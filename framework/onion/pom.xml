@@ -23,6 +23,8 @@
 		<spring.version>4.3.0.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 		<netty.version>4.1.1.Final</netty.version>
+		<protostuff.version>1.4.4</protostuff.version>
+		<objenesis.version>2.4</objenesis.version>
 	</properties>
 
 	<dependencyManagement>
@@ -48,6 +50,21 @@
 				<groupId>io.netty</groupId>
 				<artifactId>netty-all</artifactId>
 				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.protostuff</groupId>
+				<artifactId>protostuff-runtime</artifactId>
+				<version>${protostuff.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.protostuff</groupId>
+				<artifactId>protostuff-core</artifactId>
+				<version>${protostuff.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.objenesis</groupId>
+				<artifactId>objenesis</artifactId>
+				<version>${objenesis.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
