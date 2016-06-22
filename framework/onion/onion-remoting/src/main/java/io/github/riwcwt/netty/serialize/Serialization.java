@@ -23,7 +23,7 @@ public class Serialization implements InitializingBean {
 		Class<T> clazz = (Class<T>) object.getClass();
 		LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
 		try {
-			Schema<T> schema = getSchema(clazz);
+			Schema<T> schema = this.getSchema(clazz);
 			return ProtostuffIOUtil.toByteArray(object, schema, buffer);
 		} catch (Exception e) {
 			throw new IllegalStateException(e.getMessage(), e);
@@ -34,18 +34,18 @@ public class Serialization implements InitializingBean {
 
 	@SuppressWarnings("unchecked")
 	private <T> Schema<T> getSchema(Class<T> clazz) {
-		Schema<T> schema = Schema.class.cast(cachedSchema.get(clazz));
+		Schema<T> schema = Schema.class.cast(this.cachedSchema.get(clazz));
 		if (schema == null) {
 			schema = RuntimeSchema.createFrom(clazz);
-			cachedSchema.put(clazz, schema);
+			this.cachedSchema.put(clazz, schema);
 		}
 		return schema;
 	}
 
 	public <T> T deserialize(byte[] data, Class<T> clazz) {
 		try {
-			T message = objenesis.newInstance(clazz);
-			Schema<T> schema = getSchema(clazz);
+			T message = this.objenesis.newInstance(clazz);
+			Schema<T> schema = this.getSchema(clazz);
 			ProtostuffIOUtil.mergeFrom(data, message, schema);
 			return message;
 		} catch (Exception e) {
@@ -55,8 +55,8 @@ public class Serialization implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		cachedSchema = new ConcurrentHashMap<Class<?>, Schema<?>>();
-		objenesis = new ObjenesisStd(true);
+		this.cachedSchema = new ConcurrentHashMap<Class<?>, Schema<?>>();
+		this.objenesis = new ObjenesisStd(true);
 	}
 
 }
