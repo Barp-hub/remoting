@@ -1,6 +1,6 @@
 package io.github.riwcwt.entity;
 
-public class Request {
+public class Response {
 	private Integer type;
 	private Object data;
 

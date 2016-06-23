@@ -45,6 +45,11 @@
 			<groupId>org.objenesis</groupId>
 			<artifactId>objenesis</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>io.github.riwcwt</groupId>
+			<artifactId>onion-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 </project>
