@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.btime</groupId>
 	<artifactId>im-server-parent</artifactId>
@@ -10,8 +11,8 @@
 
 	<modules>
 		<module>im-common</module>
-    <module>im-server</module>
-  </modules>
+		<module>im-server</module>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,6 +23,7 @@
 		<spring.version>4.3.0.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 		<netty.version>4.1.1.Final</netty.version>
+		<slf4j.version>1.7.21</slf4j.version>
 	</properties>
 
 	<dependencyManagement>
@@ -47,6 +49,11 @@
 				<groupId>io.netty</groupId>
 				<artifactId>netty-all</artifactId>
 				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${slf4j.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
