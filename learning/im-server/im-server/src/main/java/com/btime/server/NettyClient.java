@@ -18,6 +18,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.mqtt.MqttDecoder;
+import io.netty.handler.codec.mqtt.MqttEncoder;
 
 @Component
 public class NettyClient implements InitializingBean, DisposableBean, ApplicationContextAware {
@@ -45,10 +47,11 @@ public class NettyClient implements InitializingBean, DisposableBean, Applicatio
 				.option(ChannelOption.TCP_NODELAY, true).handler(new ChannelInitializer<SocketChannel>() {
 					@Override
 					public void initChannel(SocketChannel channel) throws Exception {
+						channel.pipeline().addLast(new MqttDecoder());
+						channel.pipeline().addLast(MqttEncoder.INSTANCE);
 					}
 				});
 		channels = new LinkedList<Channel>();
-
 	}
 
 	@Override
