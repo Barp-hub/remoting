@@ -16,7 +16,7 @@ public class ClientTest {
 		NettyClient client = new NettyClient();
 		client.start();
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 3; i++) {
 			Thread thread = new Thread(new Runnable() {
 				@Override
 				public void run() {

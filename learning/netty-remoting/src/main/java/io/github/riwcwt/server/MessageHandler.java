@@ -16,7 +16,7 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
 		Request request = Request.class.cast(msg);
 
 		logger.info("服务端收到请求:" + request.getRequestId());
-		
+
 		Response response = new Response();
 		response.setRequestId(request.getRequestId());
 		ctx.writeAndFlush(response);
@@ -24,6 +24,7 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		logger.info("channel active : " + ctx.channel().remoteAddress().toString());
 		super.channelActive(ctx);
 	}
 
