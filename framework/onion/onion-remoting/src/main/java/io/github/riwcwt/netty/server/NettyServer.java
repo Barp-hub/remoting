@@ -1,5 +1,7 @@
 package io.github.riwcwt.netty.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -22,6 +24,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 @Component
 public class NettyServer implements InitializingBean, DisposableBean, ApplicationContextAware {
 
+	private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
+
 	private ApplicationContext context = null;
 
 	private EventLoopGroup bossGroup;
@@ -40,6 +44,7 @@ public class NettyServer implements InitializingBean, DisposableBean, Applicatio
 	}
 
 	public void start(int port) throws InterruptedException {
+		logger.info("###########################start netty server, port : " + port + "###########################");
 		channel = bootstrap.bind(port).sync().channel();
 	}
 
