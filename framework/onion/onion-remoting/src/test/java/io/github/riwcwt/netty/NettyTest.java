@@ -1,5 +1,7 @@
 package io.github.riwcwt.netty;
 
+import java.io.IOException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -21,12 +23,14 @@ public class NettyTest {
 	private NettyServer server = null;
 
 	@Test
-	public void server() {
+	public void server() throws IOException {
 		try {
 			this.server.start(8888);
 		} catch (InterruptedException e) {
 			logger.error("netty server start error!", e);
 		}
+
+		System.in.read();
 	}
 
 }
