@@ -33,7 +33,7 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
 				request.setRequestId(UUID.randomUUID().toString());
 				context.writeAndFlush(request);
 			}
-		}, 1000, 60000);
+		}, 1000, 20000);
 	}
 
 	@Override

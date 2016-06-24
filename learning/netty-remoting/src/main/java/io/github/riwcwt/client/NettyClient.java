@@ -44,6 +44,5 @@ public class NettyClient {
 
 	public void destroy() {
 		group.shutdownGracefully();
-
 	}
 }

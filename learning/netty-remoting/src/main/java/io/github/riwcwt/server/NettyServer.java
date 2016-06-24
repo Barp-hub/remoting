@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -25,6 +25,8 @@ public class NettyServer {
 	// 配置服务端的NIO线程组
 	private EventLoopGroup bossGroup = null;
 	private EventLoopGroup workerGroup = null;
+	private ServerBootstrap bootstrap = null;
+	private Channel channel;
 
 	public NettyServer() {
 	}
@@ -38,7 +40,7 @@ public class NettyServer {
 		workerGroup = new NioEventLoopGroup();
 
 		try {
-			ServerBootstrap bootstrap = new ServerBootstrap();
+			bootstrap = new ServerBootstrap();
 			bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
 					.option(ChannelOption.SO_BACKLOG, 100).handler(new LoggingHandler(LogLevel.INFO))
 					.childHandler(new ChannelInitializer<SocketChannel>() {
@@ -56,15 +58,18 @@ public class NettyServer {
 					});
 
 			// 绑定端口，同步等待成功
-			ChannelFuture future = bootstrap.bind(port).sync();
-			future.channel().closeFuture().sync();
+			channel = bootstrap.bind(port).sync().channel();
 		} catch (InterruptedException e) {
 			logger.info("netty server start error!", e);
-		} finally {
-			workerGroup.shutdownGracefully();
-			bossGroup.shutdownGracefully();
 		}
-
 	}
 
+	public void close() {
+		bossGroup.shutdownGracefully();
+		workerGroup.shutdownGracefully();
+		channel.closeFuture().syncUninterruptibly();
+		bossGroup = null;
+		workerGroup = null;
+		channel = null;
+	}
 }

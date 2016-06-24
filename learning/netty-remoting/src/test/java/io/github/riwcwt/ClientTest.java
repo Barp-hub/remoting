@@ -12,16 +12,16 @@ public class ClientTest {
 	private static final Logger logger = LoggerFactory.getLogger(ClientTest.class);
 
 	@Test
-	public void client() throws IOException {
+	public void thread() throws IOException {
 		NettyClient client = new NettyClient();
 		client.start();
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 10000; i++) {
 			Thread thread = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					try {
-						client.connect("localhost", 8888);
+						client.connect("121.41.101.137", 8888);
 					} catch (InterruptedException e) {
 						logger.info("can not connect to : localhost:8888");
 					}
@@ -31,6 +31,23 @@ public class ClientTest {
 		}
 		System.in.read();
 		client.destroy();
+	}
+
+	@Test
+	public void client() {
+		NettyClient client = new NettyClient();
+		client.start();
+		try {
+			for (int i = 0; i < 10000; i++) {
+				client.connect("121.41.101.137", 8888);
+			}
+			System.in.read();
+			client.destroy();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
