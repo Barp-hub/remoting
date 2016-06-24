@@ -7,7 +7,7 @@ import io.github.riwcwt.entity.Request;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-@Component
+@Component("server-handler")
 public class MessageHandler extends ChannelInboundHandlerAdapter {
 
 	@Override

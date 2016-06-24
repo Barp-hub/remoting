@@ -7,7 +7,7 @@ import io.github.riwcwt.entity.Response;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-@Component
+@Component("cleint-handler")
 public class MessageHandler extends ChannelInboundHandlerAdapter {
 
 	@Override

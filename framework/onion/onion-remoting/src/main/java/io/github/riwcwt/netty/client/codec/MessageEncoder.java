@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
-@Component
+@Component("client-encoder")
 public class MessageEncoder extends MessageToByteEncoder<Request> {
 
 	@Autowired
