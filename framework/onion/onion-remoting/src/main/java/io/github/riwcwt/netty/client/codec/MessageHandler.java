@@ -1,9 +1,9 @@
-package io.github.riwcwt.netty.server.codec;
+package io.github.riwcwt.netty.client.codec;
 
 import org.springframework.stereotype.Component;
 
 import io.github.riwcwt.constant.MessageType;
-import io.github.riwcwt.entity.Request;
+import io.github.riwcwt.entity.Response;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -17,15 +17,15 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		Request request = Request.class.cast(msg);
-		if (request.getType() == MessageType.HEART_BEAT) {
+		Response response = Response.class.cast(msg);
+		if (response.getType() == MessageType.HEART_BEAT) {
 
 		}
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		super.exceptionCaught(ctx, cause);
+		ctx.channel().close();
 	}
 
 }
