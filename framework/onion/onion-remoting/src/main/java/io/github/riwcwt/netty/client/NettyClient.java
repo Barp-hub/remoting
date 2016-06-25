@@ -67,7 +67,8 @@ public class NettyClient implements ApplicationContextAware, InitializingBean, D
 		group = new NioEventLoopGroup();
 		bootstrap = new Bootstrap();
 		bootstrap.group(group).channel(NioSocketChannel.class).option(ChannelOption.SO_KEEPALIVE, true)
-				.option(ChannelOption.TCP_NODELAY, true).handler(new ChannelInitializer<SocketChannel>() {
+				.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000).option(ChannelOption.TCP_NODELAY, true)
+				.handler(new ChannelInitializer<SocketChannel>() {
 					@Override
 					public void initChannel(SocketChannel channel) throws Exception {
 						channel.pipeline().addLast(context.getBean(MessageDecoder.class));

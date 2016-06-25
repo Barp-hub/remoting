@@ -11,7 +11,6 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-
 @Sharable
 @Component("server-handler")
 public class MessageHandler extends ChannelInboundHandlerAdapter {
@@ -21,10 +20,17 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		Request request = Request.class.cast(msg);
 		if (request.getType() == MessageType.HEART_BEAT) {
+			Thread.sleep(5000);
 			Response response = new Response();
 			response.setType(MessageType.HEART_BEAT);
 			ctx.writeAndFlush(response);
 		}
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		logger.error("exception:" + cause.getMessage());
+		ctx.channel().close();
 	}
 
 }

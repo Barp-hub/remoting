@@ -3,17 +3,18 @@ package io.github.riwcwt.netty.client.codec;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import io.github.riwcwt.entity.Response;
 import io.github.riwcwt.netty.serialize.Serialization;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-@Sharable
 @Component("client-decoder")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MessageDecoder extends ByteToMessageDecoder {
 
 	@Autowired

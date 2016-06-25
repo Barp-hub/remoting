@@ -45,10 +45,24 @@ public class NettyTest {
 		for (int i = 0; i < 10; i++) {
 			Request request = new Request();
 			request.setType(MessageType.HEART_BEAT);
-			logger.info("PING");
+			logger.info("PING:" + i);
 			ChannelFuture future = channel.writeAndFlush(request);
+
+			future.awaitUninterruptibly();
+
+			if (future.isDone()) {
+				if (future.isSuccess()) {
+					logger.info("PING successed:" + i);
+				}
+				if (future.cause() != null) {
+					Throwable cause = future.cause();
+					logger.info("PING exception:" + i + " - " + cause.getMessage());
+				}
+				if (future.isCancelled()) {
+					logger.info("PING cancelled:" + i);
+				}
+			}
 		}
-		System.in.read();
 	}
 
 }

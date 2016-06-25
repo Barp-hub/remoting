@@ -37,10 +37,12 @@ public class NettyServer implements InitializingBean, DisposableBean, Applicatio
 	public void destroy() throws Exception {
 		bossGroup.shutdownGracefully();
 		workerGroup.shutdownGracefully();
-		channel.closeFuture().syncUninterruptibly();
 		bossGroup = null;
 		workerGroup = null;
-		channel = null;
+		if (channel != null) {
+			channel.closeFuture().syncUninterruptibly();
+			channel = null;
+		}
 	}
 
 	public void start(int port) throws InterruptedException {
