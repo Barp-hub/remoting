@@ -17,7 +17,9 @@ public class RequestListener implements ChannelFutureListener {
 
 	@Override
 	public void operationComplete(ChannelFuture future) throws Exception {
-		logger.info("channel operation complete!");
+		if (future.isSuccess()) {
+			logger.info("channel send message sucessed!");
+		}
 	}
 
 }

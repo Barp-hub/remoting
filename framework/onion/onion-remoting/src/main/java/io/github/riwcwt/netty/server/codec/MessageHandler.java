@@ -20,7 +20,6 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object message) throws Exception {
 		Request request = Request.class.cast(message);
 		if (request.getType() == MessageType.HEART_BEAT) {
-			Thread.sleep(5000);
 			Response response = new Response();
 			response.setRequestId(request.getRequestId());
 			response.setType(MessageType.HEART_BEAT);
