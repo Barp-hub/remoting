@@ -2,6 +2,7 @@ package io.github.riwcwt.netty;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.UUID;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,11 +14,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import io.github.riwcwt.constant.MessageType;
 import io.github.riwcwt.entity.Request;
+import io.github.riwcwt.entity.Response;
 import io.github.riwcwt.netty.client.NettyClient;
 import io.github.riwcwt.netty.config.NettyConfig;
 import io.github.riwcwt.netty.server.NettyServer;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = NettyConfig.class)
@@ -41,26 +41,15 @@ public class NettyTest {
 
 	@Test
 	public void client() throws InterruptedException, IOException {
-		Channel channel = this.client.connect(new InetSocketAddress("localhost", 8888));
+		InetSocketAddress socketAddress = new InetSocketAddress("localhost", 8888);
 		for (int i = 0; i < 10; i++) {
 			Request request = new Request();
 			request.setType(MessageType.HEART_BEAT);
-			logger.info("PING:" + i);
-			ChannelFuture future = channel.writeAndFlush(request);
-
-			future.awaitUninterruptibly();
-
-			if (future.isDone()) {
-				if (future.isSuccess()) {
-					logger.info("PING successed:" + i);
-				}
-				if (future.cause() != null) {
-					Throwable cause = future.cause();
-					logger.info("PING exception:" + i + " - " + cause.getMessage());
-				}
-				if (future.isCancelled()) {
-					logger.info("PING cancelled:" + i);
-				}
+			request.setRequestId(UUID.randomUUID().toString());
+			logger.info("PING:" + request.getRequestId());
+			Response response = this.client.send(socketAddress, request);
+			if (response != null) {
+				logger.info("PONG:" + response.getRequestId());
 			}
 		}
 	}

@@ -10,7 +10,6 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-
 @Sharable
 @Component("cleint-handler")
 public class MessageHandler extends ChannelInboundHandlerAdapter {
@@ -25,7 +24,7 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		Response response = Response.class.cast(msg);
 		if (response.getType() == MessageType.HEART_BEAT) {
-			logger.info("PONG");
+			logger.info("PONG:" + response.getRequestId());
 		}
 	}
 
