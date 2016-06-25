@@ -14,6 +14,7 @@
 		<module>onion-proxy</module>
     <module>onion-registry</module>
     <module>onion</module>
+    <module>onion-container</module>
   </modules>
 
 	<properties>
