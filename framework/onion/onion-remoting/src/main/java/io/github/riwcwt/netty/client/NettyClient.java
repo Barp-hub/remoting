@@ -17,6 +17,7 @@ import io.github.riwcwt.entity.Response;
 import io.github.riwcwt.netty.client.codec.MessageDecoder;
 import io.github.riwcwt.netty.client.codec.MessageEncoder;
 import io.github.riwcwt.netty.client.codec.MessageHandler;
+import io.github.riwcwt.netty.listener.RequestListener;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -68,6 +69,8 @@ public class NettyClient implements ApplicationContextAware, InitializingBean, D
 	public Response send(InetSocketAddress socketAddress, Request request) {
 		Channel channel = this.connect(socketAddress);
 		ChannelFuture future = channel.writeAndFlush(request);
+		RequestListener listener = this.context.getBean(RequestListener.class);
+		future.addListener(listener);
 		return null;
 	}
 
