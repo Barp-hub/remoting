@@ -17,5 +17,30 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>io.github.riwcwt</groupId>
+			<artifactId>onion-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.riwcwt</groupId>
+			<artifactId>onion-container</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.riwcwt</groupId>
+			<artifactId>onion-proxy</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.riwcwt</groupId>
+			<artifactId>onion-registry</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.riwcwt</groupId>
+			<artifactId>onion-remoting</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
