@@ -42,7 +42,8 @@ public class NettyTest {
 	@Test
 	public void client() throws InterruptedException, IOException {
 		InetSocketAddress socketAddress = new InetSocketAddress("localhost", 8888);
-		for (int i = 0; i < 10; i++) {
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < 100000; i++) {
 			Request request = new Request();
 			request.setType(MessageType.HEART_BEAT);
 			request.setRequestId(UUID.randomUUID().toString());
@@ -52,6 +53,8 @@ public class NettyTest {
 				logger.info("PONG:" + response.getRequestId());
 			}
 		}
+		long end = System.currentTimeMillis();
+		logger.info("发送:" + 10000 + "  耗时：" + (end - start));
 		System.in.read();
 	}
 
