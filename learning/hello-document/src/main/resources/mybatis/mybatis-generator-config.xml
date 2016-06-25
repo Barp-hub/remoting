@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<classPathEntry
+		location="E:\repository\maven\mysql\mysql-connector-java\5.1.35\mysql-connector-java-5.1.35.jar" />
+	<context id="mysql" targetRuntime="MyBatis3">
+
+		<!-- 开启注释 -->
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://qbb6test.mysql.rds.aliyuncs.com/btime_webser?useUnicode=true"
+			userId="btime_test" password="DiWand2012yiosDB" />
+		<javaModelGenerator targetPackage="com.riwcwt.application.entity"
+			targetProject="hello-document/src/main/java" />
+		<sqlMapGenerator targetPackage="mybatis.mapper"
+			targetProject="hello-document/src/main/resources" />
+		<javaClientGenerator targetPackage="com.riwcwt.application.mapper"
+			targetProject="hello-document/src/main/java" type="XMLMAPPER" />
+		<table schema="btime_webser" tableName="application"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+
+	</context>
+</generatorConfiguration>

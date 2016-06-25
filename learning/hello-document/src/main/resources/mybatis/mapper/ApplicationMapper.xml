@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.riwcwt.application.mapper.ApplicationMapper">
+	<resultMap id="BaseResultMap" type="com.riwcwt.application.entity.Application">
+		<id column="appid" property="appid" jdbcType="INTEGER" />
+		<result column="appName" property="appName" jdbcType="VARCHAR" />
+		<result column="appKey" property="appKey" jdbcType="VARCHAR" />
+		<result column="appSecret" property="appSecret" jdbcType="VARCHAR" />
+		<result column="version" property="version" jdbcType="VARCHAR" />
+		<result column="releaseDate" property="releaseDate" jdbcType="TIMESTAMP" />
+		<result column="downloadUrl" property="downloadUrl" jdbcType="VARCHAR" />
+		<result column="versionCode" property="versionCode" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.riwcwt.application.entity.Application"
+		extends="BaseResultMap">
+		<result column="description" property="description" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		appid, appName, appKey, appSecret, version, releaseDate,
+		downloadUrl,
+		versionCode,
+		status
+	</sql>
+	<sql id="Blob_Column_List">
+		description
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from application
+		where appid = #{appid,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		application
+		where appid = #{appid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.riwcwt.application.entity.Application">
+		insert into application
+		(appid, appName, appKey,
+		appSecret, version, releaseDate,
+		downloadUrl,
+		versionCode, status,
+		description)
+		values (#{appid,jdbcType=INTEGER},
+		#{appName,jdbcType=VARCHAR},
+		#{appKey,jdbcType=VARCHAR},
+		#{appSecret,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR},
+		#{releaseDate,jdbcType=TIMESTAMP},
+		#{downloadUrl,jdbcType=VARCHAR},
+		#{versionCode,jdbcType=INTEGER},
+		#{status,jdbcType=INTEGER},
+		#{description,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.riwcwt.application.entity.Application">
+		insert into application
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="appid != null">
+				appid,
+			</if>
+			<if test="appName != null">
+				appName,
+			</if>
+			<if test="appKey != null">
+				appKey,
+			</if>
+			<if test="appSecret != null">
+				appSecret,
+			</if>
+			<if test="version != null">
+				version,
+			</if>
+			<if test="releaseDate != null">
+				releaseDate,
+			</if>
+			<if test="downloadUrl != null">
+				downloadUrl,
+			</if>
+			<if test="versionCode != null">
+				versionCode,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="appid != null">
+				#{appid,jdbcType=INTEGER},
+			</if>
+			<if test="appName != null">
+				#{appName,jdbcType=VARCHAR},
+			</if>
+			<if test="appKey != null">
+				#{appKey,jdbcType=VARCHAR},
+			</if>
+			<if test="appSecret != null">
+				#{appSecret,jdbcType=VARCHAR},
+			</if>
+			<if test="version != null">
+				#{version,jdbcType=VARCHAR},
+			</if>
+			<if test="releaseDate != null">
+				#{releaseDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="downloadUrl != null">
+				#{downloadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="versionCode != null">
+				#{versionCode,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.riwcwt.application.entity.Application">
+		update application
+		<set>
+			<if test="appName != null">
+				appName = #{appName,jdbcType=VARCHAR},
+			</if>
+			<if test="appKey != null">
+				appKey = #{appKey,jdbcType=VARCHAR},
+			</if>
+			<if test="appSecret != null">
+				appSecret = #{appSecret,jdbcType=VARCHAR},
+			</if>
+			<if test="version != null">
+				version = #{version,jdbcType=VARCHAR},
+			</if>
+			<if test="releaseDate != null">
+				releaseDate = #{releaseDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="downloadUrl != null">
+				downloadUrl = #{downloadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="versionCode != null">
+				versionCode = #{versionCode,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where appid = #{appid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.riwcwt.application.entity.Application">
+		update
+		application
+		set appName = #{appName,jdbcType=VARCHAR},
+		appKey =
+		#{appKey,jdbcType=VARCHAR},
+		appSecret = #{appSecret,jdbcType=VARCHAR},
+		version = #{version,jdbcType=VARCHAR},
+		releaseDate =
+		#{releaseDate,jdbcType=TIMESTAMP},
+		downloadUrl =
+		#{downloadUrl,jdbcType=VARCHAR},
+		versionCode =
+		#{versionCode,jdbcType=INTEGER},
+		status = #{status,jdbcType=INTEGER},
+		description = #{description,jdbcType=LONGVARCHAR}
+		where appid =
+		#{appid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.riwcwt.application.entity.Application">
+		update application
+		set appName = #{appName,jdbcType=VARCHAR},
+		appKey =
+		#{appKey,jdbcType=VARCHAR},
+		appSecret = #{appSecret,jdbcType=VARCHAR},
+		version = #{version,jdbcType=VARCHAR},
+		releaseDate =
+		#{releaseDate,jdbcType=TIMESTAMP},
+		downloadUrl =
+		#{downloadUrl,jdbcType=VARCHAR},
+		versionCode =
+		#{versionCode,jdbcType=INTEGER},
+		status = #{status,jdbcType=INTEGER}
+		where appid = #{appid,jdbcType=INTEGER}
+	</update>
+</mapper>
