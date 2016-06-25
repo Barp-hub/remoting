@@ -12,11 +12,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import io.github.riwcwt.entity.Request;
+import io.github.riwcwt.entity.Response;
 import io.github.riwcwt.netty.client.codec.MessageDecoder;
 import io.github.riwcwt.netty.client.codec.MessageEncoder;
 import io.github.riwcwt.netty.client.codec.MessageHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -60,6 +63,12 @@ public class NettyClient implements ApplicationContextAware, InitializingBean, D
 			this.channels.add(channel);
 		}
 		return channel;
+	}
+
+	public Response send(InetSocketAddress socketAddress, Request request) {
+		Channel channel = this.connect(socketAddress);
+		ChannelFuture future = channel.writeAndFlush(request);
+		return null;
 	}
 
 	@Override

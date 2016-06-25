@@ -1,20 +1,11 @@
 package io.github.riwcwt.entity;
 
 public class ServiceRequest {
-	private String requestId;
 	private String service;
 	private String version;
 	private String method;
 	private Class<?>[] parameterTypes;
 	private Object[] parameters;
-
-	public String getRequestId() {
-		return requestId;
-	}
-
-	public void setRequestId(String requestId) {
-		this.requestId = requestId;
-	}
 
 	public String getService() {
 		return service;
