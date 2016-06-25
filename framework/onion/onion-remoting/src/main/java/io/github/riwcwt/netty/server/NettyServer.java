@@ -53,7 +53,7 @@ public class NettyServer implements InitializingBean, DisposableBean, Applicatio
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		bossGroup = new NioEventLoopGroup();
-		workerGroup = new NioEventLoopGroup();
+		workerGroup = new NioEventLoopGroup(10);
 		bootstrap = new ServerBootstrap();
 
 		bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)

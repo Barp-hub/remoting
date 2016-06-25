@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 
-@Component("server-decoder")
+@Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class RequestListener implements ChannelFutureListener {
 

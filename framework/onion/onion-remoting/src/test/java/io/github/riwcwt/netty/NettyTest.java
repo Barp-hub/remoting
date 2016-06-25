@@ -52,6 +52,7 @@ public class NettyTest {
 				logger.info("PONG:" + response.getRequestId());
 			}
 		}
+		System.in.read();
 	}
 
 }
