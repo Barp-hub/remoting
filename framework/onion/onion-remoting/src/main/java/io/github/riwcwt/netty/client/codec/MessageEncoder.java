@@ -6,9 +6,12 @@ import org.springframework.stereotype.Component;
 import io.github.riwcwt.entity.Request;
 import io.github.riwcwt.netty.serialize.Serialization;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
+
+@Sharable
 @Component("client-encoder")
 public class MessageEncoder extends MessageToByteEncoder<Request> {
 

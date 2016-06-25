@@ -17,6 +17,7 @@ import io.github.riwcwt.netty.client.NettyClient;
 import io.github.riwcwt.netty.config.NettyConfig;
 import io.github.riwcwt.netty.server.NettyServer;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = NettyConfig.class)
@@ -39,14 +40,15 @@ public class NettyTest {
 	}
 
 	@Test
-	public void client() throws InterruptedException {
+	public void client() throws InterruptedException, IOException {
 		Channel channel = this.client.connect(new InetSocketAddress("localhost", 8888));
 		for (int i = 0; i < 10; i++) {
 			Request request = new Request();
 			request.setType(MessageType.HEART_BEAT);
-			channel.writeAndFlush(request);
-			Thread.sleep(1000);
+			logger.info("PING");
+			ChannelFuture future = channel.writeAndFlush(request);
 		}
+		System.in.read();
 	}
 
 }
