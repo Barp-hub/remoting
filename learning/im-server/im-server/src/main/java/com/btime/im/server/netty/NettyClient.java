@@ -1,4 +1,4 @@
-package com.btime.server.netty;
+package com.btime.im.server.netty;
 
 import java.util.LinkedList;
 import java.util.List;
