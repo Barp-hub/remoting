@@ -1,10 +1,13 @@
 package com.btime.im.server.ons.listener;
 
+import org.springframework.stereotype.Component;
+
 import com.aliyun.openservices.ons.api.Action;
 import com.aliyun.openservices.ons.api.ConsumeContext;
 import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.MessageListener;
 
+@Component
 public class ChatMessageListener implements MessageListener {
 
 	@Override
