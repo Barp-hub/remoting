@@ -1,21 +1,27 @@
 package io.github.riwcwt.proxy;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
+import java.util.Map;
 
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-@Component
-public class Proxy {
-	@SuppressWarnings("unchecked")
-	public <T> T create(Class<Object> interfaces) {
-		return (T) java.lang.reflect.Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-				new Class<?>[] { interfaces }, new InvocationHandler() {
+import io.github.riwcwt.annotation.RemotingService;
 
-					@Override
-					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						return null;
-					}
-				});
+@Component
+public class Proxy implements ApplicationContextAware, InitializingBean {
+	private ApplicationContext context = null;
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.context = applicationContext;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		Map<String, Object> beans = this.context.getBeansWithAnnotation(RemotingService.class);
+
 	}
 }

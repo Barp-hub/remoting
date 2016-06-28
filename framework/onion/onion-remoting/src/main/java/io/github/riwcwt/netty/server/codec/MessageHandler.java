@@ -27,6 +27,10 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
 		}
 	}
 
+	private void handle(Request request) {
+
+	}
+
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		logger.error("exception:" + cause.getMessage());
