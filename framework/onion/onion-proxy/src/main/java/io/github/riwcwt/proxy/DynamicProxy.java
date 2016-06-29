@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import io.github.riwcwt.annotation.RemotingService;
 
 @Component
-public class Proxy implements ApplicationContextAware, InitializingBean {
+public class DynamicProxy implements ApplicationContextAware, InitializingBean {
 	private ApplicationContext context = null;
 
 	@Override
