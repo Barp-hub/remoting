@@ -19,6 +19,7 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object message) throws Exception {
 		Request request = Request.class.cast(message);
+		logger.info("server received message : " + request.toString());
 		if (request.getType() == MessageType.HEART_BEAT) {
 			Response response = new Response();
 			response.setRequestId(request.getRequestId());

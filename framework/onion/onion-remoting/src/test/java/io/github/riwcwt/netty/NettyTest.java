@@ -43,7 +43,7 @@ public class NettyTest {
 	public void client() throws InterruptedException, IOException {
 		InetSocketAddress socketAddress = new InetSocketAddress("localhost", 8888);
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < 100000; i++) {
+		for (int i = 0; i < 100; i++) {
 			Request request = new Request();
 			request.setType(MessageType.HEART_BEAT);
 			request.setRequestId(UUID.randomUUID().toString());
