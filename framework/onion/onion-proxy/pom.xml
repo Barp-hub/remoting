@@ -19,7 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.github.riwcwt</groupId>
-			<artifactId>onion-remoting</artifactId>
+			<artifactId>onion-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

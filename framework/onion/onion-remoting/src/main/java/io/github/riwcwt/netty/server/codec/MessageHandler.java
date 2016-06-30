@@ -16,6 +16,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 public class MessageHandler extends ChannelInboundHandlerAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
+	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object message) throws Exception {
 		Request request = Request.class.cast(message);

@@ -1,5 +1,7 @@
 package io.github.riwcwt.proxy;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.springframework.beans.BeansException;
@@ -30,12 +32,22 @@ public class DynamicProxy implements ApplicationContextAware, InitializingBean {
 
 	private Object findService(String service, String version) {
 		for (String key : beans.keySet()) {
+			RemotingService annotation = beans.get(key).getClass().getAnnotation(RemotingService.class);
+			if (annotation.value().getCanonicalName().equals(service) && annotation.version().equals(version)) {
+				return beans.get(key);
+			}
 		}
 		return null;
 	}
 
-	public void invoke(ServiceRequest request) {
+	public Object invoke(ServiceRequest request) throws NoSuchMethodException, SecurityException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Object target = this.findService(request.getService(), request.getVersion());
+		if (target != null) {
+			Method method = target.getClass().getMethod(request.getMethod(), request.getParameterTypes());
+			return method.invoke(target, request.getParameters());
+		}
+		return null;
 	}
 
 }
