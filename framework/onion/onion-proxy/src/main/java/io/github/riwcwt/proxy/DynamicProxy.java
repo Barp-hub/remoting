@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import io.github.riwcwt.annotation.RemotingService;
+import io.github.riwcwt.entity.ServiceRequest;
 
 @Component
 public class DynamicProxy implements ApplicationContextAware, InitializingBean {
@@ -19,9 +20,22 @@ public class DynamicProxy implements ApplicationContextAware, InitializingBean {
 		this.context = applicationContext;
 	}
 
+	private Map<String, Object> beans = null;
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		Map<String, Object> beans = this.context.getBeansWithAnnotation(RemotingService.class);
+		beans = this.context.getBeansWithAnnotation(RemotingService.class);
 
 	}
+
+	private Object findService(String service, String version) {
+		for (String key : beans.keySet()) {
+		}
+		return null;
+	}
+
+	public void invoke(ServiceRequest request) {
+		Object target = this.findService(request.getService(), request.getVersion());
+	}
+
 }
