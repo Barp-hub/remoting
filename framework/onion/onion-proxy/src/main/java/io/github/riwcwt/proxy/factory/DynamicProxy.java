@@ -1,4 +1,4 @@
-package io.github.riwcwt.proxy;
+package io.github.riwcwt.proxy.factory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -10,8 +10,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import io.github.riwcwt.annotation.RemotingService;
 import io.github.riwcwt.entity.ServiceRequest;
+import io.github.riwcwt.proxy.annotation.RemotingService;
 
 @Component
 public class DynamicProxy implements ApplicationContextAware, InitializingBean {
@@ -27,7 +27,6 @@ public class DynamicProxy implements ApplicationContextAware, InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		beans = this.context.getBeansWithAnnotation(RemotingService.class);
-
 	}
 
 	private Object findService(String service, String version) {

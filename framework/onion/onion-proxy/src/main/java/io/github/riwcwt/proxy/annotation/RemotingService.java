@@ -1,4 +1,4 @@
-package io.github.riwcwt.annotation;
+package io.github.riwcwt.proxy.annotation;
 
 public @interface RemotingService {
 

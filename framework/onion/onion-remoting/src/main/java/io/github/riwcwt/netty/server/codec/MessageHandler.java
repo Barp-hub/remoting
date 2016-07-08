@@ -11,7 +11,7 @@ import io.github.riwcwt.constant.MessageType;
 import io.github.riwcwt.entity.Request;
 import io.github.riwcwt.entity.Response;
 import io.github.riwcwt.entity.ServiceRequest;
-import io.github.riwcwt.proxy.DynamicProxy;
+import io.github.riwcwt.proxy.factory.DynamicProxy;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
