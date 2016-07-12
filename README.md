@@ -1,3 +1,3 @@
 # readme
 
-remoting开发学校
+remoting开发学习
