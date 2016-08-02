@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -15,6 +17,9 @@ import io.github.riwcwt.proxy.annotation.RemotingService;
 
 @Component
 public class DynamicProxy implements ApplicationContextAware, InitializingBean {
+
+	private static final Logger logger = LoggerFactory.getLogger(DynamicProxy.class);
+
 	private ApplicationContext context = null;
 
 	@Override
@@ -27,6 +32,11 @@ public class DynamicProxy implements ApplicationContextAware, InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		beans = this.context.getBeansWithAnnotation(RemotingService.class);
+		if (beans != null && !beans.isEmpty()) {
+			for (String key : beans.keySet()) {
+				logger.debug(key + " - " + beans.get(key).getClass().getCanonicalName());
+			}
+		}
 	}
 
 	private Object findService(String service, String version) {
