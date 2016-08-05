@@ -1,15 +1,21 @@
 syntax = "proto3";
 
-package google.protobuf;
+option java_package = "io.grpc.examples";
 
-option csharp_namespace = "Google.Protobuf.WellKnownTypes";
-option java_package = "com.google.protobuf";
-option java_outer_classname = "ApiProto";
-option java_multiple_files = true;
-option java_generate_equals_and_hash = true;
-option objc_class_prefix = "GPB";
+package helloworld;
 
-message Api {
+// The greeter service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+}
+
+// The request message containing the user's name.
+message HelloRequest {
   string name = 1;
-  string version = 4;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
 }
