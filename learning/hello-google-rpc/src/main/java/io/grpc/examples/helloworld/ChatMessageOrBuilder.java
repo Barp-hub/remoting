@@ -3,8 +3,8 @@
 
 package io.grpc.examples.helloworld;
 
-public interface HelloReplyOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:helloworld.HelloReply)
+public interface ChatMessageOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:helloworld.ChatMessage)
     com.google.protobuf.MessageOrBuilder {
 
   /**

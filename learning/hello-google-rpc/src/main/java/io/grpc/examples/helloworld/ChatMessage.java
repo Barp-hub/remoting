@@ -8,17 +8,17 @@ package io.grpc.examples.helloworld;
  * The response message containing the greetings
  * </pre>
  *
- * Protobuf type {@code helloworld.HelloReply}
+ * Protobuf type {@code helloworld.ChatMessage}
  */
-public  final class HelloReply extends
+public  final class ChatMessage extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:helloworld.HelloReply)
-    HelloReplyOrBuilder {
-  // Use HelloReply.newBuilder() to construct.
-  private HelloReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // @@protoc_insertion_point(message_implements:helloworld.ChatMessage)
+    ChatMessageOrBuilder {
+  // Use ChatMessage.newBuilder() to construct.
+  private ChatMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private HelloReply() {
+  private ChatMessage() {
     message_ = "";
   }
 
@@ -27,7 +27,7 @@ public  final class HelloReply extends
   getUnknownFields() {
     return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
   }
-  private HelloReply(
+  private ChatMessage(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -66,14 +66,14 @@ public  final class HelloReply extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return io.grpc.examples.helloworld.HelloWorldProto.internal_static_helloworld_HelloReply_descriptor;
+    return io.grpc.examples.helloworld.HelloWorldProto.internal_static_helloworld_ChatMessage_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return io.grpc.examples.helloworld.HelloWorldProto.internal_static_helloworld_HelloReply_fieldAccessorTable
+    return io.grpc.examples.helloworld.HelloWorldProto.internal_static_helloworld_ChatMessage_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            io.grpc.examples.helloworld.HelloReply.class, io.grpc.examples.helloworld.HelloReply.Builder.class);
+            io.grpc.examples.helloworld.ChatMessage.class, io.grpc.examples.helloworld.ChatMessage.Builder.class);
   }
 
   public static final int MESSAGE_FIELD_NUMBER = 1;
@@ -145,10 +145,10 @@ public  final class HelloReply extends
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof io.grpc.examples.helloworld.HelloReply)) {
+    if (!(obj instanceof io.grpc.examples.helloworld.ChatMessage)) {
       return super.equals(obj);
     }
-    io.grpc.examples.helloworld.HelloReply other = (io.grpc.examples.helloworld.HelloReply) obj;
+    io.grpc.examples.helloworld.ChatMessage other = (io.grpc.examples.helloworld.ChatMessage) obj;
 
     boolean result = true;
     result = result && getMessage()
@@ -170,58 +170,58 @@ public  final class HelloReply extends
     return hash;
   }
 
-  public static io.grpc.examples.helloworld.HelloReply parseFrom(
+  public static io.grpc.examples.helloworld.ChatMessage parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static io.grpc.examples.helloworld.HelloReply parseFrom(
+  public static io.grpc.examples.helloworld.ChatMessage parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static io.grpc.examples.helloworld.HelloReply parseFrom(byte[] data)
+  public static io.grpc.examples.helloworld.ChatMessage parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static io.grpc.examples.helloworld.HelloReply parseFrom(
+  public static io.grpc.examples.helloworld.ChatMessage parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static io.grpc.examples.helloworld.HelloReply parseFrom(java.io.InputStream input)
+  public static io.grpc.examples.helloworld.ChatMessage parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static io.grpc.examples.helloworld.HelloReply parseFrom(
+  public static io.grpc.examples.helloworld.ChatMessage parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static io.grpc.examples.helloworld.HelloReply parseDelimitedFrom(java.io.InputStream input)
+  public static io.grpc.examples.helloworld.ChatMessage parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static io.grpc.examples.helloworld.HelloReply parseDelimitedFrom(
+  public static io.grpc.examples.helloworld.ChatMessage parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static io.grpc.examples.helloworld.HelloReply parseFrom(
+  public static io.grpc.examples.helloworld.ChatMessage parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static io.grpc.examples.helloworld.HelloReply parseFrom(
+  public static io.grpc.examples.helloworld.ChatMessage parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -233,7 +233,7 @@ public  final class HelloReply extends
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(io.grpc.examples.helloworld.HelloReply prototype) {
+  public static Builder newBuilder(io.grpc.examples.helloworld.ChatMessage prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -252,25 +252,25 @@ public  final class HelloReply extends
    * The response message containing the greetings
    * </pre>
    *
-   * Protobuf type {@code helloworld.HelloReply}
+   * Protobuf type {@code helloworld.ChatMessage}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:helloworld.HelloReply)
-      io.grpc.examples.helloworld.HelloReplyOrBuilder {
+      // @@protoc_insertion_point(builder_implements:helloworld.ChatMessage)
+      io.grpc.examples.helloworld.ChatMessageOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return io.grpc.examples.helloworld.HelloWorldProto.internal_static_helloworld_HelloReply_descriptor;
+      return io.grpc.examples.helloworld.HelloWorldProto.internal_static_helloworld_ChatMessage_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return io.grpc.examples.helloworld.HelloWorldProto.internal_static_helloworld_HelloReply_fieldAccessorTable
+      return io.grpc.examples.helloworld.HelloWorldProto.internal_static_helloworld_ChatMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              io.grpc.examples.helloworld.HelloReply.class, io.grpc.examples.helloworld.HelloReply.Builder.class);
+              io.grpc.examples.helloworld.ChatMessage.class, io.grpc.examples.helloworld.ChatMessage.Builder.class);
     }
 
-    // Construct using io.grpc.examples.helloworld.HelloReply.newBuilder()
+    // Construct using io.grpc.examples.helloworld.ChatMessage.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -294,23 +294,23 @@ public  final class HelloReply extends
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return io.grpc.examples.helloworld.HelloWorldProto.internal_static_helloworld_HelloReply_descriptor;
+      return io.grpc.examples.helloworld.HelloWorldProto.internal_static_helloworld_ChatMessage_descriptor;
     }
 
-    public io.grpc.examples.helloworld.HelloReply getDefaultInstanceForType() {
-      return io.grpc.examples.helloworld.HelloReply.getDefaultInstance();
+    public io.grpc.examples.helloworld.ChatMessage getDefaultInstanceForType() {
+      return io.grpc.examples.helloworld.ChatMessage.getDefaultInstance();
     }
 
-    public io.grpc.examples.helloworld.HelloReply build() {
-      io.grpc.examples.helloworld.HelloReply result = buildPartial();
+    public io.grpc.examples.helloworld.ChatMessage build() {
+      io.grpc.examples.helloworld.ChatMessage result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public io.grpc.examples.helloworld.HelloReply buildPartial() {
-      io.grpc.examples.helloworld.HelloReply result = new io.grpc.examples.helloworld.HelloReply(this);
+    public io.grpc.examples.helloworld.ChatMessage buildPartial() {
+      io.grpc.examples.helloworld.ChatMessage result = new io.grpc.examples.helloworld.ChatMessage(this);
       result.message_ = message_;
       onBuilt();
       return result;
@@ -343,16 +343,16 @@ public  final class HelloReply extends
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof io.grpc.examples.helloworld.HelloReply) {
-        return mergeFrom((io.grpc.examples.helloworld.HelloReply)other);
+      if (other instanceof io.grpc.examples.helloworld.ChatMessage) {
+        return mergeFrom((io.grpc.examples.helloworld.ChatMessage)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(io.grpc.examples.helloworld.HelloReply other) {
-      if (other == io.grpc.examples.helloworld.HelloReply.getDefaultInstance()) return this;
+    public Builder mergeFrom(io.grpc.examples.helloworld.ChatMessage other) {
+      if (other == io.grpc.examples.helloworld.ChatMessage.getDefaultInstance()) return this;
       if (!other.getMessage().isEmpty()) {
         message_ = other.message_;
         onChanged();
@@ -369,11 +369,11 @@ public  final class HelloReply extends
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      io.grpc.examples.helloworld.HelloReply parsedMessage = null;
+      io.grpc.examples.helloworld.ChatMessage parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (io.grpc.examples.helloworld.HelloReply) e.getUnfinishedMessage();
+        parsedMessage = (io.grpc.examples.helloworld.ChatMessage) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -462,39 +462,39 @@ public  final class HelloReply extends
     }
 
 
-    // @@protoc_insertion_point(builder_scope:helloworld.HelloReply)
+    // @@protoc_insertion_point(builder_scope:helloworld.ChatMessage)
   }
 
-  // @@protoc_insertion_point(class_scope:helloworld.HelloReply)
-  private static final io.grpc.examples.helloworld.HelloReply DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:helloworld.ChatMessage)
+  private static final io.grpc.examples.helloworld.ChatMessage DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new io.grpc.examples.helloworld.HelloReply();
+    DEFAULT_INSTANCE = new io.grpc.examples.helloworld.ChatMessage();
   }
 
-  public static io.grpc.examples.helloworld.HelloReply getDefaultInstance() {
+  public static io.grpc.examples.helloworld.ChatMessage getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<HelloReply>
-      PARSER = new com.google.protobuf.AbstractParser<HelloReply>() {
-    public HelloReply parsePartialFrom(
+  private static final com.google.protobuf.Parser<ChatMessage>
+      PARSER = new com.google.protobuf.AbstractParser<ChatMessage>() {
+    public ChatMessage parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-        return new HelloReply(input, extensionRegistry);
+        return new ChatMessage(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<HelloReply> parser() {
+  public static com.google.protobuf.Parser<ChatMessage> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<HelloReply> getParserForType() {
+  public com.google.protobuf.Parser<ChatMessage> getParserForType() {
     return PARSER;
   }
 
-  public io.grpc.examples.helloworld.HelloReply getDefaultInstanceForType() {
+  public io.grpc.examples.helloworld.ChatMessage getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

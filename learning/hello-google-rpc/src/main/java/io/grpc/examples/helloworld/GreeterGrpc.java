@@ -22,7 +22,7 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall;
  */
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.0.0)",
-    comments = "Source: rpc.proto")
+    comments = "Source: hello.proto")
 public class GreeterGrpc {
 
   private GreeterGrpc() {}
@@ -39,6 +39,15 @@ public class GreeterGrpc {
               "helloworld.Greeter", "SayHello"),
           io.grpc.protobuf.ProtoUtils.marshaller(io.grpc.examples.helloworld.HelloRequest.getDefaultInstance()),
           io.grpc.protobuf.ProtoUtils.marshaller(io.grpc.examples.helloworld.HelloReply.getDefaultInstance()));
+  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  public static final io.grpc.MethodDescriptor<io.grpc.examples.helloworld.ChatMessage,
+      io.grpc.examples.helloworld.ChatMessage> METHOD_CHAT =
+      io.grpc.MethodDescriptor.create(
+          io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING,
+          generateFullMethodName(
+              "helloworld.Greeter", "Chat"),
+          io.grpc.protobuf.ProtoUtils.marshaller(io.grpc.examples.helloworld.ChatMessage.getDefaultInstance()),
+          io.grpc.protobuf.ProtoUtils.marshaller(io.grpc.examples.helloworld.ChatMessage.getDefaultInstance()));
 
   /**
    * Creates a new async stub that supports all call types for the service
@@ -80,6 +89,16 @@ public class GreeterGrpc {
       asyncUnimplementedUnaryCall(METHOD_SAY_HELLO, responseObserver);
     }
 
+    /**
+     * <pre>
+     * chat
+     * </pre>
+     */
+    public io.grpc.stub.StreamObserver<io.grpc.examples.helloworld.ChatMessage> chat(
+        io.grpc.stub.StreamObserver<io.grpc.examples.helloworld.ChatMessage> responseObserver) {
+      return asyncUnimplementedStreamingCall(METHOD_CHAT, responseObserver);
+    }
+
     @java.lang.Override public io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -89,6 +108,13 @@ public class GreeterGrpc {
                 io.grpc.examples.helloworld.HelloRequest,
                 io.grpc.examples.helloworld.HelloReply>(
                   this, METHODID_SAY_HELLO)))
+          .addMethod(
+            METHOD_CHAT,
+            asyncBidiStreamingCall(
+              new MethodHandlers<
+                io.grpc.examples.helloworld.ChatMessage,
+                io.grpc.examples.helloworld.ChatMessage>(
+                  this, METHODID_CHAT)))
           .build();
     }
   }
@@ -123,6 +149,17 @@ public class GreeterGrpc {
         io.grpc.stub.StreamObserver<io.grpc.examples.helloworld.HelloReply> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_SAY_HELLO, getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     * <pre>
+     * chat
+     * </pre>
+     */
+    public io.grpc.stub.StreamObserver<io.grpc.examples.helloworld.ChatMessage> chat(
+        io.grpc.stub.StreamObserver<io.grpc.examples.helloworld.ChatMessage> responseObserver) {
+      return asyncBidiStreamingCall(
+          getChannel().newCall(METHOD_CHAT, getCallOptions()), responseObserver);
     }
   }
 
@@ -192,6 +229,7 @@ public class GreeterGrpc {
   }
 
   private static final int METHODID_SAY_HELLO = 0;
+  private static final int METHODID_CHAT = 1;
 
   private static class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -224,6 +262,9 @@ public class GreeterGrpc {
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
+        case METHODID_CHAT:
+          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.chat(
+              (io.grpc.stub.StreamObserver<io.grpc.examples.helloworld.ChatMessage>) responseObserver);
         default:
           throw new AssertionError();
       }
@@ -232,7 +273,8 @@ public class GreeterGrpc {
 
   public static io.grpc.ServiceDescriptor getServiceDescriptor() {
     return new io.grpc.ServiceDescriptor(SERVICE_NAME,
-        METHOD_SAY_HELLO);
+        METHOD_SAY_HELLO,
+        METHOD_CHAT);
   }
 
 }
