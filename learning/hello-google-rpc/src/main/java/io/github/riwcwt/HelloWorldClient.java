@@ -1,15 +1,19 @@
 package io.github.riwcwt;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
+import io.grpc.examples.helloworld.ChatMessage;
 import io.grpc.examples.helloworld.GreeterGrpc;
 import io.grpc.examples.helloworld.HelloReply;
 import io.grpc.examples.helloworld.HelloRequest;
+import io.grpc.stub.StreamObserver;
 
 /**
  * A simple client that requests a greeting from the {@link HelloWorldServer}.
@@ -20,6 +24,8 @@ public class HelloWorldClient {
 	private final ManagedChannel channel;
 	private final GreeterGrpc.GreeterBlockingStub blockingStub;
 
+	private final GreeterGrpc.GreeterStub asyncStub;
+
 	/**
 	 * Construct client connecting to HelloWorld server at {@code host:port}.
 	 */
@@ -29,10 +35,43 @@ public class HelloWorldClient {
 				// needing certificates.
 				.usePlaintext(true).build();
 		blockingStub = GreeterGrpc.newBlockingStub(channel);
+		asyncStub = GreeterGrpc.newStub(channel);
 	}
 
 	public void shutdown() throws InterruptedException {
 		channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+	}
+
+	public void chat() throws InterruptedException {
+		final CountDownLatch finishLatch = new CountDownLatch(1);
+		StreamObserver<ChatMessage> requstObserver = asyncStub.chat(new StreamObserver<ChatMessage>() {
+
+			@Override
+			public void onNext(ChatMessage value) {
+				logger.info("client received:" + value.getMessage());
+
+			}
+
+			@Override
+			public void onError(Throwable t) {
+				Status status = Status.fromThrowable(t);
+				logger.info(status.getDescription());
+			}
+
+			@Override
+			public void onCompleted() {
+				logger.info("client completed!");
+				finishLatch.countDown();
+			}
+		});
+
+		for (int i = 0; i < 100; i++) {
+			requstObserver.onNext(ChatMessage.newBuilder().setMessage(String.valueOf(i)).build());
+		}
+
+		requstObserver.onCompleted();
+
+		finishLatch.await();
 	}
 
 	/** Say hello to server. */
@@ -64,6 +103,8 @@ public class HelloWorldClient {
 								 */
 			}
 			client.greet(user);
+
+			client.chat();
 		} finally {
 			client.shutdown();
 		}

@@ -1,10 +1,12 @@
 package io.github.riwcwt;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.examples.helloworld.ChatMessage;
 import io.grpc.examples.helloworld.GreeterGrpc;
 import io.grpc.examples.helloworld.HelloReply;
 import io.grpc.examples.helloworld.HelloRequest;
@@ -60,6 +62,29 @@ public class HelloWorldServer {
 	}
 
 	private class GreeterImpl extends GreeterGrpc.GreeterImplBase {
+
+		@Override
+		public StreamObserver<ChatMessage> chat(StreamObserver<ChatMessage> responseObserver) {
+			return new StreamObserver<ChatMessage>() {
+
+				@Override
+				public void onNext(ChatMessage value) {
+					logger.info("server received:" + value.getMessage());
+					ChatMessage message = ChatMessage.newBuilder().setMessage("收到!").build();
+					responseObserver.onNext(message);
+				}
+
+				@Override
+				public void onError(Throwable t) {
+					logger.log(Level.SEVERE, t.getMessage(), t);
+				}
+
+				@Override
+				public void onCompleted() {
+					responseObserver.onCompleted();
+				}
+			};
+		}
 
 		@Override
 		public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
