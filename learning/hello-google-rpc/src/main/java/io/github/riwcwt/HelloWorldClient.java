@@ -44,6 +44,9 @@ public class HelloWorldClient {
 
 	public void chat() throws InterruptedException {
 		final CountDownLatch finishLatch = new CountDownLatch(1);
+
+		long start = System.currentTimeMillis();
+
 		StreamObserver<ChatMessage> requstObserver = asyncStub.chat(new StreamObserver<ChatMessage>() {
 
 			@Override
@@ -62,10 +65,13 @@ public class HelloWorldClient {
 			public void onCompleted() {
 				logger.info("client completed!");
 				finishLatch.countDown();
+				long end = System.currentTimeMillis();
+
+				logger.info("一共耗时：" + (end - start));
 			}
 		});
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10000; i++) {
 			requstObserver.onNext(ChatMessage.newBuilder().setMessage(String.valueOf(i)).build());
 		}
 
@@ -102,7 +108,16 @@ public class HelloWorldClient {
 								 * Use the arg as the name to greet if provided
 								 */
 			}
-			client.greet(user);
+
+			long start = System.currentTimeMillis();
+
+			for (int i = 0; i < 10; i++) {
+				client.greet(user);
+			}
+
+			long end = System.currentTimeMillis();
+
+			logger.info("一共耗时：" + (end - start));
 
 			client.chat();
 		} finally {
