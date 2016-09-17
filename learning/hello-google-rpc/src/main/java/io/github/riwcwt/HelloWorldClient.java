@@ -2,8 +2,9 @@ package io.github.riwcwt;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -19,12 +20,12 @@ import io.grpc.stub.StreamObserver;
  * A simple client that requests a greeting from the {@link HelloWorldServer}.
  */
 public class HelloWorldClient {
-	private static final Logger logger = Logger.getLogger(HelloWorldClient.class.getName());
+	private static final Logger						logger	= LoggerFactory.getLogger(HelloWorldClient.class.getName());
 
-	private final ManagedChannel channel;
-	private final GreeterGrpc.GreeterBlockingStub blockingStub;
+	private final ManagedChannel					channel;
+	private final GreeterGrpc.GreeterBlockingStub	blockingStub;
 
-	private final GreeterGrpc.GreeterStub asyncStub;
+	private final GreeterGrpc.GreeterStub			asyncStub;
 
 	/**
 	 * Construct client connecting to HelloWorld server at {@code host:port}.
@@ -88,15 +89,14 @@ public class HelloWorldClient {
 		try {
 			response = blockingStub.sayHello(request);
 		} catch (StatusRuntimeException e) {
-			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+			logger.error("RPC failed: {0}", e.getStatus());
 			return;
 		}
 		logger.info("Greeting: " + response.getMessage());
 	}
 
 	/**
-	 * Greet server. If provided, the first element of {@code args} is the name
-	 * to use in the greeting.
+	 * Greet server. If provided, the first element of {@code args} is the name to use in the greeting.
 	 */
 	public static void main(String[] args) throws Exception {
 		HelloWorldClient client = new HelloWorldClient("localhost", 50051);

@@ -1,8 +1,9 @@
 package io.github.riwcwt;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -16,11 +17,11 @@ import io.grpc.stub.StreamObserver;
  * Server that manages startup/shutdown of a {@code Greeter} server.
  */
 public class HelloWorldServer {
-	private static final Logger logger = Logger.getLogger(HelloWorldServer.class.getName());
+	private static final Logger	logger	= LoggerFactory.getLogger(HelloWorldServer.class.getName());
 
 	/* The port on which the server should run */
-	private int port = 50051;
-	private Server server;
+	private int					port	= 50051;
+	private Server				server;
 
 	private void start() throws IOException {
 		server = ServerBuilder.forPort(port).addService(new GreeterImpl()).build().start();
@@ -43,8 +44,7 @@ public class HelloWorldServer {
 	}
 
 	/**
-	 * Await termination on the main thread since the grpc library uses daemon
-	 * threads.
+	 * Await termination on the main thread since the grpc library uses daemon threads.
 	 */
 	private void blockUntilShutdown() throws InterruptedException {
 		if (server != null) {
@@ -76,7 +76,7 @@ public class HelloWorldServer {
 
 				@Override
 				public void onError(Throwable t) {
-					logger.log(Level.SEVERE, t.getMessage(), t);
+					logger.error(t.getMessage(), t);
 				}
 
 				@Override
