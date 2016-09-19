@@ -6,6 +6,10 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.riwcwt.interceptor.ClientHeaderInterceptor;
+import io.grpc.Channel;
+import io.grpc.ClientInterceptor;
+import io.grpc.ClientInterceptors;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Status;
@@ -20,12 +24,12 @@ import io.grpc.stub.StreamObserver;
  * A simple client that requests a greeting from the {@link HelloWorldServer}.
  */
 public class HelloWorldClient {
-	private static final Logger						logger	= LoggerFactory.getLogger(HelloWorldClient.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(HelloWorldClient.class.getName());
 
-	private final ManagedChannel					channel;
-	private final GreeterGrpc.GreeterBlockingStub	blockingStub;
+	private final ManagedChannel channel;
+	private final GreeterGrpc.GreeterBlockingStub blockingStub;
 
-	private final GreeterGrpc.GreeterStub			asyncStub;
+	private final GreeterGrpc.GreeterStub asyncStub;
 
 	/**
 	 * Construct client connecting to HelloWorld server at {@code host:port}.
@@ -35,8 +39,11 @@ public class HelloWorldClient {
 				// Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
 				// needing certificates.
 				.usePlaintext(true).build();
-		blockingStub = GreeterGrpc.newBlockingStub(channel);
-		asyncStub = GreeterGrpc.newStub(channel);
+
+		ClientInterceptor interceptor = new ClientHeaderInterceptor();
+		Channel interceptorChannel = ClientInterceptors.intercept(channel, interceptor);
+		blockingStub = GreeterGrpc.newBlockingStub(interceptorChannel);
+		asyncStub = GreeterGrpc.newStub(interceptorChannel);
 	}
 
 	public void shutdown() throws InterruptedException {
@@ -73,7 +80,11 @@ public class HelloWorldClient {
 		});
 
 		for (int i = 0; i < 10000; i++) {
-			requstObserver.onNext(ChatMessage.newBuilder().setMessage(String.valueOf(i)).build());
+			requstObserver.onNext(ChatMessage.newBuilder()
+					.setMessage(
+							"这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据"
+									+ String.valueOf(i))
+					.build());
 		}
 
 		requstObserver.onCompleted();
@@ -96,7 +107,8 @@ public class HelloWorldClient {
 	}
 
 	/**
-	 * Greet server. If provided, the first element of {@code args} is the name to use in the greeting.
+	 * Greet server. If provided, the first element of {@code args} is the name
+	 * to use in the greeting.
 	 */
 	public static void main(String[] args) throws Exception {
 		HelloWorldClient client = new HelloWorldClient("localhost", 50051);
