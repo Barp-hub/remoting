@@ -79,7 +79,7 @@ public class HelloWorldClient {
 			}
 		});
 
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 1; i++) {
 			requstObserver.onNext(ChatMessage.newBuilder()
 					.setMessage(
 							"这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据"
@@ -123,7 +123,7 @@ public class HelloWorldClient {
 
 			long start = System.currentTimeMillis();
 
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 1; i++) {
 				client.greet(user);
 			}
 

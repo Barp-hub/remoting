@@ -5,8 +5,10 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.riwcwt.interceptor.ServerHeaderInterceptor;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.ServerInterceptors;
 import io.grpc.examples.helloworld.ChatMessage;
 import io.grpc.examples.helloworld.GreeterGrpc;
 import io.grpc.examples.helloworld.HelloReply;
@@ -17,14 +19,16 @@ import io.grpc.stub.StreamObserver;
  * Server that manages startup/shutdown of a {@code Greeter} server.
  */
 public class HelloWorldServer {
-	private static final Logger	logger	= LoggerFactory.getLogger(HelloWorldServer.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(HelloWorldServer.class.getName());
 
 	/* The port on which the server should run */
-	private int					port	= 50051;
-	private Server				server;
+	private int port = 50051;
+	private Server server;
 
 	private void start() throws IOException {
-		server = ServerBuilder.forPort(port).addService(new GreeterImpl()).build().start();
+		server = ServerBuilder.forPort(port)
+				.addService(ServerInterceptors.intercept(new GreeterImpl(), new ServerHeaderInterceptor())).build()
+				.start();
 		logger.info("Server started, listening on " + port);
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
@@ -44,7 +48,8 @@ public class HelloWorldServer {
 	}
 
 	/**
-	 * Await termination on the main thread since the grpc library uses daemon threads.
+	 * Await termination on the main thread since the grpc library uses daemon
+	 * threads.
 	 */
 	private void blockUntilShutdown() throws InterruptedException {
 		if (server != null) {
