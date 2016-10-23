@@ -22,7 +22,7 @@ public class HelloWorldServer {
 	private static final Logger logger = LoggerFactory.getLogger(HelloWorldServer.class.getName());
 
 	/* The port on which the server should run */
-	private int port = 50051;
+	private int port = 50052;
 	private Server server;
 
 	private void start() throws IOException {

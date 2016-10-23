@@ -79,7 +79,7 @@ public class HelloWorldClient {
 			}
 		});
 
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 50; i++) {
 			requstObserver.onNext(ChatMessage.newBuilder()
 					.setMessage(
 							"这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据"
@@ -111,7 +111,7 @@ public class HelloWorldClient {
 	 * to use in the greeting.
 	 */
 	public static void main(String[] args) throws Exception {
-		HelloWorldClient client = new HelloWorldClient("localhost", 50051);
+		HelloWorldClient client = new HelloWorldClient("localhost", 12345);
 		try {
 			/* Access a service running on the local machine on port 50051 */
 			String user = "world";
