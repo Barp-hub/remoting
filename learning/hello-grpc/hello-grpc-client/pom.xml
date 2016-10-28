@@ -28,6 +28,11 @@
 			<artifactId>grpc-stub</artifactId>
 			<version>${grpc.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>io.github.riwcwt</groupId>
+			<artifactId>hello-grpc-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
