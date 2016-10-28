@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.riwcwt.api.GreeterGrpc;
+import io.github.riwcwt.api.HelloReply;
+import io.github.riwcwt.api.HelloRequest;
 import io.github.riwcwt.client.interceptor.ClientHeaderInterceptor;
 import io.grpc.Channel;
 import io.grpc.ClientInterceptor;
@@ -27,7 +29,9 @@ public class Main {
 		GreeterGrpc.GreeterBlockingStub blockingStub = GreeterGrpc.newBlockingStub(interceptorChannel);
 		GreeterGrpc.GreeterStub asyncStub = GreeterGrpc.newStub(interceptorChannel);
 
-		//TODO
+		HelloReply reply = blockingStub.sayHello(HelloRequest.newBuilder().setName("world").build());
+
+		logger.info(reply.getMessage());
 
 		channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
 	}
