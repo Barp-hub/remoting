@@ -72,6 +72,10 @@
 
 		var app4 = new Vue({
 			el : '#app-4',
+			created : function() {
+				// `this` points to the vm instance
+				console.log(this.todos);
+			},
 			data : {
 				todos : [ {
 					text : 'Learn JavaScript'
@@ -86,6 +90,7 @@
 
 
 	<div id="app-7">
+	
 		<ol>
 			<!--
 		    Now we provide each todo-item with the todo object
