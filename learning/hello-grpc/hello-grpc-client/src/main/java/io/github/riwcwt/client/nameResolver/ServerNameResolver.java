@@ -95,10 +95,10 @@ public class ServerNameResolver extends NameResolver {
 						break label142;
 					}
 
-					List<List<ResolvedServerInfo>> serversList = new ArrayList<>();
+					List<List<ResolvedServerInfo>> serversList = new ArrayList<List<ResolvedServerInfo>>();
 
 					for (int var6 = 0; var6 < inetSocketAddresses.length; ++var6) {
-						List<ResolvedServerInfo> var25 = new ArrayList(inetSocketAddresses.length);
+						List<ResolvedServerInfo> var25 = new ArrayList<ResolvedServerInfo>(inetSocketAddresses.length);
 						InetSocketAddress inetSocketAddress = inetSocketAddresses[var6];
 						var25.add(new ResolvedServerInfo(
 								new InetSocketAddress(inetSocketAddress.getHostName(), inetSocketAddress.getPort()),
