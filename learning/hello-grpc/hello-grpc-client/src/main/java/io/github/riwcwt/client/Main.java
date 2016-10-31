@@ -9,11 +9,13 @@ import io.github.riwcwt.api.GreeterGrpc;
 import io.github.riwcwt.api.HelloReply;
 import io.github.riwcwt.api.HelloRequest;
 import io.github.riwcwt.client.interceptor.ClientHeaderInterceptor;
+import io.github.riwcwt.client.nameResolver.ServerNameResolverProvider;
 import io.grpc.Channel;
 import io.grpc.ClientInterceptor;
 import io.grpc.ClientInterceptors;
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import io.grpc.netty.NettyChannelBuilder;
+import io.grpc.util.RoundRobinLoadBalancerFactory;
 
 public class Main {
 	private static final Logger logger = LoggerFactory.getLogger(Main.class);
@@ -23,7 +25,10 @@ public class Main {
 	}
 
 	public static void client() throws InterruptedException {
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9999).usePlaintext(true).build();
+		//		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9999).usePlaintext(true).build();
+		ManagedChannel channel = NettyChannelBuilder.forTarget("server://127.0.0.1:9999")
+				.nameResolverFactory(new ServerNameResolverProvider())
+				.loadBalancerFactory(RoundRobinLoadBalancerFactory.getInstance()).usePlaintext(true).build();
 		ClientInterceptor interceptor = new ClientHeaderInterceptor();
 		Channel interceptorChannel = ClientInterceptors.intercept(channel, interceptor);
 		GreeterGrpc.GreeterBlockingStub blockingStub = GreeterGrpc.newBlockingStub(interceptorChannel);
