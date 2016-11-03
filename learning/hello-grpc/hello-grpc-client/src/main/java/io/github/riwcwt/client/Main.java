@@ -1,5 +1,6 @@
 package io.github.riwcwt.client;
 
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -58,12 +59,18 @@ public class Main {
 			}
 		});
 
-		for (int i = 0; i < 10; i++) {
-			ChatMessage message = ChatMessage.newBuilder().setMessage("client request : " + System.currentTimeMillis())
-					.build();
+		Scanner in = new Scanner(System.in);
+		while (true) {
+
+			String content = in.nextLine();
+			if ("quit".equalsIgnoreCase(content)) {
+				break;
+			}
+
+			ChatMessage message = ChatMessage.newBuilder().setMessage(content).build();
 			requestStreamObserver.onNext(message);
 		}
-
+		in.close();
 		requestStreamObserver.onCompleted();
 
 		channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
