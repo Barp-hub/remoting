@@ -1,11 +1,14 @@
 package io.github.riwcwt;
 
-/**
- * Hello world!
- *
- */
+import java.util.ServiceLoader;
+
+import io.github.riwcwt.spi.Car;
+
 public class App {
 	public static void main(String[] args) {
-		System.out.println("Hello World!");
+		ServiceLoader<Car> loaders = ServiceLoader.load(Car.class);
+		for (Car car : loaders) {
+			car.run();
+		}
 	}
 }
