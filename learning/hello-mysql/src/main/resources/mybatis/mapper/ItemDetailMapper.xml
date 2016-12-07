@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mysql.mapper.ItemDetailMapper">
+	<resultMap id="BaseResultMap" type="com.mysql.entity.ItemDetail">
+		<id column="numIId" property="numIId" jdbcType="BIGINT" />
+		<result column="cid" property="cid" jdbcType="BIGINT" />
+		<result column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="custom" property="custom" jdbcType="SMALLINT" />
+		<result column="global" property="global" jdbcType="SMALLINT" />
+		<result column="status" property="status" jdbcType="SMALLINT" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="postFee" property="postFee" jdbcType="INTEGER" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="listTime" property="listTime" jdbcType="TIMESTAMP" />
+		<result column="delistTime" property="delistTime" jdbcType="TIMESTAMP" />
+		<result column="saleVolume" property="saleVolume" jdbcType="INTEGER" />
+		<result column="order" property="order" jdbcType="INTEGER" />
+		<result column="tags" property="tags" jdbcType="VARCHAR" />
+		<result column="itemWeight" property="itemWeight" jdbcType="VARCHAR" />
+		<result column="itemSize" property="itemSize" jdbcType="VARCHAR" />
+		<result column="limitCount" property="limitCount" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.mysql.entity.ItemDetailWithBLOBs"
+		extends="BaseResultMap">
+		<result column="desc" property="desc" jdbcType="LONGVARCHAR" />
+		<result column="intro" property="intro" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		numIId, cid, sid, custom, global, status, title, postFee, url, createTime,
+		listTime,
+		delistTime, saleVolume, `order`, tags, itemWeight, itemSize, limitCount
+	</sql>
+	<sql id="Blob_Column_List">
+		`desc`, intro
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from item_detail
+		where numIId = #{numIId,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from item_detail
+		where numIId = #{numIId,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.mysql.entity.ItemDetailWithBLOBs">
+		insert into item_detail (numIId, cid, sid,
+		custom, global, status,
+		title, postFee, url,
+		createTime, listTime, delistTime,
+		saleVolume, `order`, tags,
+		itemWeight, itemSize, limitCount,
+		`desc`, intro)
+		values (#{numIId,jdbcType=BIGINT}, #{cid,jdbcType=BIGINT},
+		#{sid,jdbcType=BIGINT},
+		#{custom,jdbcType=SMALLINT}, #{global,jdbcType=SMALLINT}, #{status,jdbcType=SMALLINT},
+		#{title,jdbcType=VARCHAR}, #{postFee,jdbcType=INTEGER},
+		#{url,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{listTime,jdbcType=TIMESTAMP}, #{delistTime,jdbcType=TIMESTAMP},
+		#{saleVolume,jdbcType=INTEGER}, #{order,jdbcType=INTEGER},
+		#{tags,jdbcType=VARCHAR},
+		#{itemWeight,jdbcType=VARCHAR}, #{itemSize,jdbcType=VARCHAR}, #{limitCount,jdbcType=INTEGER},
+		#{desc,jdbcType=LONGVARCHAR}, #{intro,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.mysql.entity.ItemDetailWithBLOBs">
+		insert into item_detail
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="numIId != null">
+				numIId,
+			</if>
+			<if test="cid != null">
+				cid,
+			</if>
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="custom != null">
+				custom,
+			</if>
+			<if test="global != null">
+				global,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="postFee != null">
+				postFee,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="listTime != null">
+				listTime,
+			</if>
+			<if test="delistTime != null">
+				delistTime,
+			</if>
+			<if test="saleVolume != null">
+				saleVolume,
+			</if>
+			<if test="order != null">
+				`order`,
+			</if>
+			<if test="tags != null">
+				tags,
+			</if>
+			<if test="itemWeight != null">
+				itemWeight,
+			</if>
+			<if test="itemSize != null">
+				itemSize,
+			</if>
+			<if test="limitCount != null">
+				limitCount,
+			</if>
+			<if test="desc != null">
+				`desc`,
+			</if>
+			<if test="intro != null">
+				intro,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="numIId != null">
+				#{numIId,jdbcType=BIGINT},
+			</if>
+			<if test="cid != null">
+				#{cid,jdbcType=BIGINT},
+			</if>
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="custom != null">
+				#{custom,jdbcType=SMALLINT},
+			</if>
+			<if test="global != null">
+				#{global,jdbcType=SMALLINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=SMALLINT},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="postFee != null">
+				#{postFee,jdbcType=INTEGER},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="listTime != null">
+				#{listTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delistTime != null">
+				#{delistTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="saleVolume != null">
+				#{saleVolume,jdbcType=INTEGER},
+			</if>
+			<if test="order != null">
+				#{order,jdbcType=INTEGER},
+			</if>
+			<if test="tags != null">
+				#{tags,jdbcType=VARCHAR},
+			</if>
+			<if test="itemWeight != null">
+				#{itemWeight,jdbcType=VARCHAR},
+			</if>
+			<if test="itemSize != null">
+				#{itemSize,jdbcType=VARCHAR},
+			</if>
+			<if test="limitCount != null">
+				#{limitCount,jdbcType=INTEGER},
+			</if>
+			<if test="desc != null">
+				#{desc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="intro != null">
+				#{intro,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.mysql.entity.ItemDetailWithBLOBs">
+		update item_detail
+		<set>
+			<if test="cid != null">
+				cid = #{cid,jdbcType=BIGINT},
+			</if>
+			<if test="sid != null">
+				sid = #{sid,jdbcType=BIGINT},
+			</if>
+			<if test="custom != null">
+				custom = #{custom,jdbcType=SMALLINT},
+			</if>
+			<if test="global != null">
+				global = #{global,jdbcType=SMALLINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=SMALLINT},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="postFee != null">
+				postFee = #{postFee,jdbcType=INTEGER},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="listTime != null">
+				listTime = #{listTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delistTime != null">
+				delistTime = #{delistTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="saleVolume != null">
+				saleVolume = #{saleVolume,jdbcType=INTEGER},
+			</if>
+			<if test="order != null">
+				`order` = #{order,jdbcType=INTEGER},
+			</if>
+			<if test="tags != null">
+				tags = #{tags,jdbcType=VARCHAR},
+			</if>
+			<if test="itemWeight != null">
+				itemWeight = #{itemWeight,jdbcType=VARCHAR},
+			</if>
+			<if test="itemSize != null">
+				itemSize = #{itemSize,jdbcType=VARCHAR},
+			</if>
+			<if test="limitCount != null">
+				limitCount = #{limitCount,jdbcType=INTEGER},
+			</if>
+			<if test="desc != null">
+				`desc` = #{desc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="intro != null">
+				intro = #{intro,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where numIId = #{numIId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mysql.entity.ItemDetailWithBLOBs">
+		update item_detail
+		set cid = #{cid,jdbcType=BIGINT},
+		sid = #{sid,jdbcType=BIGINT},
+		custom = #{custom,jdbcType=SMALLINT},
+		global = #{global,jdbcType=SMALLINT},
+		status = #{status,jdbcType=SMALLINT},
+		title = #{title,jdbcType=VARCHAR},
+		postFee = #{postFee,jdbcType=INTEGER},
+		url = #{url,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=TIMESTAMP},
+		listTime = #{listTime,jdbcType=TIMESTAMP},
+		delistTime = #{delistTime,jdbcType=TIMESTAMP},
+		saleVolume = #{saleVolume,jdbcType=INTEGER},
+		`order` = #{order,jdbcType=INTEGER},
+		tags = #{tags,jdbcType=VARCHAR},
+		itemWeight = #{itemWeight,jdbcType=VARCHAR},
+		itemSize = #{itemSize,jdbcType=VARCHAR},
+		limitCount = #{limitCount,jdbcType=INTEGER},
+		`desc` = #{desc,jdbcType=LONGVARCHAR},
+		intro = #{intro,jdbcType=LONGVARCHAR}
+		where numIId = #{numIId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.mysql.entity.ItemDetail">
+		update item_detail
+		set cid = #{cid,jdbcType=BIGINT},
+		sid = #{sid,jdbcType=BIGINT},
+		custom = #{custom,jdbcType=SMALLINT},
+		global = #{global,jdbcType=SMALLINT},
+		status = #{status,jdbcType=SMALLINT},
+		title = #{title,jdbcType=VARCHAR},
+		postFee = #{postFee,jdbcType=INTEGER},
+		url = #{url,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=TIMESTAMP},
+		listTime = #{listTime,jdbcType=TIMESTAMP},
+		delistTime = #{delistTime,jdbcType=TIMESTAMP},
+		saleVolume = #{saleVolume,jdbcType=INTEGER},
+		`order` = #{order,jdbcType=INTEGER},
+		tags = #{tags,jdbcType=VARCHAR},
+		itemWeight = #{itemWeight,jdbcType=VARCHAR},
+		itemSize = #{itemSize,jdbcType=VARCHAR},
+		limitCount = #{limitCount,jdbcType=INTEGER}
+		where numIId = #{numIId,jdbcType=BIGINT}
+	</update>
+</mapper>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mysql.mapper.GroupJoinRequestMapper" >
+  <resultMap id="BaseResultMap" type="com.mysql.entity.GroupJoinRequest" >
+    <id column="rid" property="rid" jdbcType="BIGINT" />
+    <result column="gid" property="gid" jdbcType="BIGINT" />
+    <result column="uid" property="uid" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="bids" property="bids" jdbcType="VARCHAR" />
+    <result column="processBy" property="processBy" jdbcType="BIGINT" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    rid, gid, uid, status, message, bids, processBy, createTime, updateTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from group_join_request
+    where rid = #{rid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from group_join_request
+    where rid = #{rid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mysql.entity.GroupJoinRequest" >
+    insert into group_join_request (rid, gid, uid, status, 
+      message, bids, processBy, 
+      createTime, updateTime)
+    values (#{rid,jdbcType=BIGINT}, #{gid,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
+      #{message,jdbcType=VARCHAR}, #{bids,jdbcType=VARCHAR}, #{processBy,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mysql.entity.GroupJoinRequest" >
+    insert into group_join_request
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rid != null" >
+        rid,
+      </if>
+      <if test="gid != null" >
+        gid,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="bids != null" >
+        bids,
+      </if>
+      <if test="processBy != null" >
+        processBy,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rid != null" >
+        #{rid,jdbcType=BIGINT},
+      </if>
+      <if test="gid != null" >
+        #{gid,jdbcType=BIGINT},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="bids != null" >
+        #{bids,jdbcType=VARCHAR},
+      </if>
+      <if test="processBy != null" >
+        #{processBy,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mysql.entity.GroupJoinRequest" >
+    update group_join_request
+    <set >
+      <if test="gid != null" >
+        gid = #{gid,jdbcType=BIGINT},
+      </if>
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="bids != null" >
+        bids = #{bids,jdbcType=VARCHAR},
+      </if>
+      <if test="processBy != null" >
+        processBy = #{processBy,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where rid = #{rid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mysql.entity.GroupJoinRequest" >
+    update group_join_request
+    set gid = #{gid,jdbcType=BIGINT},
+      uid = #{uid,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      message = #{message,jdbcType=VARCHAR},
+      bids = #{bids,jdbcType=VARCHAR},
+      processBy = #{processBy,jdbcType=BIGINT},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where rid = #{rid,jdbcType=BIGINT}
+  </update>
+</mapper>

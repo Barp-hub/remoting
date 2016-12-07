@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mysql.mapper.GroupUserMapper" >
+  <resultMap id="BaseResultMap" type="com.mysql.entity.GroupUser" >
+    <id column="guid" property="guid" jdbcType="BIGINT" />
+    <result column="gid" property="gid" jdbcType="BIGINT" />
+    <result column="uid" property="uid" jdbcType="BIGINT" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="role" property="role" jdbcType="INTEGER" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="bids" property="bids" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    guid, gid, uid, createTime, role, nickname, status, bids
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from group_user
+    where guid = #{guid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from group_user
+    where guid = #{guid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mysql.entity.GroupUser" >
+    insert into group_user (guid, gid, uid, 
+      createTime, role, nickname, 
+      status, bids)
+    values (#{guid,jdbcType=BIGINT}, #{gid,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{role,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{bids,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mysql.entity.GroupUser" >
+    insert into group_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="guid != null" >
+        guid,
+      </if>
+      <if test="gid != null" >
+        gid,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="role != null" >
+        role,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="bids != null" >
+        bids,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="guid != null" >
+        #{guid,jdbcType=BIGINT},
+      </if>
+      <if test="gid != null" >
+        #{gid,jdbcType=BIGINT},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="role != null" >
+        #{role,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="bids != null" >
+        #{bids,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mysql.entity.GroupUser" >
+    update group_user
+    <set >
+      <if test="gid != null" >
+        gid = #{gid,jdbcType=BIGINT},
+      </if>
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="role != null" >
+        role = #{role,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="bids != null" >
+        bids = #{bids,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where guid = #{guid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mysql.entity.GroupUser" >
+    update group_user
+    set gid = #{gid,jdbcType=BIGINT},
+      uid = #{uid,jdbcType=BIGINT},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      role = #{role,jdbcType=INTEGER},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      bids = #{bids,jdbcType=VARCHAR}
+    where guid = #{guid,jdbcType=BIGINT}
+  </update>
+</mapper>

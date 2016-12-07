@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mysql.mapper.ForumTopicMapper" >
+  <resultMap id="BaseResultMap" type="com.mysql.entity.ForumTopic" >
+    <id column="tid" property="tid" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="groupid" property="groupid" jdbcType="BIGINT" />
+    <result column="withPhoto" property="withPhoto" jdbcType="BIT" />
+    <result column="receiveMsg" property="receiveMsg" jdbcType="BIT" />
+    <result column="selected" property="selected" jdbcType="BIT" />
+    <result column="uid" property="uid" jdbcType="BIGINT" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="postNum" property="postNum" jdbcType="INTEGER" />
+    <result column="visitNum" property="visitNum" jdbcType="INTEGER" />
+    <result column="likeNum" property="likeNum" jdbcType="INTEGER" />
+    <result column="ownerPost" property="ownerPost" jdbcType="INTEGER" />
+    <result column="photoPost" property="photoPost" jdbcType="INTEGER" />
+    <result column="hot" property="hot" jdbcType="INTEGER" />
+    <result column="secret" property="secret" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.mysql.entity.ForumTopic" extends="BaseResultMap" >
+    <result column="title" property="title" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tid, status, groupid, withPhoto, receiveMsg, selected, uid, createTime, updateTime, 
+    postNum, visitNum, likeNum, ownerPost, photoPost, hot, secret
+  </sql>
+  <sql id="Blob_Column_List" >
+    title
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from forum_topic
+    where tid = #{tid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from forum_topic
+    where tid = #{tid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mysql.entity.ForumTopic" >
+    insert into forum_topic (tid, status, groupid, 
+      withPhoto, receiveMsg, selected, 
+      uid, createTime, updateTime, 
+      postNum, visitNum, likeNum, 
+      ownerPost, photoPost, hot, 
+      secret, title)
+    values (#{tid,jdbcType=BIGINT}, #{status,jdbcType=SMALLINT}, #{groupid,jdbcType=BIGINT}, 
+      #{withPhoto,jdbcType=BIT}, #{receiveMsg,jdbcType=BIT}, #{selected,jdbcType=BIT}, 
+      #{uid,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{postNum,jdbcType=INTEGER}, #{visitNum,jdbcType=INTEGER}, #{likeNum,jdbcType=INTEGER}, 
+      #{ownerPost,jdbcType=INTEGER}, #{photoPost,jdbcType=INTEGER}, #{hot,jdbcType=INTEGER}, 
+      #{secret,jdbcType=VARCHAR}, #{title,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mysql.entity.ForumTopic" >
+    insert into forum_topic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tid != null" >
+        tid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="groupid != null" >
+        groupid,
+      </if>
+      <if test="withPhoto != null" >
+        withPhoto,
+      </if>
+      <if test="receiveMsg != null" >
+        receiveMsg,
+      </if>
+      <if test="selected != null" >
+        selected,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+      <if test="postNum != null" >
+        postNum,
+      </if>
+      <if test="visitNum != null" >
+        visitNum,
+      </if>
+      <if test="likeNum != null" >
+        likeNum,
+      </if>
+      <if test="ownerPost != null" >
+        ownerPost,
+      </if>
+      <if test="photoPost != null" >
+        photoPost,
+      </if>
+      <if test="hot != null" >
+        hot,
+      </if>
+      <if test="secret != null" >
+        secret,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tid != null" >
+        #{tid,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="groupid != null" >
+        #{groupid,jdbcType=BIGINT},
+      </if>
+      <if test="withPhoto != null" >
+        #{withPhoto,jdbcType=BIT},
+      </if>
+      <if test="receiveMsg != null" >
+        #{receiveMsg,jdbcType=BIT},
+      </if>
+      <if test="selected != null" >
+        #{selected,jdbcType=BIT},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postNum != null" >
+        #{postNum,jdbcType=INTEGER},
+      </if>
+      <if test="visitNum != null" >
+        #{visitNum,jdbcType=INTEGER},
+      </if>
+      <if test="likeNum != null" >
+        #{likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="ownerPost != null" >
+        #{ownerPost,jdbcType=INTEGER},
+      </if>
+      <if test="photoPost != null" >
+        #{photoPost,jdbcType=INTEGER},
+      </if>
+      <if test="hot != null" >
+        #{hot,jdbcType=INTEGER},
+      </if>
+      <if test="secret != null" >
+        #{secret,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mysql.entity.ForumTopic" >
+    update forum_topic
+    <set >
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="groupid != null" >
+        groupid = #{groupid,jdbcType=BIGINT},
+      </if>
+      <if test="withPhoto != null" >
+        withPhoto = #{withPhoto,jdbcType=BIT},
+      </if>
+      <if test="receiveMsg != null" >
+        receiveMsg = #{receiveMsg,jdbcType=BIT},
+      </if>
+      <if test="selected != null" >
+        selected = #{selected,jdbcType=BIT},
+      </if>
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postNum != null" >
+        postNum = #{postNum,jdbcType=INTEGER},
+      </if>
+      <if test="visitNum != null" >
+        visitNum = #{visitNum,jdbcType=INTEGER},
+      </if>
+      <if test="likeNum != null" >
+        likeNum = #{likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="ownerPost != null" >
+        ownerPost = #{ownerPost,jdbcType=INTEGER},
+      </if>
+      <if test="photoPost != null" >
+        photoPost = #{photoPost,jdbcType=INTEGER},
+      </if>
+      <if test="hot != null" >
+        hot = #{hot,jdbcType=INTEGER},
+      </if>
+      <if test="secret != null" >
+        secret = #{secret,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where tid = #{tid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mysql.entity.ForumTopic" >
+    update forum_topic
+    set status = #{status,jdbcType=SMALLINT},
+      groupid = #{groupid,jdbcType=BIGINT},
+      withPhoto = #{withPhoto,jdbcType=BIT},
+      receiveMsg = #{receiveMsg,jdbcType=BIT},
+      selected = #{selected,jdbcType=BIT},
+      uid = #{uid,jdbcType=BIGINT},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      postNum = #{postNum,jdbcType=INTEGER},
+      visitNum = #{visitNum,jdbcType=INTEGER},
+      likeNum = #{likeNum,jdbcType=INTEGER},
+      ownerPost = #{ownerPost,jdbcType=INTEGER},
+      photoPost = #{photoPost,jdbcType=INTEGER},
+      hot = #{hot,jdbcType=INTEGER},
+      secret = #{secret,jdbcType=VARCHAR},
+      title = #{title,jdbcType=LONGVARCHAR}
+    where tid = #{tid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mysql.entity.ForumTopic" >
+    update forum_topic
+    set status = #{status,jdbcType=SMALLINT},
+      groupid = #{groupid,jdbcType=BIGINT},
+      withPhoto = #{withPhoto,jdbcType=BIT},
+      receiveMsg = #{receiveMsg,jdbcType=BIT},
+      selected = #{selected,jdbcType=BIT},
+      uid = #{uid,jdbcType=BIGINT},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      postNum = #{postNum,jdbcType=INTEGER},
+      visitNum = #{visitNum,jdbcType=INTEGER},
+      likeNum = #{likeNum,jdbcType=INTEGER},
+      ownerPost = #{ownerPost,jdbcType=INTEGER},
+      photoPost = #{photoPost,jdbcType=INTEGER},
+      hot = #{hot,jdbcType=INTEGER},
+      secret = #{secret,jdbcType=VARCHAR}
+    where tid = #{tid,jdbcType=BIGINT}
+  </update>
+</mapper>

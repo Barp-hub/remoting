@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mysql.mapper.FileDataMapper">
+	<resultMap id="BaseResultMap" type="com.mysql.entity.FileData">
+		<id column="fid" property="fid" jdbcType="BIGINT" />
+		<result column="owner" property="owner" jdbcType="BIGINT" />
+		<result column="uploadTime" property="uploadtime" jdbcType="TIMESTAMP" />
+		<result column="origTime" property="origtime" jdbcType="TIMESTAMP" />
+		<result column="size" property="size" jdbcType="INTEGER" />
+		<result column="duration" property="duration" jdbcType="INTEGER" />
+		<result column="filetype" property="filetype" jdbcType="SMALLINT" />
+		<result column="width" property="width" jdbcType="SMALLINT" />
+		<result column="height" property="height" jdbcType="SMALLINT" />
+		<result column="farm" property="farm" jdbcType="SMALLINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="secret" property="secret" jdbcType="VARCHAR" />
+		<result column="gpsInfo" property="gpsinfo" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		fid, owner, uploadTime, origTime, size, duration, filetype,
+		width, height,
+		farm,
+		status, secret, gpsInfo
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from file_data_0
+		where fid = #{fid,jdbcType=BIGINT}
+	</select>
+	<select id="getFile" resultMap="BaseResultMap" parameterType="com.mysql.entity.FileData">
+		select
+		<include refid="Base_Column_List" />
+		from ${table}
+		where fid = #{fid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		file_data_0
+		where fid = #{fid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.mysql.entity.FileData">
+		insert into file_data_0 (fid,
+		owner, uploadTime,
+		origTime, size, duration,
+		filetype, width, height,
+		farm, status, secret,
+		gpsInfo)
+		values (#{fid,jdbcType=BIGINT},
+		#{owner,jdbcType=BIGINT},
+		#{uploadtime,jdbcType=TIMESTAMP},
+		#{origtime,jdbcType=TIMESTAMP}, #{size,jdbcType=INTEGER},
+		#{duration,jdbcType=INTEGER},
+		#{filetype,jdbcType=SMALLINT},
+		#{width,jdbcType=SMALLINT},
+		#{height,jdbcType=SMALLINT},
+		#{farm,jdbcType=SMALLINT}, #{status,jdbcType=TINYINT},
+		#{secret,jdbcType=VARCHAR},
+		#{gpsinfo,jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="addFile" parameterType="com.mysql.entity.FileData">
+		insert into ${table} (fid,
+		owner, uploadTime,
+		origTime, size, duration,
+		filetype, width, height,
+		farm, status, secret,
+		gpsInfo)
+		values (#{fid,jdbcType=BIGINT},
+		#{owner,jdbcType=BIGINT},
+		#{uploadtime,jdbcType=TIMESTAMP},
+		#{origtime,jdbcType=TIMESTAMP}, #{size,jdbcType=INTEGER},
+		#{duration,jdbcType=INTEGER},
+		#{filetype,jdbcType=SMALLINT},
+		#{width,jdbcType=SMALLINT},
+		#{height,jdbcType=SMALLINT},
+		#{farm,jdbcType=SMALLINT}, #{status,jdbcType=TINYINT},
+		#{secret,jdbcType=VARCHAR},
+		#{gpsinfo,jdbcType=VARCHAR})
+		ON DUPLICATE
+		KEY UPDATE
+		owner = #{owner,jdbcType=BIGINT}
+	</insert>
+
+	<delete id="deleteFile" parameterType="com.mysql.entity.FileData">
+		delete from
+		${table}
+		where
+		fid = #{fid,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="insertSelective" parameterType="com.mysql.entity.FileData">
+		insert into file_data_0
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fid != null">
+				fid,
+			</if>
+			<if test="owner != null">
+				owner,
+			</if>
+			<if test="uploadtime != null">
+				uploadTime,
+			</if>
+			<if test="origtime != null">
+				origTime,
+			</if>
+			<if test="size != null">
+				size,
+			</if>
+			<if test="duration != null">
+				duration,
+			</if>
+			<if test="filetype != null">
+				filetype,
+			</if>
+			<if test="width != null">
+				width,
+			</if>
+			<if test="height != null">
+				height,
+			</if>
+			<if test="farm != null">
+				farm,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="secret != null">
+				secret,
+			</if>
+			<if test="gpsinfo != null">
+				gpsInfo,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fid != null">
+				#{fid,jdbcType=BIGINT},
+			</if>
+			<if test="owner != null">
+				#{owner,jdbcType=BIGINT},
+			</if>
+			<if test="uploadtime != null">
+				#{uploadtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="origtime != null">
+				#{origtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="size != null">
+				#{size,jdbcType=INTEGER},
+			</if>
+			<if test="duration != null">
+				#{duration,jdbcType=INTEGER},
+			</if>
+			<if test="filetype != null">
+				#{filetype,jdbcType=SMALLINT},
+			</if>
+			<if test="width != null">
+				#{width,jdbcType=SMALLINT},
+			</if>
+			<if test="height != null">
+				#{height,jdbcType=SMALLINT},
+			</if>
+			<if test="farm != null">
+				#{farm,jdbcType=SMALLINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="secret != null">
+				#{secret,jdbcType=VARCHAR},
+			</if>
+			<if test="gpsinfo != null">
+				#{gpsinfo,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.mysql.entity.FileData">
+		update file_data_0
+		<set>
+			<if test="owner != null">
+				owner = #{owner,jdbcType=BIGINT},
+			</if>
+			<if test="uploadtime != null">
+				uploadTime = #{uploadtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="origtime != null">
+				origTime = #{origtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="size != null">
+				size = #{size,jdbcType=INTEGER},
+			</if>
+			<if test="duration != null">
+				duration = #{duration,jdbcType=INTEGER},
+			</if>
+			<if test="filetype != null">
+				filetype = #{filetype,jdbcType=SMALLINT},
+			</if>
+			<if test="width != null">
+				width = #{width,jdbcType=SMALLINT},
+			</if>
+			<if test="height != null">
+				height = #{height,jdbcType=SMALLINT},
+			</if>
+			<if test="farm != null">
+				farm = #{farm,jdbcType=SMALLINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="secret != null">
+				secret = #{secret,jdbcType=VARCHAR},
+			</if>
+			<if test="gpsinfo != null">
+				gpsInfo = #{gpsinfo,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where fid = #{fid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.mysql.entity.FileData">
+		update file_data_0
+		set owner = #{owner,jdbcType=BIGINT},
+		uploadTime =
+		#{uploadtime,jdbcType=TIMESTAMP},
+		origTime =
+		#{origtime,jdbcType=TIMESTAMP},
+		size = #{size,jdbcType=INTEGER},
+		duration = #{duration,jdbcType=INTEGER},
+		filetype =
+		#{filetype,jdbcType=SMALLINT},
+		width = #{width,jdbcType=SMALLINT},
+		height = #{height,jdbcType=SMALLINT},
+		farm = #{farm,jdbcType=SMALLINT},
+		status = #{status,jdbcType=TINYINT},
+		secret =
+		#{secret,jdbcType=VARCHAR},
+		gpsInfo = #{gpsinfo,jdbcType=VARCHAR}
+		where
+		fid = #{fid,jdbcType=BIGINT}
+	</update>
+</mapper>
