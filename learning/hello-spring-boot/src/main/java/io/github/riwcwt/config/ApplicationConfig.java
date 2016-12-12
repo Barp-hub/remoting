@@ -13,7 +13,7 @@ import org.springframework.context.annotation.PropertySource;
  * Created by michael on 2016-12-08.
  */
 @Configuration
-@PropertySource(value = "${config.file}", ignoreResourceNotFound = true, encoding = "UTF-8")
+//@PropertySource(value = "${config.file}", ignoreResourceNotFound = true, encoding = "UTF-8")
 public class ApplicationConfig {
 
     //@Bean
