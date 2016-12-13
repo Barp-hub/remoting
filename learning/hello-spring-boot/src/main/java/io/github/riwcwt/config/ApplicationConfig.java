@@ -3,6 +3,7 @@ package io.github.riwcwt.config;
 //import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 //import org.springframework.context.annotation.Bean;
 
+import io.github.riwcwt.annotations.EnableRPC;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 //import org.springframework.core.io.UrlResource;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.PropertySource;
  */
 @Configuration
 //@PropertySource(value = "${config.file}", ignoreResourceNotFound = true, encoding = "UTF-8")
+@EnableRPC
 public class ApplicationConfig {
 
     //@Bean
