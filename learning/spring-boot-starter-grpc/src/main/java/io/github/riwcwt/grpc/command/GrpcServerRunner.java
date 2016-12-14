@@ -19,6 +19,7 @@ import org.springframework.core.type.StandardMethodMetadata;
 
 import io.github.riwcwt.grpc.annotation.GrpcGlobalInterceptor;
 import io.github.riwcwt.grpc.annotation.GrpcService;
+import io.github.riwcwt.grpc.autoconfigure.GrpcServerProperties;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -33,6 +34,9 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
 	@Autowired
 	private AbstractApplicationContext applicationContext;
 
+	@Autowired
+	private GrpcServerProperties grpcServerProperties;
+
 	private Server server;
 
 	@Override
@@ -42,7 +46,7 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
 		Collection<ServerInterceptor> globalInterceptors = this.getBeanNamesByTypeWithAnnotation(GrpcGlobalInterceptor.class, ServerInterceptor.class)
 				.map(name -> applicationContext.getBeanFactory().getBean(name, ServerInterceptor.class)).collect(Collectors.toList());
 
-		final ServerBuilder<?> serverBuilder = ServerBuilder.forPort(8899);
+		final ServerBuilder<?> serverBuilder = ServerBuilder.forPort(this.grpcServerProperties.getPort());
 
 		// find and register all GRpcService-enabled beans
 		getBeanNamesByTypeWithAnnotation(GrpcService.class, BindableService.class).forEach(name -> {
@@ -55,7 +59,7 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
 		});
 
 		server = serverBuilder.build().start();
-		logger.info("gRPC Server started, listening on port {}.", 8899);
+		logger.info("gRPC Server started, listening on port {}.", this.grpcServerProperties.getPort());
 		startDaemonAwaitThread();
 
 	}
