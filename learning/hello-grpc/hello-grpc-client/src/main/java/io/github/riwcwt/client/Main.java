@@ -29,7 +29,7 @@ public class Main {
 
 	public static void client() throws InterruptedException {
 		//		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9999).usePlaintext(true).build();
-		ManagedChannel channel = NettyChannelBuilder.forTarget("server://localhost:9999")
+		ManagedChannel channel = NettyChannelBuilder.forTarget("server://localhost:11111")
 				.nameResolverFactory(new ServerNameResolverProvider())
 				.loadBalancerFactory(RoundRobinLoadBalancerFactory.getInstance()).usePlaintext(true).build();
 		ClientInterceptor interceptor = new ClientHeaderInterceptor();
