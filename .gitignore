@@ -9,6 +9,8 @@
 .settings
 .classpath
 .project
+*.log
+*.iml
 
 bin/
 target/

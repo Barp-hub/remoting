@@ -11,6 +11,8 @@
 
     <modules>
         <module>master-sso</module>
+        <module>system-mall</module>
+        <module>system-scm</module>
     </modules>
 
     <parent>
