@@ -23,7 +23,7 @@ public class SpringBootPerformanceApplicationTests {
 
         executor.initialize();
 
-        int count = 1000;
+        int count = 600;
         CountDownLatch latch = new CountDownLatch(count);
         for (int i = 0; i < count; i++) {
             executor.execute(() -> {
