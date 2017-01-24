@@ -16,6 +16,8 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.util.internal.logging.InternalLoggerFactory;
+import io.netty.util.internal.logging.Log4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +33,10 @@ public class NettyClientPool {
 
 
     public static void main(String[] args) throws InterruptedException, IOException {
+
+        InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);
+
+
         NettyClientPool client = new NettyClientPool();
         client.start();
 
@@ -50,9 +56,12 @@ public class NettyClientPool {
     public void start() throws InterruptedException {
         this.group = new NioEventLoopGroup();
         this.bootstrap = new Bootstrap();
-        this.bootstrap.group(this.group).channel(NioSocketChannel.class).option(ChannelOption.SO_KEEPALIVE, true)
-                .option(ChannelOption.TCP_NODELAY, true).option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
-                .option(ChannelOption.WRITE_BUFFER_WATER_MARK, WriteBufferWaterMark.DEFAULT);
+        this.bootstrap.group(this.group);
+        this.bootstrap.channel(NioSocketChannel.class);
+        this.bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+        this.bootstrap.option(ChannelOption.TCP_NODELAY, true);
+        this.bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+        this.bootstrap.option(ChannelOption.WRITE_BUFFER_WATER_MARK, WriteBufferWaterMark.DEFAULT);
         this.channelPoolMap = new AbstractChannelPoolMap<InetSocketAddress, ChannelPool>() {
             @Override
             protected ChannelPool newPool(InetSocketAddress key) {

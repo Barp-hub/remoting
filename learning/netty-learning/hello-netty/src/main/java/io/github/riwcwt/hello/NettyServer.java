@@ -14,6 +14,8 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.internal.logging.InternalLoggerFactory;
+import io.netty.util.internal.logging.Log4JLoggerFactory;
 
 import java.io.IOException;
 
@@ -23,6 +25,10 @@ import java.io.IOException;
 public class NettyServer {
 
     public static void main(String[] args) throws InterruptedException, IOException {
+
+        InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);
+
+
         NettyServer server = new NettyServer(12321);
         server.start();
 
