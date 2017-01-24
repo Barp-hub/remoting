@@ -16,6 +16,8 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 import io.netty.util.internal.logging.Log4JLoggerFactory;
 import org.slf4j.Logger;
@@ -76,6 +78,7 @@ public class NettyClientPool {
                     @Override
                     public void channelCreated(Channel channel) throws Exception {
                         logger.info("创建连接通道！");
+                        channel.pipeline().addLast(new LoggingHandler(NettyClientPool.class, LogLevel.DEBUG));
                         channel.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024 * 1024, 0, 4, 0, 4));
                         channel.pipeline().addLast(new LengthFieldPrepender(4));
                         channel.pipeline().addLast(new StringDecoder());

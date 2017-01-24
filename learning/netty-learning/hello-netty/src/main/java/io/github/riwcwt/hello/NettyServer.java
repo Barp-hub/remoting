@@ -59,10 +59,10 @@ public class NettyServer {
         bootstrap.group(bossGroup, workerGroup);
         bootstrap.channel(NioServerSocketChannel.class);
         bootstrap.option(ChannelOption.SO_BACKLOG, 100);
-        bootstrap.handler(new LoggingHandler(LogLevel.DEBUG));
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel channel) throws Exception {
+                channel.pipeline().addLast(new LoggingHandler(NettyServer.class, LogLevel.DEBUG));
                 channel.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024 * 1024, 0, 4, 0, 4));
                 channel.pipeline().addLast(new LengthFieldPrepender(4));
                 channel.pipeline().addLast(new StringDecoder());

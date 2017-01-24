@@ -36,8 +36,13 @@ public class NettyClient {
         NettyClient client = new NettyClient("localhost", 12321);
         client.start();
 
+        StringBuffer content = new StringBuffer();
+        for (int i = 0; i < 8; i++) {
+            content.append("正");
+        }
+
         for (int i = 0; i < 5; i++) {
-            client.send(String.valueOf(i));
+            client.send(content.toString());
         }
 
         System.in.read();
@@ -61,10 +66,10 @@ public class NettyClient {
         bootstrap.group(group);
         bootstrap.channel(NioSocketChannel.class);
         bootstrap.option(ChannelOption.TCP_NODELAY, true);
-        bootstrap.handler(new LoggingHandler(LogLevel.DEBUG));
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel channel) throws Exception {
+                channel.pipeline().addLast(new LoggingHandler(NettyClient.class, LogLevel.DEBUG));
                 channel.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024 * 1024, 0, 4, 0, 4));
                 channel.pipeline().addLast(new LengthFieldPrepender(4));
                 channel.pipeline().addLast(new StringDecoder());
