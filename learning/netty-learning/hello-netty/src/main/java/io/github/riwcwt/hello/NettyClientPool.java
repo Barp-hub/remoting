@@ -36,12 +36,13 @@ public class NettyClientPool {
 
         InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);
 
+        InetSocketAddress socketAddress = new InetSocketAddress("localhost", 12321);
 
         NettyClientPool client = new NettyClientPool();
         client.start();
 
         for (int i = 0; i < 5; i++) {
-            client.send(String.valueOf(i));
+            client.send(String.valueOf(i), socketAddress);
         }
 
         System.in.read();
@@ -91,8 +92,7 @@ public class NettyClientPool {
         };
     }
 
-    public void send(String content) {
-        InetSocketAddress socketAddress = new InetSocketAddress("localhost", 12321);
+    public void send(String content, InetSocketAddress socketAddress) {
         ChannelPool pool = channelPoolMap.get(socketAddress);
         Channel channel = null;
         try {
