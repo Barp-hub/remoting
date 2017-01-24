@@ -16,6 +16,11 @@
 
 package com.digitalpetri.modbus.examples.slave;
 
+import java.util.concurrent.ExecutionException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.digitalpetri.modbus.requests.ReadCoilsRequest;
 import com.digitalpetri.modbus.requests.ReadHoldingRegistersRequest;
 import com.digitalpetri.modbus.responses.ReadCoilsResponse;
@@ -23,13 +28,10 @@ import com.digitalpetri.modbus.responses.ReadHoldingRegistersResponse;
 import com.digitalpetri.modbus.slave.ModbusTcpSlave;
 import com.digitalpetri.modbus.slave.ModbusTcpSlaveConfig;
 import com.digitalpetri.modbus.slave.ServiceRequestHandler;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.util.ReferenceCountUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.ExecutionException;
 
 public class SlaveExample {
 
@@ -71,7 +73,7 @@ public class SlaveExample {
             }
         });
 
-        slave.bind("localhost", 50200).get();
+        slave.bind("localhost", 502).get();
     }
 
     public void stop() {
