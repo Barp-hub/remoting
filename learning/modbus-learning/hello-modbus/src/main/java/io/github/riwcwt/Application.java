@@ -17,8 +17,11 @@ public class Application {
 		Slave slave = new Slave();
 		slave.start();
 
+		logger.info("start...");
+
 		System.in.read();
 
+		logger.info("stop...");
 		slave.stop();
 	}
 }
