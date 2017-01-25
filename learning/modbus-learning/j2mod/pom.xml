@@ -225,6 +225,15 @@
                 </configuration>
             </plugin>
 
+            <!-- 打包编译时跳过测试用例，需要加入这个插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+            
         </plugins>
 
         <!-- Tell Maven to exclude our properties files from the resources directory. -->
