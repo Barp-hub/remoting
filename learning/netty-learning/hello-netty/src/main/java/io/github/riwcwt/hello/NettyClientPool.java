@@ -18,6 +18,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.concurrent.FutureListener;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 import io.netty.util.internal.logging.Log4JLoggerFactory;
 import org.slf4j.Logger;
@@ -25,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by michael on 2017-01-24.
@@ -43,7 +43,7 @@ public class NettyClientPool {
         NettyClientPool client = new NettyClientPool();
         client.start();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 50000; i++) {
             client.send(String.valueOf(i), socketAddress);
         }
 
@@ -97,17 +97,30 @@ public class NettyClientPool {
 
     public void send(String content, InetSocketAddress socketAddress) {
         ChannelPool pool = channelPoolMap.get(socketAddress);
-        Channel channel = null;
-        try {
-            channel = pool.acquire().sync().get();
-            channel.writeAndFlush(content);
-        } catch (InterruptedException e) {
-            logger.error(e.getMessage(), e);
-        } catch (ExecutionException e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-            pool.release(channel);
-        }
+        //Channel channel = null;
+        //try {
+        //channel = pool.acquire().sync().get();
+
+        pool.acquire().addListener((FutureListener<Channel>) future -> {
+            if (future.isSuccess()) {
+                Channel channel = future.getNow();
+                try {
+                    if (channel.isActive() && channel.isWritable()) {
+                        channel.writeAndFlush(content);
+                    }
+                } finally {
+                    pool.release(channel, channel.voidPromise());
+                }
+            }
+        });
+        //channel.writeAndFlush(content);
+        //} catch (InterruptedException e) {
+        //    logger.error(e.getMessage(), e);
+        //} catch (ExecutionException e) {
+        //    logger.error(e.getMessage(), e);
+        //} finally {
+        //    //pool.release(channel);
+        //}
     }
 
     public void stop() {
