@@ -95,7 +95,7 @@ public class Slave {
 			}
 		});
 
-		slave.bind("localhost", 502).get();
+		slave.bind("101.37.22.193", 502).get();
 	}
 
 	public void stop() {
