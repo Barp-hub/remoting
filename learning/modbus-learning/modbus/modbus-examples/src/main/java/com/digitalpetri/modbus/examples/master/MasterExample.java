@@ -58,8 +58,8 @@ public class MasterExample {
         started = true;
 
         ModbusTcpMasterConfig config = new ModbusTcpMasterConfig.Builder("localhost")
-                .setPort(50200)
-                .setTimeout(Duration.ofMillis(1))
+                .setPort(502)
+                .setTimeout(Duration.ofMillis(1000))
                 .build();
 
         new Thread(() -> {
@@ -96,7 +96,7 @@ public class MasterExample {
         if (!started) return;
 
         CompletableFuture<ReadHoldingRegistersResponse> future =
-                master.sendRequest(new ReadHoldingRegistersRequest(0, 10), 0);
+                master.sendRequest(new ReadHoldingRegistersRequest(0, 10), 1);
 
         future.whenCompleteAsync((response, ex) -> {
             if (response != null) {

@@ -20,6 +20,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
 
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         logger.info("server receive : " + msg);
+
+
         ctx.writeAndFlush("server time : " + System.currentTimeMillis());
     }
 
