@@ -48,12 +48,7 @@ public class NettyServer {
     }
 
     public void start() throws InterruptedException {
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                NettyServer.this.stop();
-            }
-        });
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> NettyServer.this.stop()));
 
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(bossGroup, workerGroup);
