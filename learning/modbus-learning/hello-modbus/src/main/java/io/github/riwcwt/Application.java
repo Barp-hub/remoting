@@ -25,9 +25,9 @@ public class Application {
 
 		logger.info("start...");
 
-		System.in.read();
-
-		logger.info("stop...");
-		slave.stop();
+		// System.in.read();
+		//
+		// logger.info("stop...");
+		// slave.stop();
 	}
 }

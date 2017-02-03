@@ -2,6 +2,9 @@ package io.github.riwcwt;
 
 import java.util.concurrent.ExecutionException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.digitalpetri.modbus.requests.MaskWriteRegisterRequest;
 import com.digitalpetri.modbus.requests.ReadCoilsRequest;
 import com.digitalpetri.modbus.requests.ReadDiscreteInputsRequest;
@@ -29,6 +32,9 @@ import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.util.ReferenceCountUtil;
 
 public class Slave {
+
+	private static final Logger logger = LoggerFactory.getLogger(Slave.class);
+
 	private final ModbusTcpSlaveConfig config = new ModbusTcpSlaveConfig.Builder().build();
 	private final ModbusTcpSlave slave = new ModbusTcpSlave(config);
 
@@ -86,7 +92,7 @@ public class Slave {
 				ByteBuf registers = PooledByteBufAllocator.DEFAULT.buffer(request.getQuantity());
 
 				for (int i = 0; i < request.getQuantity(); i++) {
-					registers.writeShort(i);
+					registers.writeShort((int) (Math.random() * 64));
 				}
 
 				service.sendResponse(new ReadHoldingRegistersResponse(registers));
@@ -95,7 +101,15 @@ public class Slave {
 			}
 		});
 
-		slave.bind("101.37.22.193", 502).get();
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				logger.info("stop...");
+				Slave.this.stop();
+			}
+		});
+
+		slave.bind("0.0.0.0", 502).get();
 	}
 
 	public void stop() {
