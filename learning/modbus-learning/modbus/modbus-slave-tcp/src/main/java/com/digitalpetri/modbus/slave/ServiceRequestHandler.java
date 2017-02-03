@@ -37,86 +37,93 @@ import com.digitalpetri.modbus.responses.WriteMultipleCoilsResponse;
 import com.digitalpetri.modbus.responses.WriteMultipleRegistersResponse;
 import com.digitalpetri.modbus.responses.WriteSingleCoilResponse;
 import com.digitalpetri.modbus.responses.WriteSingleRegisterResponse;
+
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.ReferenceCountUtil;
 
 public interface ServiceRequestHandler {
 
-    default void onReadHoldingRegisters(ServiceRequest<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse> service) {
-        service.sendException(ExceptionCode.IllegalFunction);
-        ReferenceCountUtil.release(service.getRequest());
-    }
+	default void onChannelActive(ChannelHandlerContext ctx) {
+	}
 
-    default void onReadInputRegisters(ServiceRequest<ReadInputRegistersRequest, ReadInputRegistersResponse> service) {
-        service.sendException(ExceptionCode.IllegalFunction);
-        ReferenceCountUtil.release(service.getRequest());
-    }
+	default void onReadHoldingRegisters(ServiceRequest<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse> service) {
+		service.sendException(ExceptionCode.IllegalFunction);
+		ReferenceCountUtil.release(service.getRequest());
+	}
 
-    default void onReadCoils(ServiceRequest<ReadCoilsRequest, ReadCoilsResponse> service) {
-        service.sendException(ExceptionCode.IllegalFunction);
-        ReferenceCountUtil.release(service.getRequest());
-    }
+	default void onReadInputRegisters(ServiceRequest<ReadInputRegistersRequest, ReadInputRegistersResponse> service) {
+		service.sendException(ExceptionCode.IllegalFunction);
+		ReferenceCountUtil.release(service.getRequest());
+	}
 
-    default void onReadDiscreteInputs(ServiceRequest<ReadDiscreteInputsRequest, ReadDiscreteInputsResponse> service) {
-        service.sendException(ExceptionCode.IllegalFunction);
-        ReferenceCountUtil.release(service.getRequest());
-    }
+	default void onReadCoils(ServiceRequest<ReadCoilsRequest, ReadCoilsResponse> service) {
+		service.sendException(ExceptionCode.IllegalFunction);
+		ReferenceCountUtil.release(service.getRequest());
+	}
 
-    default void onWriteSingleCoil(ServiceRequest<WriteSingleCoilRequest, WriteSingleCoilResponse> service) {
-        service.sendException(ExceptionCode.IllegalFunction);
-        ReferenceCountUtil.release(service.getRequest());
-    }
+	default void onReadDiscreteInputs(ServiceRequest<ReadDiscreteInputsRequest, ReadDiscreteInputsResponse> service) {
+		service.sendException(ExceptionCode.IllegalFunction);
+		ReferenceCountUtil.release(service.getRequest());
+	}
 
-    default void onWriteSingleRegister(ServiceRequest<WriteSingleRegisterRequest, WriteSingleRegisterResponse> service) {
-        service.sendException(ExceptionCode.IllegalFunction);
-        ReferenceCountUtil.release(service.getRequest());
-    }
+	default void onWriteSingleCoil(ServiceRequest<WriteSingleCoilRequest, WriteSingleCoilResponse> service) {
+		service.sendException(ExceptionCode.IllegalFunction);
+		ReferenceCountUtil.release(service.getRequest());
+	}
 
-    default void onWriteMultipleCoils(ServiceRequest<WriteMultipleCoilsRequest, WriteMultipleCoilsResponse> service) {
-        service.sendException(ExceptionCode.IllegalFunction);
-        ReferenceCountUtil.release(service.getRequest());
-    }
+	default void onWriteSingleRegister(ServiceRequest<WriteSingleRegisterRequest, WriteSingleRegisterResponse> service) {
+		service.sendException(ExceptionCode.IllegalFunction);
+		ReferenceCountUtil.release(service.getRequest());
+	}
 
-    default void onWriteMultipleRegisters(ServiceRequest<WriteMultipleRegistersRequest, WriteMultipleRegistersResponse> service) {
-        service.sendException(ExceptionCode.IllegalFunction);
-        ReferenceCountUtil.release(service.getRequest());
-    }
+	default void onWriteMultipleCoils(ServiceRequest<WriteMultipleCoilsRequest, WriteMultipleCoilsResponse> service) {
+		service.sendException(ExceptionCode.IllegalFunction);
+		ReferenceCountUtil.release(service.getRequest());
+	}
 
-    default void onMaskWriteRegister(ServiceRequest<MaskWriteRegisterRequest, MaskWriteRegisterResponse> service) {
-        service.sendException(ExceptionCode.IllegalFunction);
-        ReferenceCountUtil.release(service.getRequest());
-    }
+	default void onWriteMultipleRegisters(ServiceRequest<WriteMultipleRegistersRequest, WriteMultipleRegistersResponse> service) {
+		service.sendException(ExceptionCode.IllegalFunction);
+		ReferenceCountUtil.release(service.getRequest());
+	}
 
-    public static interface ServiceRequest<Request extends ModbusRequest, Response extends ModbusResponse> {
+	default void onMaskWriteRegister(ServiceRequest<MaskWriteRegisterRequest, MaskWriteRegisterResponse> service) {
+		service.sendException(ExceptionCode.IllegalFunction);
+		ReferenceCountUtil.release(service.getRequest());
+	}
 
-        /**
-         * @return the transaction id associated with this request.
-         */
-        short getTransactionId();
+	public static interface ServiceRequest<Request extends ModbusRequest, Response extends ModbusResponse> {
 
-        /**
-         * @return the unit/slave id this request is directed to.
-         */
-        short getUnitId();
+		/**
+		 * @return the transaction id associated with this request.
+		 */
+		short getTransactionId();
 
-        /**
-         * @return the request to service.
-         */
-        Request getRequest();
+		/**
+		 * @return the unit/slave id this request is directed to.
+		 */
+		short getUnitId();
 
-        /**
-         * Send a normal response.
-         *
-         * @param response the service response
-         */
-        void sendResponse(Response response);
+		/**
+		 * @return the request to service.
+		 */
+		Request getRequest();
 
-        /**
-         * Send an exception response.
-         *
-         * @param exceptionCode the {@link ExceptionCode}
-         */
-        void sendException(ExceptionCode exceptionCode);
+		/**
+		 * Send a normal response.
+		 *
+		 * @param response
+		 *            the service response
+		 */
+		void sendResponse(Response response);
 
-    }
+		/**
+		 * Send an exception response.
+		 *
+		 * @param exceptionCode
+		 *            the {@link ExceptionCode}
+		 */
+		void sendException(ExceptionCode exceptionCode);
+
+	}
 
 }

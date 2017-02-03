@@ -16,15 +16,6 @@
 
 package com.digitalpetri.modbus.examples.master;
 
-import com.digitalpetri.modbus.codec.Modbus;
-import com.digitalpetri.modbus.master.ModbusTcpMaster;
-import com.digitalpetri.modbus.master.ModbusTcpMasterConfig;
-import com.digitalpetri.modbus.requests.ReadHoldingRegistersRequest;
-import com.digitalpetri.modbus.responses.ReadHoldingRegistersResponse;
-import io.netty.util.ReferenceCountUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -32,6 +23,17 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.digitalpetri.modbus.codec.Modbus;
+import com.digitalpetri.modbus.master.ModbusTcpMaster;
+import com.digitalpetri.modbus.master.ModbusTcpMasterConfig;
+import com.digitalpetri.modbus.requests.ReadHoldingRegistersRequest;
+import com.digitalpetri.modbus.responses.ReadHoldingRegistersResponse;
+
+import io.netty.util.ReferenceCountUtil;
 
 public class MasterExample {
 
@@ -59,7 +61,7 @@ public class MasterExample {
 
         ModbusTcpMasterConfig config = new ModbusTcpMasterConfig.Builder("localhost")
                 .setPort(502)
-                .setTimeout(Duration.ofMillis(1000))
+                .setTimeout(Duration.ofMillis(120000))
                 .build();
 
         new Thread(() -> {
