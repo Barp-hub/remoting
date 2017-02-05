@@ -1,6 +1,7 @@
 package io.github.riwcwt.netty;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class NettyClient {
 
 		InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);
 
-		NettyClient client = new NettyClient("localhost", 502);
+		NettyClient client = new NettyClient("101.37.22.193", 502);
 		client.start();
 
 		StringBuffer content = new StringBuffer();
@@ -65,8 +66,8 @@ public class NettyClient {
 			@Override
 			protected void initChannel(SocketChannel channel) throws Exception {
 				channel.pipeline().addLast(new LoggingHandler(NettyClient.class, LogLevel.DEBUG));
-				channel.pipeline().addLast(new StringDecoder());
-				channel.pipeline().addLast(new StringEncoder());
+				channel.pipeline().addLast(new StringDecoder(Charset.forName("UTF-8")));
+				channel.pipeline().addLast(new StringEncoder(Charset.forName("UTF-8")));
 				channel.pipeline().addLast(new ClientHandler());
 			}
 		});

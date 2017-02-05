@@ -1,5 +1,7 @@
 package io.github.riwcwt.netty;
 
+import java.nio.charset.Charset;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -44,8 +46,8 @@ public class NettyServer {
 			@Override
 			public void initChannel(SocketChannel channel) throws Exception {
 				channel.pipeline().addLast(new LoggingHandler(NettyServer.class, LogLevel.DEBUG));
-				channel.pipeline().addLast(new StringDecoder());
-				channel.pipeline().addLast(new StringEncoder());
+				channel.pipeline().addLast(new StringDecoder(Charset.forName("UTF-8")));
+				channel.pipeline().addLast(new StringEncoder(Charset.forName("UTF-8")));
 				channel.pipeline().addLast(new ServerHandler());
 			}
 		});
