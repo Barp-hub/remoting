@@ -69,6 +69,7 @@
                 </goals>
                 <configuration>
                   <tasks>
+                    <echo>打包生产环境</echo>
                     <delete />
                     <copy />
                   </tasks>

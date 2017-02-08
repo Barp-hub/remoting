@@ -37,6 +37,7 @@
                                 </goals>
                                 <configuration>
                                     <tasks>
+                                        <echo>打包生产环境</echo>
                                         <delete file="${project.build.outputDirectory}/log4j.properties"/>
                                         <copy file="src/main/resources/prod/log4j.properties"
                                               tofile="${project.build.outputDirectory}/log4j.properties"/>
