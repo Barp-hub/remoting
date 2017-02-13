@@ -23,6 +23,7 @@ public class GeneratorTest {
 
         Properties properties = new Properties();
         properties.setProperty("target.project", System.getProperty("user.dir"));
+        properties.setProperty("maven.repository.home", "E:/repository/maven");
 
         List<String> warnings = new ArrayList<String>();
         boolean overwrite = true;

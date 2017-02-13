@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration>
     <classPathEntry
-            location="E:\repository\maven\mysql\mysql-connector-java\5.1.40\mysql-connector-java-5.1.40.jar"/>
+            location="${maven.repository.home}\mysql\mysql-connector-java\5.1.40\mysql-connector-java-5.1.40.jar"/>
     <context id="mysql" targetRuntime="MyBatis3">
 
         <!-- 开启注释 -->
