@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.github.riwcwt.mapper.AuthUserMapper">
-	<resultMap id="BaseResultMap" type="io.github.riwcwt.entity.AuthUser">
-		<id column="id" jdbcType="BIGINT" property="id" />
-		<result column="username" jdbcType="VARCHAR" property="username" />
-		<result column="password" jdbcType="VARCHAR" property="password" />
-		<result column="description" jdbcType="VARCHAR" property="description" />
-		<result column="email" jdbcType="VARCHAR" property="email" />
-		<result column="phone" jdbcType="VARCHAR" property="phone" />
-		<result column="status" jdbcType="INTEGER" property="status" />
-		<result column="creation_date" jdbcType="BIGINT" property="creation_date" />
-	</resultMap>
-	<sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="io.github.riwcwt.entity.AuthUser">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="creation_date" jdbcType="BIGINT" property="creation_date"/>
+    </resultMap>
+    <sql id="Base_Column_List">
 		id, username, password, description, email, phone, status,
 		creation_date
 	</sql>
-	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
-		resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from auth_user
-		where id = #{id,jdbcType=BIGINT}
-	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from auth_user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
 		delete from
 		auth_user
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
-	<insert id="insert" parameterType="io.github.riwcwt.entity.AuthUser">
+    <insert id="insert" parameterType="io.github.riwcwt.entity.AuthUser">
 		insert into auth_user (id,
 		username, password,
 		description, email,
@@ -42,93 +42,93 @@
 		#{status,jdbcType=INTEGER},
 		#{creation_date,jdbcType=BIGINT})
 	</insert>
-	<insert id="insertSelective" parameterType="io.github.riwcwt.entity.AuthUser"
-		useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-		insert into auth_user
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id != null">
-				id,
-			</if>
-			<if test="username != null">
-				username,
-			</if>
-			<if test="password != null">
-				password,
-			</if>
-			<if test="description != null">
-				description,
-			</if>
-			<if test="email != null">
-				email,
-			</if>
-			<if test="phone != null">
-				phone,
-			</if>
-			<if test="status != null">
-				status,
-			</if>
-			<if test="creation_date != null">
-				creation_date,
-			</if>
-		</trim>
-		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="id != null">
-				#{id,jdbcType=BIGINT},
-			</if>
-			<if test="username != null">
-				#{username,jdbcType=VARCHAR},
-			</if>
-			<if test="password != null">
-				#{password,jdbcType=VARCHAR},
-			</if>
-			<if test="description != null">
-				#{description,jdbcType=VARCHAR},
-			</if>
-			<if test="email != null">
-				#{email,jdbcType=VARCHAR},
-			</if>
-			<if test="phone != null">
-				#{phone,jdbcType=VARCHAR},
-			</if>
-			<if test="status != null">
-				#{status,jdbcType=INTEGER},
-			</if>
-			<if test="creation_date != null">
-				#{creation_date,jdbcType=BIGINT},
-			</if>
-		</trim>
-		<selectKey keyProperty="id" resultType="long" order="AFTER">
-			SELECT LAST_INSERT_ID();
-		</selectKey>
-	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="io.github.riwcwt.entity.AuthUser">
-		update auth_user
-		<set>
-			<if test="username != null">
-				username = #{username,jdbcType=VARCHAR},
-			</if>
-			<if test="password != null">
-				password = #{password,jdbcType=VARCHAR},
-			</if>
-			<if test="description != null">
-				description = #{description,jdbcType=VARCHAR},
-			</if>
-			<if test="email != null">
-				email = #{email,jdbcType=VARCHAR},
-			</if>
-			<if test="phone != null">
-				phone = #{phone,jdbcType=VARCHAR},
-			</if>
-			<if test="status != null">
-				status = #{status,jdbcType=INTEGER},
-			</if>
-			<if test="creation_date != null">
-				creation_date = #{creation_date,jdbcType=BIGINT},
-			</if>
-		</set>
-		where id = #{id,jdbcType=BIGINT}
-	</update>
-	<update id="updateByPrimaryKey" parameterType="io.github.riwcwt.entity.AuthUser">
+    <insert id="insertSelective" parameterType="io.github.riwcwt.entity.AuthUser"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into auth_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="creation_date != null">
+                creation_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="creation_date != null">
+                #{creation_date,jdbcType=BIGINT},
+            </if>
+        </trim>
+        <selectKey keyProperty="id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="io.github.riwcwt.entity.AuthUser">
+        update auth_user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="creation_date != null">
+                creation_date = #{creation_date,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="io.github.riwcwt.entity.AuthUser">
 		update auth_user
 		set username = #{username,jdbcType=VARCHAR},
 		password =
