@@ -27,21 +27,25 @@
 		auth_user
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
-    <insert id="insert" parameterType="io.github.riwcwt.entity.AuthUser">
-		insert into auth_user (id,
-		username, password,
-		description, email,
-		phone,
-		status, creation_date)
-		values (#{id,jdbcType=BIGINT},
-		#{username,jdbcType=VARCHAR},
-		#{password,jdbcType=VARCHAR},
-		#{description,jdbcType=VARCHAR},
-		#{email,jdbcType=VARCHAR},
-		#{phone,jdbcType=VARCHAR},
-		#{status,jdbcType=INTEGER},
-		#{creation_date,jdbcType=BIGINT})
-	</insert>
+    <insert id="insert" parameterType="io.github.riwcwt.entity.AuthUser" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        insert into auth_user (
+        username, password,
+        description, email,
+        phone,
+        status, creation_date)
+        values (
+        #{username,jdbcType=VARCHAR},
+        #{password,jdbcType=VARCHAR},
+        #{description,jdbcType=VARCHAR},
+        #{email,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
+        #{creation_date,jdbcType=BIGINT})
+        <selectKey keyProperty="id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+    </insert>
     <insert id="insertSelective" parameterType="io.github.riwcwt.entity.AuthUser"
             useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into auth_user
