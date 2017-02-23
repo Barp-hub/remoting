@@ -22,4 +22,12 @@ public class Instance {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "Instance{" +
+                "version='" + version + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

@@ -47,12 +47,10 @@ public class ZookeeperRegistry {
             ServiceCache<Instance> serviceCache = this.serviceDiscovery.serviceCacheBuilder().name(service).build();
             serviceCache.addListener(new ServiceCacheListener() {
                 public void cacheChanged() {
-                    System.out.println("cache changed");
                     listener.update();
                 }
 
                 public void stateChanged(CuratorFramework client, ConnectionState newState) {
-                    System.out.println("state changed");
                 }
             });
             serviceCache.start();
