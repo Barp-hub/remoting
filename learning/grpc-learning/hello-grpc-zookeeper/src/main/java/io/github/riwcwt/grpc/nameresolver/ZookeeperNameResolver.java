@@ -29,15 +29,10 @@ public class ZookeeperNameResolver extends NameResolver {
 
     private URI uri;
 
-    //private CuratorFramework client;
     private ZookeeperRegistry registry = null;
 
     public ZookeeperNameResolver(URI uri, ZookeeperRegistry registry/*CuratorFramework client*/) throws Exception {
         this.uri = uri;
-        //this.client = client;
-
-        //registry = new ZookeeperRegistry();
-        //registry.init(client, BASE_PATH);
         this.registry = registry;
     }
 

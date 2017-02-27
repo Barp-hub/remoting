@@ -1,10 +1,10 @@
 package io.github.riwcwt.grpc.nameresolver;
 
 import com.google.common.base.Preconditions;
+import io.github.riwcwt.registry.zookeeper.ZookeeperRegistry;
 import io.grpc.Attributes;
 import io.grpc.NameResolver;
 import io.grpc.NameResolverProvider;
-import org.apache.curator.framework.CuratorFramework;
 
 import javax.annotation.Nullable;
 import java.net.URI;
@@ -16,10 +16,11 @@ public class ZookeeperNameResolverProvider extends NameResolverProvider {
 
     private static final String SCHEME = "zookeeper";
 
-    private CuratorFramework client;
+    private ZookeeperRegistry registry = null;
 
-    public ZookeeperNameResolverProvider(CuratorFramework client) {
-        this.client = client;
+    public ZookeeperNameResolverProvider(ZookeeperRegistry registry) {
+        //this.client = client;
+        this.registry = registry;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class ZookeeperNameResolverProvider extends NameResolverProvider {
         if (uri.getScheme().equals(SCHEME)) {
             Preconditions.checkNotNull(uri.getAuthority(), "authority is not null");
             try {
-                return new ZookeeperNameResolver(uri, client);
+                return new ZookeeperNameResolver(uri, registry);
             } catch (Exception e) {
                 throw new RuntimeException("can not create zookeeper name resolver");
             }
