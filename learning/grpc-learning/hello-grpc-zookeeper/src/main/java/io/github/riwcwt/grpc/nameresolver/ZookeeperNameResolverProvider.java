@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import io.grpc.Attributes;
 import io.grpc.NameResolver;
 import io.grpc.NameResolverProvider;
+import org.apache.curator.framework.CuratorFramework;
 
 import javax.annotation.Nullable;
 import java.net.URI;
@@ -14,6 +15,12 @@ import java.net.URI;
 public class ZookeeperNameResolverProvider extends NameResolverProvider {
 
     private static final String SCHEME = "zookeeper";
+
+    private CuratorFramework client;
+
+    public ZookeeperNameResolverProvider(CuratorFramework client) {
+        this.client = client;
+    }
 
     @Override
     protected boolean isAvailable() {
@@ -29,10 +36,14 @@ public class ZookeeperNameResolverProvider extends NameResolverProvider {
     @Nullable
     public NameResolver newNameResolver(URI uri, Attributes attributes) {
         if (uri.getScheme().equals(SCHEME)) {
-            String targetPath = Preconditions.checkNotNull(uri.getAuthority(), "authority is not null");
-            return new ZookeeperNameResolver();
+            Preconditions.checkNotNull(uri.getAuthority(), "authority is not null");
+            try {
+                return new ZookeeperNameResolver(uri, client);
+            } catch (Exception e) {
+                throw new RuntimeException("can not create zookeeper name resolver");
+            }
         } else {
-            throw new RuntimeException("the targetUri scheme must be server");
+            throw new RuntimeException("the targetUri scheme must be zookeeper");
         }
     }
 
