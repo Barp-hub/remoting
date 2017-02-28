@@ -11,7 +11,7 @@ import io.grpc.ServerCall.Listener;
 import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
 
-@GrpcGlobalInterceptor
+//@GrpcGlobalInterceptor
 public class ServerHeaderInterceptor implements ServerInterceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(ServerHeaderInterceptor.class);

@@ -130,6 +130,10 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
 
     @Override
     public void destroy() throws Exception {
+        registry.close();
+
+        client.close();
+
         logger.info("Shutting down gRPC server ...");
         Optional.ofNullable(server).ifPresent(Server::shutdown);
         logger.info("gRPC server stopped.");
