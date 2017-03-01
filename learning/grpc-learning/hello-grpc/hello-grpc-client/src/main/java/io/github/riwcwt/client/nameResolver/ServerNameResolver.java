@@ -105,7 +105,7 @@ public class ServerNameResolver extends NameResolver {
 								Attributes.EMPTY));
 						serversList.add(var25);
 					}
-					savedListener.onUpdate(serversList, Attributes.EMPTY);
+					//savedListener.onUpdate(serversList, Attributes.EMPTY);
 				}
 			} finally {
 				synchronized (ServerNameResolver.this) {
