@@ -1,7 +1,7 @@
 package io.github.riwcwt.grpc.nameresolver;
 
 import com.google.common.base.Preconditions;
-import io.github.riwcwt.registry.zookeeper.ZookeeperRegistry;
+import io.github.riwcwt.grpc.registry.zookeeper.ZookeeperRegistry;
 import io.grpc.Attributes;
 import io.grpc.NameResolver;
 import io.grpc.NameResolverProvider;
@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import java.net.URI;
 
 /**
- * Created by michael on 2017-02-23.
+ * Created by michael on 2017-03-02.
  */
 public class ZookeeperNameResolverProvider extends NameResolverProvider {
 
@@ -19,7 +19,6 @@ public class ZookeeperNameResolverProvider extends NameResolverProvider {
     private ZookeeperRegistry registry = null;
 
     public ZookeeperNameResolverProvider(ZookeeperRegistry registry) {
-        //this.client = client;
         this.registry = registry;
     }
 
@@ -33,9 +32,9 @@ public class ZookeeperNameResolverProvider extends NameResolverProvider {
         return 5;
     }
 
-    @Override
     @Nullable
-    public NameResolver newNameResolver(URI uri, Attributes attributes) {
+    @Override
+    public NameResolver newNameResolver(URI uri, Attributes params) {
         if (uri.getScheme().equals(SCHEME)) {
             Preconditions.checkNotNull(uri.getAuthority(), "authority is not null");
             try {

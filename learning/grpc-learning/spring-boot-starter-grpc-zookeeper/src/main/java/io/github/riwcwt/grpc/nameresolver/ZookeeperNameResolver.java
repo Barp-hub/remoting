@@ -1,8 +1,7 @@
 package io.github.riwcwt.grpc.nameresolver;
 
-import io.github.riwcwt.registry.zookeeper.Instance;
-import io.github.riwcwt.registry.zookeeper.ServiceListener;
-import io.github.riwcwt.registry.zookeeper.ZookeeperRegistry;
+import io.github.riwcwt.grpc.registry.zookeeper.Instance;
+import io.github.riwcwt.grpc.registry.zookeeper.ZookeeperRegistry;
 import io.grpc.Attributes;
 import io.grpc.NameResolver;
 import io.grpc.ResolvedServerInfo;
@@ -11,19 +10,16 @@ import org.apache.curator.x.discovery.ServiceInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by michael on 2017-02-23.
+ * Created by michael on 2017-03-02.
  */
 public class ZookeeperNameResolver extends NameResolver {
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperNameResolver.class);
-
-    private static final String BASE_PATH = "grpc";
 
     private Listener listener;
 
@@ -31,10 +27,11 @@ public class ZookeeperNameResolver extends NameResolver {
 
     private ZookeeperRegistry registry = null;
 
-    public ZookeeperNameResolver(URI uri, ZookeeperRegistry registry/*CuratorFramework client*/) throws Exception {
+    public ZookeeperNameResolver(URI uri, ZookeeperRegistry registry) throws Exception {
         this.uri = uri;
         this.registry = registry;
     }
+
 
     @Override
     public String getServiceAuthority() {
@@ -42,15 +39,11 @@ public class ZookeeperNameResolver extends NameResolver {
     }
 
     @Override
-    public void start(final Listener listener) {
+    public void start(Listener listener) {
         this.listener = listener;
         this.refresh();
         try {
-            this.registry.watchService(uri.getAuthority(), new ServiceListener() {
-                public void update() {
-                    ZookeeperNameResolver.this.refresh();
-                }
-            });
+            this.registry.watchService(uri.getAuthority(), () -> this.refresh());
         } catch (Exception e) {
             throw new RuntimeException("listening to service change error!!!", e);
         }
@@ -60,7 +53,7 @@ public class ZookeeperNameResolver extends NameResolver {
     public void refresh() {
         List<ServiceInstance<Instance>> instances = registry.getServiceInstances(uri.getAuthority());
         if (instances != null) {
-            List<ResolvedServerInfoGroup> servers = new LinkedList<ResolvedServerInfoGroup>();
+            List<ResolvedServerInfoGroup> servers = new LinkedList<>();
             ResolvedServerInfoGroup.Builder builder = ResolvedServerInfoGroup.builder();
 
             for (ServiceInstance<Instance> instance : instances) {
@@ -78,10 +71,5 @@ public class ZookeeperNameResolver extends NameResolver {
 
     @Override
     public void shutdown() {
-        try {
-            registry.close();
-        } catch (IOException e) {
-            logger.warn("close registry error!", e);
-        }
     }
 }
