@@ -41,18 +41,18 @@ public class ZookeeperNameResolver extends NameResolver {
     @Override
     public void start(Listener listener) {
         this.listener = listener;
-        this.refresh();
         try {
             this.registry.watchService(uri.getAuthority(), () -> this.refresh());
         } catch (Exception e) {
             throw new RuntimeException("listening to service change error!!!", e);
         }
+        this.refresh();
     }
 
     @Override
     public void refresh() {
         List<ServiceInstance<Instance>> instances = registry.getServiceInstances(uri.getAuthority());
-        if (instances != null) {
+        if (instances != null && !instances.isEmpty()) {
             List<ResolvedServerInfoGroup> servers = new LinkedList<>();
             ResolvedServerInfoGroup.Builder builder = ResolvedServerInfoGroup.builder();
 
