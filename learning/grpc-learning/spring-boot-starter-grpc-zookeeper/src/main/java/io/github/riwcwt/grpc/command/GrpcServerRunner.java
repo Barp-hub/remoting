@@ -3,14 +3,19 @@ package io.github.riwcwt.grpc.command;
 import io.github.riwcwt.grpc.annotation.GrpcGlobalInterceptor;
 import io.github.riwcwt.grpc.annotation.GrpcService;
 import io.github.riwcwt.grpc.autoconfigure.GrpcServerProperties;
+import io.github.riwcwt.grpc.nameresolver.ZookeeperNameResolverProvider;
 import io.github.riwcwt.grpc.registry.zookeeper.Instance;
 import io.github.riwcwt.grpc.registry.zookeeper.ZookeeperRegistry;
 import io.grpc.BindableService;
+import io.grpc.Channel;
+import io.grpc.ManagedChannel;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.ServerInterceptor;
 import io.grpc.ServerInterceptors;
 import io.grpc.ServerServiceDefinition;
+import io.grpc.netty.NettyChannelBuilder;
+import io.grpc.util.RoundRobinLoadBalancerFactory;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
@@ -145,4 +150,11 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
         });
     }
 
+
+    public Channel channel(String service) {
+        ManagedChannel channel = NettyChannelBuilder.forTarget("zookeeper://" + service)
+                .nameResolverFactory(new ZookeeperNameResolverProvider(registry))
+                .loadBalancerFactory(RoundRobinLoadBalancerFactory.getInstance()).usePlaintext(true).build();
+        return channel;
+    }
 }

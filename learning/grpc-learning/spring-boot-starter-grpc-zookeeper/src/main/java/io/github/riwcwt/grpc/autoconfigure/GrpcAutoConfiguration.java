@@ -1,8 +1,11 @@
 package io.github.riwcwt.grpc.autoconfigure;
 
+import io.github.riwcwt.grpc.annotation.GrpcClient;
 import io.github.riwcwt.grpc.annotation.GrpcService;
+import io.github.riwcwt.grpc.client.GrpcClientBeanPostProcessor;
 import io.github.riwcwt.grpc.command.GrpcServerRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,4 +23,9 @@ public class GrpcAutoConfiguration {
         return new GrpcServerRunner();
     }
 
+    @Bean
+    @ConditionalOnClass(value = GrpcClient.class)
+    public GrpcClientBeanPostProcessor grpcClientBeanPostProcessor() {
+        return new GrpcClientBeanPostProcessor();
+    }
 }
