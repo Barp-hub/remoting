@@ -2,7 +2,7 @@ package io.github.riwcwt.grpc.client;
 
 import com.google.common.collect.Lists;
 import io.github.riwcwt.grpc.annotation.GrpcClient;
-import io.github.riwcwt.grpc.command.GrpcServerRunner;
+import io.github.riwcwt.grpc.autoconfigure.Registry;
 import io.grpc.Channel;
 import io.grpc.ClientInterceptor;
 import org.slf4j.Logger;
@@ -17,10 +17,9 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Optional;
 
 /**
  * Created by michael on 2017-03-06.
@@ -28,66 +27,48 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GrpcClientBeanPostProcessor implements BeanPostProcessor {
     private static final Logger logger = LoggerFactory.getLogger(GrpcClientBeanPostProcessor.class);
 
-    private ConcurrentHashMap<String, List<Class>> beansToProcess = new ConcurrentHashMap<>();
-
     @Autowired
     private DefaultListableBeanFactory beanFactory;
 
     @Autowired
-    private GrpcServerRunner serverRunner;
+    private Registry registry;
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        logger.info("before : " + beanName + " - " + bean.getClass().getCanonicalName());
+        logger.debug("before : " + beanName + " - " + bean.getClass().getCanonicalName());
 
         Class clazz = bean.getClass();
         do {
-            for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(GrpcClient.class)) {
-                    if (!beansToProcess.containsKey(beanName)) {
-                        beansToProcess.put(beanName, new ArrayList<>());
+            Arrays.stream(clazz.getDeclaredFields()).forEach(field -> Optional.ofNullable(AnnotationUtils.getAnnotation(field, GrpcClient.class)).ifPresent(annotation -> {
+                Object target = getTargetBean(bean);
+
+                List<ClientInterceptor> list = Lists.newArrayList();
+                Arrays.stream(annotation.interceptors()).forEach(clientInterceptorClass -> {
+                    ClientInterceptor clientInterceptor;
+                    if (beanFactory.getBeanNamesForType(ClientInterceptor.class).length > 0) {
+                        clientInterceptor = beanFactory.getBean(clientInterceptorClass);
+                    } else {
+                        try {
+                            clientInterceptor = clientInterceptorClass.newInstance();
+                        } catch (InstantiationException | IllegalAccessException e) {
+                            throw new BeanCreationException("Failed to create interceptor instance", e);
+                        }
                     }
-                    beansToProcess.get(beanName).add(clazz);
-                }
-            }
+                    list.add(clientInterceptor);
+                });
+
+                Channel channel = this.registry.channel(annotation.value(), list);
+                ReflectionUtils.makeAccessible(field);
+                ReflectionUtils.setField(field, target, channel);
+            }));
             clazz = clazz.getSuperclass();
         } while (clazz != null);
-
         return bean;
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        logger.info("after : " + beanName + " - " + bean.getClass().getCanonicalName());
-        if (beansToProcess.containsKey(beanName)) {
-            Object target = getTargetBean(bean);
-            for (Class clazz : beansToProcess.get(beanName)) {
-                for (Field field : clazz.getDeclaredFields()) {
-                    GrpcClient annotation = AnnotationUtils.getAnnotation(field, GrpcClient.class);
-                    if (null != annotation) {
-
-                        List<ClientInterceptor> list = Lists.newArrayList();
-                        for (Class<? extends ClientInterceptor> clientInterceptorClass : annotation.interceptors()) {
-                            ClientInterceptor clientInterceptor;
-                            if (beanFactory.getBeanNamesForType(ClientInterceptor.class).length > 0) {
-                                clientInterceptor = beanFactory.getBean(clientInterceptorClass);
-                            } else {
-                                try {
-                                    clientInterceptor = clientInterceptorClass.newInstance();
-                                } catch (InstantiationException | IllegalAccessException e) {
-                                    throw new BeanCreationException("Failed to create interceptor instance", e);
-                                }
-                            }
-                            list.add(clientInterceptor);
-                        }
-
-                        Channel channel = this.serverRunner.channel(annotation.value()); //channelFactory.createChannel(annotation.value(), list);
-                        ReflectionUtils.makeAccessible(field);
-                        ReflectionUtils.setField(field, target, channel);
-                    }
-                }
-            }
-        }
+        logger.debug("after : " + beanName + " - " + bean.getClass().getCanonicalName());
         return bean;
     }
 

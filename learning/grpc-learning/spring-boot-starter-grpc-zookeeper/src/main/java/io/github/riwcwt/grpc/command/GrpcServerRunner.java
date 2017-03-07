@@ -3,22 +3,14 @@ package io.github.riwcwt.grpc.command;
 import io.github.riwcwt.grpc.annotation.GrpcGlobalInterceptor;
 import io.github.riwcwt.grpc.annotation.GrpcService;
 import io.github.riwcwt.grpc.autoconfigure.GrpcServerProperties;
-import io.github.riwcwt.grpc.nameresolver.ZookeeperNameResolverProvider;
+import io.github.riwcwt.grpc.autoconfigure.Registry;
 import io.github.riwcwt.grpc.registry.zookeeper.Instance;
-import io.github.riwcwt.grpc.registry.zookeeper.ZookeeperRegistry;
 import io.grpc.BindableService;
-import io.grpc.Channel;
-import io.grpc.ManagedChannel;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.ServerInterceptor;
 import io.grpc.ServerInterceptors;
 import io.grpc.ServerServiceDefinition;
-import io.grpc.netty.NettyChannelBuilder;
-import io.grpc.util.RoundRobinLoadBalancerFactory;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.x.discovery.ServiceInstance;
 import org.apache.curator.x.discovery.UriSpec;
 import org.slf4j.Logger;
@@ -46,7 +38,6 @@ import java.util.stream.Stream;
 public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
     private static final Logger logger = LoggerFactory.getLogger(GrpcServerRunner.class);
 
-    private static final String BASE_PATH = "GRPC";
     @Autowired
     private AbstractApplicationContext applicationContext;
 
@@ -55,18 +46,11 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
 
     private Server server;
 
-    private ZookeeperRegistry registry;
-
-    private CuratorFramework client;
+    @Autowired
+    private Registry registry;
 
     @Override
     public void destroy() throws Exception {
-        logger.info("unregister grpc service ...");
-        registry.close();
-
-        logger.info("disconnect to zookeeper ...");
-        client.close();
-
         logger.info("Shutting down gRPC server ...");
         Optional.ofNullable(server).ifPresent(Server::shutdown);
         logger.info("gRPC server stopped.");
@@ -74,13 +58,6 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
 
     @Override
     public void run(String... strings) throws Exception {
-        logger.info("initing register center...");
-        client = CuratorFrameworkFactory.newClient(grpcServerProperties.getRegisterCenter(), new ExponentialBackoffRetry(1000, 3));
-        client.start();
-
-        registry = new ZookeeperRegistry();
-        registry.init(client, BASE_PATH);
-
         logger.info("Starting gRPC Server...");
 
         Collection<ServerInterceptor> globalInterceptors = this.getBeanNamesByTypeWithAnnotation(GrpcGlobalInterceptor.class, ServerInterceptor.class)
@@ -101,7 +78,7 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
         server = serverBuilder.build().start();
         logger.info("gRPC Server started, listening on port {}.", this.grpcServerProperties.getPort());
 
-        registry.registerService(ServiceInstance.<Instance>builder()
+        registry.registry().registerService(ServiceInstance.<Instance>builder()
                 .id(UUID.randomUUID().toString())
                 .name(grpcServerProperties.getServiceName())
                 .port(grpcServerProperties.getPort())
@@ -148,13 +125,5 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
             }
             return null != applicationContext.getBeanFactory().findAnnotationOnBean(name, annotationType);
         });
-    }
-
-
-    public Channel channel(String service) {
-        ManagedChannel channel = NettyChannelBuilder.forTarget("zookeeper://" + service)
-                .nameResolverFactory(new ZookeeperNameResolverProvider(registry))
-                .loadBalancerFactory(RoundRobinLoadBalancerFactory.getInstance()).usePlaintext(true).build();
-        return channel;
     }
 }
