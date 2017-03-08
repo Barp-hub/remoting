@@ -32,13 +32,40 @@ public class Registry implements InitializingBean, DisposableBean {
     private static final String BASE_PATH = "GRPC";
 
     @Autowired
-    private GrpcServerProperties grpcServerProperties;
+    private GrpcProperties grpcProperties;
 
     private ConcurrentHashMap<String, Channel> channels = new ConcurrentHashMap<>();
 
     private ZookeeperRegistry registry;
 
     private CuratorFramework client;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        logger.info("initing register center...");
+        client = CuratorFrameworkFactory.newClient(grpcProperties.getRegisterCenter(), new ExponentialBackoffRetry(1000, 3));
+        client.start();
+
+        registry = new ZookeeperRegistry();
+        registry.init(client, BASE_PATH);
+    }
+
+    public ZookeeperRegistry registry() {
+        return registry;
+    }
+
+    public Channel channel(String service, List<ClientInterceptor> list) {
+        return Optional.ofNullable(channels.get(service)).orElseGet(() -> {
+            Channel channel = NettyChannelBuilder.forTarget("zookeeper://" + service)
+                    .nameResolverFactory(new ZookeeperNameResolverProvider(registry))
+                    .loadBalancerFactory(RoundRobinLoadBalancerFactory.getInstance()).usePlaintext(true).build();
+            if (!CollectionUtils.isEmpty(list)) {
+                channel = ClientInterceptors.intercept(channel, list);
+            }
+            channels.putIfAbsent(service, channel);
+            return channel;
+        });
+    }
 
     @Override
     public void destroy() throws Exception {
@@ -60,30 +87,5 @@ public class Registry implements InitializingBean, DisposableBean {
         });
     }
 
-    public ZookeeperRegistry registry() {
-        return registry;
-    }
 
-    public Channel channel(String service, List<ClientInterceptor> list) {
-        return Optional.ofNullable(channels.get(service)).orElseGet(() -> {
-            Channel channel = NettyChannelBuilder.forTarget("zookeeper://" + service)
-                    .nameResolverFactory(new ZookeeperNameResolverProvider(registry))
-                    .loadBalancerFactory(RoundRobinLoadBalancerFactory.getInstance()).usePlaintext(true).build();
-            if (!CollectionUtils.isEmpty(list)) {
-                channel = ClientInterceptors.intercept(channel, list);
-            }
-            channels.putIfAbsent(service, channel);
-            return channel;
-        });
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        logger.info("initing register center...");
-        client = CuratorFrameworkFactory.newClient(grpcServerProperties.getRegisterCenter(), new ExponentialBackoffRetry(1000, 3));
-        client.start();
-
-        registry = new ZookeeperRegistry();
-        registry.init(client, BASE_PATH);
-    }
 }

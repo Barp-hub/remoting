@@ -49,6 +49,7 @@ public class ZookeeperNameResolver extends NameResolver {
         this.refresh();
     }
 
+
     @Override
     public void refresh() {
         List<ServiceInstance<Instance>> instances = registry.getServiceInstances(uri.getAuthority());
@@ -72,4 +73,5 @@ public class ZookeeperNameResolver extends NameResolver {
     @Override
     public void shutdown() {
     }
+
 }

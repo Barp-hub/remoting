@@ -2,7 +2,7 @@ package io.github.riwcwt.grpc.command;
 
 import io.github.riwcwt.grpc.annotation.GrpcGlobalInterceptor;
 import io.github.riwcwt.grpc.annotation.GrpcService;
-import io.github.riwcwt.grpc.autoconfigure.GrpcServerProperties;
+import io.github.riwcwt.grpc.autoconfigure.GrpcProperties;
 import io.github.riwcwt.grpc.autoconfigure.Registry;
 import io.github.riwcwt.grpc.registry.zookeeper.Instance;
 import io.grpc.BindableService;
@@ -42,7 +42,7 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
     private AbstractApplicationContext applicationContext;
 
     @Autowired
-    private GrpcServerProperties grpcServerProperties;
+    private GrpcProperties grpcProperties;
 
     private Server server;
 
@@ -63,7 +63,7 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
         Collection<ServerInterceptor> globalInterceptors = this.getBeanNamesByTypeWithAnnotation(GrpcGlobalInterceptor.class, ServerInterceptor.class)
                 .map(name -> applicationContext.getBeanFactory().getBean(name, ServerInterceptor.class)).collect(Collectors.toList());
 
-        final ServerBuilder<?> serverBuilder = ServerBuilder.forPort(this.grpcServerProperties.getPort());
+        final ServerBuilder<?> serverBuilder = ServerBuilder.forPort(this.grpcProperties.getPort());
 
         // find and register all GRpcService-enabled beans
         getBeanNamesByTypeWithAnnotation(GrpcService.class, BindableService.class).forEach(name -> {
@@ -76,12 +76,12 @@ public class GrpcServerRunner implements CommandLineRunner, DisposableBean {
         });
 
         server = serverBuilder.build().start();
-        logger.info("gRPC Server started, listening on port {}.", this.grpcServerProperties.getPort());
+        logger.info("gRPC Server started, listening on port {}.", this.grpcProperties.getPort());
 
         registry.registry().registerService(ServiceInstance.<Instance>builder()
                 .id(UUID.randomUUID().toString())
-                .name(grpcServerProperties.getServiceName())
-                .port(grpcServerProperties.getPort())
+                .name(grpcProperties.getServiceName())
+                .port(grpcProperties.getPort())
                 .address(InetAddress.getLocalHost().getHostAddress())
                 .payload(null)
                 .uriSpec(new UriSpec("{scheme}://{address}:{port}")).build());

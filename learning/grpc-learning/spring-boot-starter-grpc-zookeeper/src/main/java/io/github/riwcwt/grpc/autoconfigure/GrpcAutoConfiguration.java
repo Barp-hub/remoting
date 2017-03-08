@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * Created by michael on 2017-03-02.
  */
 @Configuration
-@EnableConfigurationProperties(GrpcServerProperties.class)
+@EnableConfigurationProperties(GrpcProperties.class)
 public class GrpcAutoConfiguration {
 
     @Bean
