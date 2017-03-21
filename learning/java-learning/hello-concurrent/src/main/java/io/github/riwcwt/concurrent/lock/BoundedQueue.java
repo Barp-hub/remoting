@@ -1,5 +1,9 @@
 package io.github.riwcwt.concurrent.lock;
 
+import io.github.riwcwt.concurrent.SleepUtils;
+
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -59,5 +63,47 @@ public class BoundedQueue<T> {
 
 
     public static void main(String[] args) throws Exception {
+        BoundedQueue<Integer> queue = new BoundedQueue<>(10);
+
+        List<Thread> list = new LinkedList<>();
+        for (int i = 0; i < 5; i++) {
+            Thread thread = new Thread(() -> {
+                for (int j = 0; j < 100; j++) {
+                    try {
+                        queue.add(j);
+                        System.out.println("add : " + j);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            thread.start();
+            list.add(thread);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            Thread thread = new Thread(() -> {
+                for (int j = 0; j < 100; j++) {
+                    try {
+                        Integer n = queue.remove();
+                        System.err.println("remove : " + n);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            thread.start();
+            list.add(thread);
+        }
+
+        list.stream().forEach(thread -> {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
