@@ -4,7 +4,7 @@
     <groupId>io.github.riwcwt</groupId>
     <artifactId>spring-boot-starter-grpc-zookeeper</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>spring-boot-starter-grpc-zookeeper</name>
     <url>http://maven.apache.org</url>
 
@@ -15,8 +15,8 @@
         <file.encoding>UTF-8</file.encoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <grpc.version>1.1.2</grpc.version>
-        <spring.boot.starter.version>1.5.1.RELEASE</spring.boot.starter.version>
+        <grpc.version>1.2.0</grpc.version>
+        <spring.boot.starter.version>1.5.2.RELEASE</spring.boot.starter.version>
         <curator.version>2.11.1</curator.version>
     </properties>
 
