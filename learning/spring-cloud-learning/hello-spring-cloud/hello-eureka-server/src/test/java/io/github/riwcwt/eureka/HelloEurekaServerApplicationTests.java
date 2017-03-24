@@ -1,4 +1,4 @@
-package io.github.riwcwt;
+package io.github.riwcwt.eureka;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class HelloSpringCloudApplicationTests {
+public class HelloEurekaServerApplicationTests {
 
 	@Test
 	public void contextLoads() {
