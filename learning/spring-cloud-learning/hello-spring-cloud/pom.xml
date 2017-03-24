@@ -28,6 +28,7 @@
         <module>hello-eureka-server</module>
         <module>hello-provider</module>
         <module>hello-consumer</module>
+        <module>hello-config-server</module>
     </modules>
 
     <dependencyManagement>
