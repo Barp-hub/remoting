@@ -17,23 +17,19 @@ public class TimeTest {
         LocalDate today = LocalDate.now();
         System.out.println("Today's Local date : " + today);
 
-
         int year = today.getYear();
         int month = today.getMonthValue();
         int day = today.getDayOfMonth();
         System.out.printf("Year : %d Month : %d day : %d \t %n", year, month, day);
-
 
         LocalDate date = LocalDate.of(2017, 3, 24);
         if (date.equals(today)) {
             System.out.printf("Today %s and date %s are same date %n", today, date);
         }
 
-
         LocalDate nextWeek = today.plus(1, ChronoUnit.WEEKS);
         System.out.println("Today is : " + today);
         System.out.println("Date after 1 week : " + nextWeek);
-
 
         LocalDate previousYear = today.minus(1, ChronoUnit.YEARS);
         System.out.println("Date before 1 year : " + previousYear);
@@ -46,7 +42,6 @@ public class TimeTest {
     public void time() {
         LocalTime time = LocalTime.now();
         System.out.println("local time now : " + time);
-
 
         LocalTime newTime = time.plusHours(2); // adding two hours
         System.out.println("Time after 2 hours : " + newTime);
@@ -80,7 +75,6 @@ public class TimeTest {
                 DateTimeFormatter.BASIC_ISO_DATE);
         System.out.printf("Date generated from String %s is %s %n", dayAfterTommorrow, formatted);
 
-
         String goodFriday = "03 18 2014";
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM dd yyyy");
@@ -90,7 +84,6 @@ public class TimeTest {
             System.out.printf("%s is not parsable!%n", goodFriday);
             ex.printStackTrace();
         }
-
 
         LocalDateTime arrivalDate = LocalDateTime.now();
         try {
