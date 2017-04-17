@@ -26,9 +26,9 @@ public class AsyncTest {
     @Test
     public void completable() {
         CompletableFuture.supplyAsync(() -> 2)
-                .thenApply(i -> i * i)
-                .thenAccept(i -> System.out.println(i))
-                .whenComplete((result, error) -> System.out.println(result + " Error:" + error));
+                .thenApplyAsync(AsyncTest::getNumber)
+                .thenAcceptAsync(i -> System.out.println(i))
+                .whenCompleteAsync((result, error) -> System.out.println(result + " Error:" + error));
     }
 
 }
