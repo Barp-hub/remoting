@@ -15,6 +15,17 @@ import java.util.Map;
 public class IndexController {
 
     @ResponseBody
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public Map<String, Object> index() throws InterruptedException {
+        Map<String, Object> result = new HashMap<>();
+        int time = (int) (Math.random() * 15);
+        Thread.sleep(time);
+        result.put("now", System.currentTimeMillis());
+        result.put("user", "michael");
+        return result;
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/performance", method = RequestMethod.GET)
     public Map<String, Object> performance() throws InterruptedException {
         Map<String, Object> result = new HashMap<>();

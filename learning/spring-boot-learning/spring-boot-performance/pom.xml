@@ -38,6 +38,7 @@
     </dependencies>
 
     <build>
+        <finalName>spring-boot</finalName>
         <plugins>
             <!-- 打包编译时跳过测试用例，需要加入这个插件 -->
             <plugin>
