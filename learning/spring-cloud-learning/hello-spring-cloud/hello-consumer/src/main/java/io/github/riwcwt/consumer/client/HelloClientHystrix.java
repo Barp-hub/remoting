@@ -1,11 +1,14 @@
 package io.github.riwcwt.consumer.client;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by michael on 2017-03-24.
  */
+@Component
 public class HelloClientHystrix implements HelloClient {
 
     @Override

@@ -1,16 +1,16 @@
-package io.github.riwcwt.config;
+package io.github.riwcwt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
-@EnableConfigServer
+@EnableZuulProxy
 @EnableEurekaClient
 @SpringBootApplication
-public class HelloConfigServerApplication {
+public class HelloZuulApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HelloConfigServerApplication.class, args);
+        SpringApplication.run(HelloZuulApplication.class, args);
     }
 }

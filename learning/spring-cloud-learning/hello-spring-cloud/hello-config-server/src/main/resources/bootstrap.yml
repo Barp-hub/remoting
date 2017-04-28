@@ -1,0 +1,37 @@
+server:
+  port: 4444
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/riwcwt/spring-cloud-config
+          searchPaths: application/config
+          clone-on-start: true
+#          uri: https://github.com/spring-cloud-samples/config-repo
+
+#          searchPaths: repo
+#      label: master
+
+#spring.cloud.config.server.git.searchPaths=respo
+#spring.cloud.config.label=master
+
+
+#spring.cloud.config.server.git.uri：配置git仓库地址
+#spring.cloud.config.server.git.searchPaths：配置仓库路径
+#spring.cloud.config.label：配置仓库的分支
+#spring.cloud.config.server.git.username：访问git仓库的用户名
+#spring.cloud.config.server.git.password：访问git仓库的用户密码
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:1111/eureka/
+  instance:
+    perferIpAddress: true
+
+#eureka.instance.perferIpAddress=true  使用IP地址
