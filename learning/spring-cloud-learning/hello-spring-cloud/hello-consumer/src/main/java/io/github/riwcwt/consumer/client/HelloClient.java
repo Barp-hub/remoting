@@ -16,4 +16,6 @@ public interface HelloClient {
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     Map<String, Object> hello(@RequestParam(value = "username") String username);
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    Map<String, Object> index();
 }

@@ -29,6 +29,7 @@
         <module>hello-provider</module>
         <module>hello-consumer</module>
         <module>hello-config-server</module>
+        <module>hello-hystrix-dashboard</module>
     </modules>
 
     <dependencyManagement>

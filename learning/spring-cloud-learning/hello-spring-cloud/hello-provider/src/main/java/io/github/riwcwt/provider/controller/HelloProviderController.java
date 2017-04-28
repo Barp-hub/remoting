@@ -22,4 +22,11 @@ public class HelloProviderController {
         return map;
     }
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public Map<String, Object> index() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("say", "hello, spring-cloud!");
+        return map;
+    }
+
 }

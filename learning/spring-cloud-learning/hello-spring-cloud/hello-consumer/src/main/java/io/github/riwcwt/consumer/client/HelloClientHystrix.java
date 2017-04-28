@@ -14,5 +14,12 @@ public class HelloClientHystrix implements HelloClient {
         map.put("error", "调用错误啦！");
         return map;
     }
-    
+
+    @Override
+    public Map<String, Object> index() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("error", "调用服务错误啦！");
+        return map;
+    }
+
 }
