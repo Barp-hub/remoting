@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +34,14 @@ public class IndexController {
         int time = (int) (Math.random() * 15);
         Thread.sleep(time);
         result.put("time", time);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/network", method = RequestMethod.GET)
+    public Map<String, Object> network() throws InterruptedException, UnknownHostException {
+        Map<String, Object> result = new HashMap<>();
+        result.put("ip", InetAddress.getLocalHost().getHostAddress());
         return result;
     }
 }
