@@ -1,9 +1,12 @@
 package io.github.riwcwt.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -15,6 +18,9 @@ import java.util.Map;
  */
 @Controller
 public class IndexController {
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @ResponseBody
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -43,5 +49,14 @@ public class IndexController {
         Map<String, Object> result = new HashMap<>();
         result.put("ip", InetAddress.getLocalHost().getHostAddress());
         return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/web", method = RequestMethod.GET)
+    public String web(@RequestParam(value = "url", required = false) String url) {
+        if (url == null) {
+            url = "https://www.baidu.com/";
+        }
+        return this.restTemplate.getForEntity(url, String.class).getBody();
     }
 }

@@ -6,6 +6,15 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomi
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by michael on 2016-12-29.
@@ -31,6 +40,26 @@ public class ApplicationConfig {
                 });
             }
         };
+    }
+
+    @Bean
+    public RestTemplate restTemplate(ClientHttpRequestFactory factory) {
+        RestTemplate restTemplate = new RestTemplate(factory);
+
+        StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        List<HttpMessageConverter<?>> list = new ArrayList<>();
+        list.add(stringHttpMessageConverter);
+
+        restTemplate.setMessageConverters(list);
+        return restTemplate;
+    }
+
+    @Bean
+    public ClientHttpRequestFactory simpleClientHttpRequestFactory() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setReadTimeout(5000);//ms
+        factory.setConnectTimeout(15000);//ms
+        return factory;
     }
 
 }
