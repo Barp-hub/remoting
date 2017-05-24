@@ -14,6 +14,22 @@ import java.util.stream.Stream;
  * Unit test for simple Application.
  */
 public class ApplicationTest {
+
+    @Test
+    public void thisObject() throws InterruptedException {
+        Runnable runnable = () -> System.out.println(this.getClass().getName());
+        //        Runnable runnable = new Runnable() {
+        //            @Override
+        //            public void run() {
+        //                System.out.println(this.getClass().getName());
+        //            }
+        //        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+        thread.join();
+    }
+
     @Test
     public void method() {
         final Car car = Car.create(Car::new);
@@ -36,7 +52,6 @@ public class ApplicationTest {
 
         System.out.println(numbers.stream().filter(i -> i % 2 == 1).reduce(Integer.MIN_VALUE, Integer::max));
 
-
         List<Integer> nums = Arrays.asList(1, 1, null, 2, 3, 4, null, 5, 6, 7, 8, 9, 10);
         System.out.println("sum is:" + nums.stream().filter(num -> num != null).distinct().mapToInt(num -> num * 2).peek(System.out::println).skip(2).limit(4).sum());
         nums.stream().filter(num -> num != null).distinct().collect(Collectors.toList()).stream().forEach(System.out::println);
@@ -49,14 +64,13 @@ public class ApplicationTest {
         list.forEach(System.out::println);
     }
 
-
     @Test
     public void optional() {
         Optional.ofNullable("hello").ifPresent(System.out::println);
 
         Optional<String> firstName = Optional.of("Tom");
         System.out.println("First Name is set? " + firstName.isPresent());
-        System.out.println("First Name: " + firstName.orElseGet(() -> "[none]"));
+        System.out.println("First Name: " + firstName.orElse("[none]"));
         System.out.println(firstName.map(s -> "Hey " + s + "!").orElse("Hey Stranger!"));
     }
 

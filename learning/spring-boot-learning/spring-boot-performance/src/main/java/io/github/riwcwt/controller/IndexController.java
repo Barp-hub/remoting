@@ -1,5 +1,7 @@
 package io.github.riwcwt.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +21,15 @@ import java.util.Map;
 @Controller
 public class IndexController {
 
+    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
+
     @Autowired
     private RestTemplate restTemplate;
 
     @ResponseBody
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public Map<String, Object> index() throws InterruptedException {
+        logger.info("访问首页！");
         Map<String, Object> result = new HashMap<>();
         int time = (int) (Math.random() * 15);
         Thread.sleep(time);

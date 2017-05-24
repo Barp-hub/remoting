@@ -19,7 +19,7 @@ public class LongEventMain {
         LongEventFactory factory = new LongEventFactory();
 
         // Specify the size of the ring buffer, must be power of 2.
-        int bufferSize = 1024;
+        int bufferSize = 4096;
 
         // Construct the Disruptor
         Disruptor<LongEvent> disruptor = new Disruptor<>(factory, bufferSize, executor);
@@ -39,7 +39,7 @@ public class LongEventMain {
         for (long l = 0; l < 10000; l++) {
             bb.putLong(0, l);
             producer.onData(bb);
-            Thread.sleep(5);
+            //            Thread.sleep(1);
         }
     }
 }
