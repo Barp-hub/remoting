@@ -33,8 +33,8 @@ public class MonitorTransformer implements ClassFileTransformer {
                         + "System.out.println(\"Method Executed in ms: \" + elapsedTime);}");
                 byteCode = cc.toBytecode();
                 cc.detach();
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
