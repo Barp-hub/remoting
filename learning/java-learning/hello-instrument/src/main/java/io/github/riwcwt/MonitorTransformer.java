@@ -20,8 +20,9 @@ public class MonitorTransformer implements ClassFileTransformer {
 
         byte[] byteCode = classfileBuffer;
 
+        System.out.println("loading : " + className);
+
         if (className.equals("io/github/riwcwt/controller/IndexController")) {
-            System.out.println("loading : " + className);
 
             try {
                 ClassPool cp = ClassPool.getDefault();

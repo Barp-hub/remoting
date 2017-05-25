@@ -26,8 +26,8 @@ public class MonitorAgentTest {
 
     @Test
     public void attach() {
-        String agentFilePath = "D:/tmp/DemoAgent.jar";
-        String jvmAppName = "vadim.demo.jvm.app.DemoApplication";
+        String agentFilePath = "E:\\repository\\github\\remoting\\learning\\java-learning\\hello-instrument\\target\\hello-instrument.jar";
+        String jvmAppName = "target\\spring-boot.jar";
         String jvmPid = null;
         List<VirtualMachineDescriptor> jvms = VirtualMachine.list();
         for (VirtualMachineDescriptor jvm : jvms) {

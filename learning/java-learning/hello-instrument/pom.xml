@@ -55,6 +55,7 @@
                             <archive>
                                 <manifestEntries>
                                     <premain-class>io.github.riwcwt.MonitorAgent</premain-class>
+                                    <agent-class>io.github.riwcwt.MonitorAgent</agent-class>
                                 </manifestEntries>
                             </archive>
                         </configuration>
