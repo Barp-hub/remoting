@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="io.github.riwcwt.consumer.service"/>
+
+    <dubbo:application name="hello-dubbo-consumer" owner="michael"/>
+
+    <dubbo:registry address="#{systemProperties['dubbo.registery.center']}"/>
+
+    <dubbo:protocol name="dubbo" port="-1"/>
+
+    <dubbo:monitor protocol="registry"/>
+
+    <dubbo:reference id="hello-service"
+                     interface="io.github.riwcwt.hello.api.HelloService"
+                     timeout="6000" version="1.0"/>
+
+</beans>
