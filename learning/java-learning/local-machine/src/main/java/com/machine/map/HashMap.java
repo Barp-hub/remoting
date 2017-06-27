@@ -12,6 +12,10 @@ public class HashMap<K, V> implements Map<K, V> {
 
     private Node<K, V>[] array;
 
+    public HashMap() {
+        array = new Node[DEFAULT_INITIAL_CAPACITY];
+    }
+
     @Override
     public V put(K key, V value) {
         int index = index(key);
@@ -33,7 +37,30 @@ public class HashMap<K, V> implements Map<K, V> {
                 entry = entry.next;
             }
         }
+
+        if (size > array.length * DEFAULT_LOAD_FACTOR) {
+            resize();
+        }
         return value;
+    }
+
+    private void resize() {
+        if (this.array == null) {
+            this.array = new Node[DEFAULT_INITIAL_CAPACITY];
+        } else {
+            Node<K, V>[] old = array;
+            this.array = new Node[this.array.length * 2];
+            for (Node node : old) {
+                Node current = node;
+                while (current != null) {
+                    Node temp = current;
+                    int index = index(temp.getKey());
+                    temp.next = this.array[index];
+                    this.array[index] = temp;
+                    current = current.next;
+                }
+            }
+        }
     }
 
     @Override
@@ -55,6 +82,19 @@ public class HashMap<K, V> implements Map<K, V> {
         }
     }
 
+    public void print() {
+        if (this.array != null) {
+            for (Node node : this.array) {
+                Node current = node;
+                while (current != null) {
+                    System.out.print(current.getKey() + " ");
+                    current = current.next;
+                }
+            }
+            System.out.println();
+        }
+    }
+
     @Override
     public int size() {
         return size;
@@ -66,7 +106,7 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     private int index(Object key) {
-        return hash(key) % DEFAULT_INITIAL_CAPACITY;
+        return hash(key) % this.array.length;
     }
 
     class Node<K, V> implements Map.Entry<K, V> {
