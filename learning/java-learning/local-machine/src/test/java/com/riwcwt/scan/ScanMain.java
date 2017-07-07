@@ -86,8 +86,8 @@ public class ScanMain {
 								// 如果可以迭代下去 并且是一个包  
 								if ((idx != -1) || recursive) {
 									// 如果是一个.class文件 而且不是目录  
-									if (name.endsWith(".class") && !entry.isDirectory()) {
-										// 去掉后面的".class" 获取真正的类名  
+									if (name.endsWith(".classloader") && !entry.isDirectory()) {
+										// 去掉后面的".classloader" 获取真正的类名
 										String className = name.substring(packageName.length() + 1, name.length() - 6);
 										try {
 											// 添加到classes  
@@ -134,7 +134,7 @@ public class ScanMain {
 		File[] dirfiles = dir.listFiles(new FileFilter() {
 			// 自定义过滤规则 如果可以循环(包含子目录) 或则是以.class结尾的文件(编译好的java类文件)  
 			public boolean accept(File file) {
-				return (recursive && file.isDirectory()) || (file.getName().endsWith(".class"));
+				return (recursive && file.isDirectory()) || (file.getName().endsWith(".classloader"));
 			}
 		});
 		// 循环所有文件  
@@ -143,7 +143,7 @@ public class ScanMain {
 			if (file.isDirectory()) {
 				findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), recursive, classes);
 			} else {
-				// 如果是java类文件 去掉后面的.class 只留下类名  
+				// 如果是java类文件 去掉后面的.classloader 只留下类名
 				String className = file.getName().substring(0, file.getName().length() - 6);
 				try {
 					// 添加到集合中去  
