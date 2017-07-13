@@ -59,8 +59,8 @@ public class MainTest {
         String token = Jwts.builder()
                 .setSubject("1234567890")
                 .setId("784fe208-5dfd-4c36-8f1f-5faeb25398b4")
-                .setIssuedAt(Date.from(Instant.ofEpochSecond(1497234336)))
-                .setExpiration(Date.from(Instant.ofEpochSecond(1497237936)))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(Instant.now().plusSeconds(300).toEpochMilli()))
                 .claim("name", "John Doe")
                 .claim("admin", true)
                 .signWith(SignatureAlgorithm.HS512, SecurityUtil.secret.getBytes("UTF-8"))
@@ -72,9 +72,9 @@ public class MainTest {
     @Test
     public void decode() throws UnsupportedEncodingException {
         Jws<Claims> claims = Jwts.parser()
-                .setSigningKey("secret".getBytes("UTF-8"))
-                .parseClaimsJws("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwianRpIjoiNzg0ZmUyMDgtNWRmZC00YzM2LThmMWYtNWZhZWIyNTM5OGI0IiwiaWF0IjoxNDk3MjM0MzM2LCJleHAiOjE0OTcyMzc5MzYsIm5hbWUiOiJKb2huIERvZSIsImFkbWluIjp0cnVlfQ.yxGvWgMyTL2UvUjBRHIaqbsc6TxXCirlOlDXm4VxxOxSTjetsVJiwXdp5zD6DmjLTqICsK9jTlB3m60ka6MeeQ");
+                .setSigningKey(SecurityUtil.secret.getBytes("UTF-8"))
+                .parseClaimsJws("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwianRpIjoiNzg0ZmUyMDgtNWRmZC00YzM2LThmMWYtNWZhZWIyNTM5OGI0IiwiaWF0IjoxNDk5NzY2MjczLCJleHAiOjE0OTk3NjY1NzMsIm5hbWUiOiJKb2huIERvZSIsImFkbWluIjp0cnVlfQ.Kx5uZmCM2pKeMIqMVeHWy-GOamSW-RCX6BgdykdYr9bleirGKcneEotpguiBAUqAGMeJgrG3-9XpUkpgmSemOA");
 
-        System.out.println(claims.getSignature());
+        System.out.println(claims.getBody());
     }
 }
