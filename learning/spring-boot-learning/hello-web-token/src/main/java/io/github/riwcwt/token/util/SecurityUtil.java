@@ -20,6 +20,7 @@ public class SecurityUtil {
 
     public static String encode(String id, Date expire) throws UnsupportedEncodingException {
         return Jwts.builder()
+                .setSubject("sports")
                 .setId(id)
                 .setIssuedAt(new Date())
                 .setExpiration(expire)
@@ -32,6 +33,7 @@ public class SecurityUtil {
         try {
             if (token != null) {
                 Jws<Claims> claims = Jwts.parser()
+                        .requireSubject("sports")
                         .setSigningKey(SecurityUtil.secret.getBytes("UTF-8"))
                         .parseClaimsJws(token);
                 return claims.getBody();

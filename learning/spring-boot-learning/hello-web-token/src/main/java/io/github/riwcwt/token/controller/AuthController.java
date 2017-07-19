@@ -27,7 +27,7 @@ public class AuthController {
     @RequestMapping(value = "/validate", method = RequestMethod.POST)
     public String validate(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password, HttpServletResponse response) throws UnsupportedEncodingException {
         if ("michael".equalsIgnoreCase(username) && "michael".equalsIgnoreCase(password)) {
-            Cookie token = new Cookie("token", SecurityUtil.encode(username, new Date(Instant.now().plusSeconds(1800).toEpochMilli())));
+            Cookie token = new Cookie("token", SecurityUtil.encode(username, Date.from(Instant.now().plusSeconds(1800))));
             token.setMaxAge(1800);
             response.addCookie(token);
             return "redirect:/";
