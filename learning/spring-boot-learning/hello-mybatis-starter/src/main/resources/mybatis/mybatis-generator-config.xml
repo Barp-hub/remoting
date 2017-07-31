@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <classPathEntry
+            location="${maven.repository.home}\mysql\mysql-connector-java\5.1.40\mysql-connector-java-5.1.40.jar"/>
+    <context id="mysql" targetRuntime="MyBatis3">
+
+        <!-- 开启注释 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/sports?useUnicode=true"
+                        userId="root" password="root"/>
+        <javaModelGenerator targetPackage="io.github.riwcwt.entity"
+                            targetProject="${target.project}/src/main/java"/>
+        <sqlMapGenerator targetPackage="mybatis.mapper"
+                         targetProject="${target.project}/src/main/resources"/>
+        <javaClientGenerator targetPackage="io.github.riwcwt.mapper"
+                             targetProject="${target.project}/src/main/java"
+                             type="ANNOTATEDMAPPER"/>
+        <table schema="console" tableName="event"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <property name="useActualColumnNames" value="true"/>
+        </table>
+
+    </context>
+</generatorConfiguration>
