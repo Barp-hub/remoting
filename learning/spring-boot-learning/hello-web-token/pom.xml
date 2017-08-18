@@ -34,7 +34,11 @@
             <artifactId>jjwt</artifactId>
             <version>0.7.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.btime</groupId>
+            <artifactId>monitor-agent</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
