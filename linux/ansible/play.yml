@@ -1,0 +1,5 @@
+- hosts: all
+  user: root
+  tasks:
+  - name: echo system
+    shell: echo \{\{ ansible_os_family \}\}
