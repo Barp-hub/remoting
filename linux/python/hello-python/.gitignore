@@ -1,0 +1,23 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Eclipse artifacts
+.settings
+.classpath
+.project
+*.log
+*.iml
+
+bin/
+target/
+.DS_Store
+*.log.*
+*.idea*
+
+.idea/
+.vscode/
+__pycache__/*
