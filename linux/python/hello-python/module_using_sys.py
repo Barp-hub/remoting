@@ -9,6 +9,7 @@ print('\n\nThe PYTHONPATH is', sys.path, '\n')
 
 print(os.getcwd())
 
+print(os.sep)
 
 def hello(name):
     return 'hello, ' + name
