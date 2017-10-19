@@ -1,0 +1,9 @@
+server:
+    port: 8080
+management:
+    port: 54000
+    health:
+        mail:
+            enabled: false
+    security:
+        enabled: false
