@@ -1,0 +1,116 @@
+version: "3"
+services:
+  zookeeper1:
+    image: zookeeper:3.4.10
+    environment:
+      - ZOO_MY_ID=1
+      - ZOO_SERVERS=server.1=0.0.0.0:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888
+    networks:
+      - cluster-network
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  zookeeper2:
+    image: zookeeper:3.4.10
+    environment:
+      - ZOO_MY_ID=2
+      - ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zookeeper3:2888:3888
+    networks:
+      - cluster-network
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  zookeeper3:
+    image: zookeeper:3.4.10
+    environment:
+      - ZOO_MY_ID=3
+      - ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=0.0.0.0:2888:3888
+    networks:
+      - cluster-network
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  dubbo_monitor:
+    image: riwcwt/dubbo-monitor:2.8.4
+    networks:
+      - cluster-network
+    ports:
+      - "8888:8888"
+    depends_on:
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  dubbo_admin:
+    image: riwcwt/dubbo-admin:2.8.4
+    networks:
+      - cluster-network
+    ports:
+      - "8889:8080"
+    depends_on:
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  dubbo-simple-provider:
+    image: riwcwt/dubbo-simple-provider:1.0
+    environment:
+      - dubbo.registery.center=zookeeper://zookeeper1:2181?backup=zookeeper2:2181,zookeeper3:2181
+    networks:
+      - cluster-network
+    depends_on:
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  dubbo-simple-consumer:
+    image: riwcwt/dubbo-simple-consumer:1.0
+    environment:
+      - dubbo.registery.center=zookeeper://zookeeper1:2181?backup=zookeeper2:2181,zookeeper3:2181
+    networks:
+      - cluster-network
+    depends_on:
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
+      - dubbo-simple-provider
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+networks:
+  cluster-network:
+    external: true

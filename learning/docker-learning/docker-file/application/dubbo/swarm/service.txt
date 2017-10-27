@@ -1,0 +1,74 @@
+docker service create \
+--name zookeeper1 \
+--network cluster-network  \
+--replicas 1 \
+--restart-condition on-failure \
+--update-parallelism 1 \
+--update-delay 10s \
+-e ZOO_MY_ID=1 \
+-e "ZOO_SERVERS=server.1=0.0.0.0:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888" \
+zookeeper:3.4.10
+
+docker service create \
+--name zookeeper2 \
+--network cluster-network  \
+--replicas 1 \
+--restart-condition on-failure \
+--update-parallelism 1 \
+--update-delay 10s \
+-e ZOO_MY_ID=2 \
+-e "ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zookeeper3:2888:3888" \
+zookeeper:3.4.10
+
+docker service create \
+--name zookeeper3 \
+--network cluster-network  \
+--replicas 1 \
+--restart-condition on-failure \
+--update-parallelism 1 \
+--update-delay 10s \
+-e ZOO_MY_ID=3 \
+-e "ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=0.0.0.0:2888:3888" \
+zookeeper:3.4.10
+
+docker service create \
+--name dubbo_monitor \
+--network cluster-network  \
+--replicas 1 \
+--restart-condition on-failure \
+--update-parallelism 1 \
+--update-delay 10s \
+--publish "8888:8888" \
+riwcwt/dubbo-monitor:2.8.4
+
+docker service create \
+--name dubbo_admin \
+--network cluster-network  \
+--replicas 1 \
+--restart-condition on-failure \
+--update-parallelism 1 \
+--update-delay 10s \
+--publish "8889:8080" \
+riwcwt/dubbo-admin:2.8.4
+
+docker service create \
+--name dubbo-simple-provider \
+--network cluster-network  \
+--replicas 1 \
+--restart-condition on-failure \
+--update-parallelism 1 \
+--update-delay 10s \
+-e dubbo.registery.center=zookeeper://zookeeper1:2181?backup=zookeeper2:2181,zookeeper3:2181 \
+riwcwt/dubbo-simple-provider:1.0
+
+docker service create \
+--name dubbo-simple-consumer \
+--network cluster-network  \
+--replicas 1 \
+--restart-condition on-failure \
+--update-parallelism 1 \
+--update-delay 10s \
+-e dubbo.registery.center=zookeeper://zookeeper1:2181?backup=zookeeper2:2181,zookeeper3:2181 \
+riwcwt/dubbo-simple-consumer:1.0
+
+
