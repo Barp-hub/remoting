@@ -25,6 +25,6 @@ public class FreemarkerConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
-        configurer.setDefaultTimeout(1000 * 60 * 60);
+        configurer.setDefaultTimeout(1000 * 100);
     }
 }

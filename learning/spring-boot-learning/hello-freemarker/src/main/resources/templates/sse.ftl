@@ -10,7 +10,7 @@
 </div>
 <script type="application/javascript">
 
-    if (!!window.EventSource) {
+    if (window.EventSource) {
         var eventSource = new EventSource("/emitter");
 
         var elements = document.getElementById("messages");
