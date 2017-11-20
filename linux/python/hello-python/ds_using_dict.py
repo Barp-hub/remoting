@@ -17,6 +17,10 @@ print('\nThere are {} contacts in the address-book\n'.format(len(ab)))
 for name, address in ab.items():
     print('Contact {} at {}'.format(name, address))
 
+
+for key in ab.keys():
+    print(key)
+
 # 添加一对键值—值配对
 ab['Guido'] = 'guido@python.org'
 

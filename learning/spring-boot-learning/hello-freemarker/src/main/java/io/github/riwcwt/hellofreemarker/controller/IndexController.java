@@ -39,7 +39,7 @@ public class IndexController {
                     emitter.send(String.valueOf("当前时间：" + System.currentTimeMillis()));
                     Thread.sleep(1000);
                 }
-//                emitter.complete();
+                emitter.complete();
             } catch (IOException e) {
                 emitter.completeWithError(e);
             } catch (InterruptedException e) {
