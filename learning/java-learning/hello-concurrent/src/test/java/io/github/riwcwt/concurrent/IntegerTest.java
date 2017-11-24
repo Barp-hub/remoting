@@ -2,13 +2,15 @@ package io.github.riwcwt.concurrent;
 
 import org.junit.Test;
 
+import java.lang.reflect.Field;
+
 /**
  * Created by michael on 2017-06-12.
  */
 public class IntegerTest {
 
     @Test
-    public void swap() {
+    public void swap() throws NoSuchFieldException, IllegalAccessException {
         Integer i = 1;
         Integer j = 2;
 
@@ -16,12 +18,24 @@ public class IntegerTest {
 
         System.out.println("i = " + i);
         System.out.println("j = " + j);
+
+        Integer k = 1;
+        System.out.println("k = " + k);
     }
 
-    public void swap(Integer i, Integer j) {
-        Integer temp = i;
-        i = j;
-        j = i;
+    public void swap(Integer i, Integer j) throws NoSuchFieldException, IllegalAccessException {
+
+        Field field = Integer.class.getDeclaredField("value");
+        field.setAccessible(true);
+
+        int k = i.intValue();
+
+        field.setInt(i, j.intValue());
+
+        field.setInt(j, k);
+        //        Integer temp = i;
+        //        i = j;
+        //        j = i;
     }
 
     @Test

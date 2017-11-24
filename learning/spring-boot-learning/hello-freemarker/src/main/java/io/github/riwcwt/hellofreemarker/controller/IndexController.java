@@ -33,11 +33,17 @@ public class IndexController {
     public SseEmitter emitter() {
         SseEmitter emitter = new SseEmitter();
 
+        final boolean[] running = {true};
+
+        emitter.onCompletion(() -> running[0] = false);
+
         new Thread(() -> {
             try {
                 for (int i = 0; i < 100; i++) {
-                    emitter.send(String.valueOf("当前时间：" + System.currentTimeMillis()));
-                    Thread.sleep(1000);
+                    if (running[0]) {
+                        emitter.send(String.valueOf("当前时间：" + System.currentTimeMillis()));
+                        Thread.sleep(1000);
+                    }
                 }
                 emitter.complete();
             } catch (IOException e) {
