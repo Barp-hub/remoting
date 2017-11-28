@@ -22,6 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <speedment.version>3.0.18</speedment.version>
     </properties>
 
     <dependencies>
@@ -45,6 +46,20 @@
             <version>2.6</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.42</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.speedment</groupId>
+            <artifactId>runtime</artifactId>
+            <version>${speedment.version}</version>
+            <type>pom</type>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -57,6 +72,17 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.speedment</groupId>
+                <artifactId>speedment-maven-plugin</artifactId>
+                <version>${speedment.version}</version>
+
+                <configuration>
+                    <components>
+                        <component>com.speedment.plugins.spring.SpringGeneratorBundle</component>
+                    </components>
+                </configuration>
             </plugin>
         </plugins>
     </build>
