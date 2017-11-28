@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class ApplicationTest {
 
@@ -50,6 +52,16 @@ public class ApplicationTest {
 
         // 获取，但不移除第一个元素
         System.out.println(linkedList.peekFirst());
+    }
+
+    @Test
+    public void array() {
+        int[] data = IntStream.range(0, 10).toArray();
+        IntStream.of(data).forEach(System.out::println);
+
+        System.out.println("---------------");
+        System.arraycopy(data, 0, data, 5, 3);
+        IntStream.of(data).forEach(System.out::println);
     }
 
 }
