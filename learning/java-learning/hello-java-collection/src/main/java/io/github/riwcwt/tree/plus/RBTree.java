@@ -10,7 +10,7 @@ public class RBTree<T extends Comparable<T>> {
     private volatile boolean overrideMode = true;
 
     public RBTree() {
-        this.root = new RBTreeNode<T>();
+        this.root = new RBTreeNode<>();
     }
 
     public RBTree(boolean overrideMode) {
