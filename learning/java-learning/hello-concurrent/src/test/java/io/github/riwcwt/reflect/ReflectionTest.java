@@ -3,7 +3,9 @@ package io.github.riwcwt.reflect;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class ReflectionTest {
@@ -20,7 +22,7 @@ public class ReflectionTest {
 
     @Test
     public void field() {
-        Stream.of(String.class.getDeclaredFields()).forEach(field -> System.out.println(field.toGenericString()));
+        Stream.of(String.class.getDeclaredFields()).map(field -> field.toGenericString()).forEach(System.out::println);
     }
 
 }
