@@ -18,6 +18,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
         logger.info("active : " + ctx.name());
     }
 
+    @Override
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         logger.info("server receive : " + msg);
 

@@ -9,7 +9,7 @@ import java.nio.channels.SocketChannel;
 public class NIOClient {
     public static void main(String[] args) throws IOException, InterruptedException {
         SocketChannel socketChannel = SocketChannel.open();
-        InetSocketAddress address = new InetSocketAddress(2345);
+        InetSocketAddress address = new InetSocketAddress(1234);
         socketChannel.connect(address);
         RandomAccessFile file = new RandomAccessFile(
                 NIOClient.class.getClassLoader().getResource("test.txt").getFile(), "rw");
