@@ -12,9 +12,9 @@
         <result column="creation_date" jdbcType="BIGINT" property="creation_date"/>
     </resultMap>
     <sql id="Base_Column_List">
-		id, username, password, description, email, phone, status,
-		creation_date
-	</sql>
+        id, username, password, description, email, phone, status,
+        creation_date
+    </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long"
             resultMap="BaseResultMap">
         select
@@ -23,10 +23,10 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-		delete from
-		auth_user
-		where id = #{id,jdbcType=BIGINT}
-	</delete>
+        delete from
+        auth_user
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
     <insert id="insert" parameterType="io.github.riwcwt.entity.AuthUser" useGeneratedKeys="true" keyProperty="id"
             keyColumn="id">
         insert into auth_user (
@@ -133,17 +133,17 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="io.github.riwcwt.entity.AuthUser">
-		update auth_user
-		set username = #{username,jdbcType=VARCHAR},
-		password =
-		#{password,jdbcType=VARCHAR},
-		description =
-		#{description,jdbcType=VARCHAR},
-		email = #{email,jdbcType=VARCHAR},
-		phone = #{phone,jdbcType=VARCHAR},
-		status = #{status,jdbcType=INTEGER},
-		creation_date = #{creation_date,jdbcType=BIGINT}
-		where id =
-		#{id,jdbcType=BIGINT}
-	</update>
+        update auth_user
+        set username = #{username,jdbcType=VARCHAR},
+        password =
+        #{password,jdbcType=VARCHAR},
+        description =
+        #{description,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
+        creation_date = #{creation_date,jdbcType=BIGINT}
+        where id =
+        #{id,jdbcType=BIGINT}
+    </update>
 </mapper>

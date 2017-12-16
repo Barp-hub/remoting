@@ -21,7 +21,7 @@
         <javaClientGenerator targetPackage="io.github.riwcwt.mapper"
                              targetProject="${target.project}/src/main/java"
                              type="XMLMAPPER"/>
-        <table schema="console" tableName="auth_user"
+        <table schema="console" tableName="role"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

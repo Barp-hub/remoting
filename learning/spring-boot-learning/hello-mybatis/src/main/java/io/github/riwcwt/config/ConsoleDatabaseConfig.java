@@ -1,6 +1,9 @@
 package io.github.riwcwt.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInterceptor;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -16,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-
+import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
@@ -59,6 +62,15 @@ public class ConsoleDatabaseConfig {
     @Bean(name = "console-sqlSessionFactory")
     public SqlSessionFactory sqlSessionFactory(@Qualifier("console-dataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+
+        PageInterceptor helper = new PageInterceptor();
+        Properties properties = new Properties();
+        properties.setProperty("helperDialect", "mysql");
+        properties.setProperty("reasonable", "true");
+        helper.setProperties(properties);
+
+        sqlSessionFactoryBean.setPlugins(new Interceptor[]{helper});
+
         sqlSessionFactoryBean.setDataSource(dataSource);
         sqlSessionFactoryBean.setConfigLocation(new DefaultResourceLoader().getResource("classpath:mybatis/config.xml"));
         sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/console/*.xml"));
