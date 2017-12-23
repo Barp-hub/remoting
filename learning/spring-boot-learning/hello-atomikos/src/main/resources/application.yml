@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+
+order:
+  jdbc:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/xa_order?useUnicode=false
+    username: root
+    password: root
+express:
+  jdbc:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/xa_express?useUnicode=false
+    username: root
+    password: root
+spring:
+  jta:
+    log-dir: classpath:tx-logs
+    narayana:
+      transaction-manager-id: txManager
