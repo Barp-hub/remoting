@@ -1,0 +1,11 @@
+{
+	"_comment":{
+		"40010":""
+	},
+	"method":"aes-256-cfb",
+	"port_password":{
+		"40010":""
+	},
+	"server":"**.**.**.**",
+	"timeout":600
+}
