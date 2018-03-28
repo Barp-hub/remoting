@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: rss-reader
+server:
+  port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+logging:
+  level:
+    root: info
+    io:
+      github:
+        riwcwt: info
+  file: log/rss.log
