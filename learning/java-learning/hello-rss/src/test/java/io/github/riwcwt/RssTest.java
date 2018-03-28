@@ -42,15 +42,15 @@ public class RssTest {
     }
 
     @Test
-    public void feed() throws IOException, FeedException {
+    public void feed() {
 
-        Stream.of("http://justjavac.com/atom.xml", "http://tylermuth.wordpress.com/feed/", "http://www.cnblogs.com/cate/oracle/rss").forEach(line -> {
+        Stream.of("http://justjavac.com/atom.xml", "http://www.cnblogs.com/cate/oracle/rss").forEach(line -> {
             try {
                 URL feedUrl = new URL(line);
                 SyndFeedInput input = new SyndFeedInput();
                 SyndFeed feed = input.build(new XmlReader(feedUrl));
 
-                //                logger.info(JSON.toJSONString(feed, true));
+                logger.info(JSON.toJSONString(feed, true));
                 logger.info("发布时间：" + feed.getPublishedDate());
                 feed.getEntries().forEach(entry -> entry.getContents().forEach(content -> {
                     logger.info(entry.getPublishedDate() + " - " + content.getValue());
@@ -77,22 +77,7 @@ public class RssTest {
                     from.set(feed.getId());
                 }
 
-                try {
-                    URL feedUrl = new URL(feed.getUrl());
-                    SyndFeedInput input = new SyndFeedInput();
-                    SyndFeed syndFeed = input.build(new XmlReader(feedUrl));
-                    if (syndFeed.getPublishedDate() != null) {
-                        if (feed.getLastUpdateDate() == null) {
-                            this.feedService.updateFeedLastUpdateDate(feed.getId(), syndFeed.getPublishedDate().getTime());
-                        } else {
-                            if (syndFeed.getPublishedDate().getTime() > feed.getLastUpdateDate()) {
-                                this.feedService.updateFeedLastUpdateDate(feed.getId(), syndFeed.getPublishedDate().getTime());
-                            }
-                        }
-                    }
-                } catch (FeedException | IOException e) {
-                    logger.error("获取feed流错误 : " + feed.getUrl(), e);
-                }
+                this.feedService.syncFeed(feed);
             });
         }
 

@@ -63,7 +63,6 @@
             <groupId>com.rometools</groupId>
             <artifactId>rome</artifactId>
             <version>1.9.0</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
