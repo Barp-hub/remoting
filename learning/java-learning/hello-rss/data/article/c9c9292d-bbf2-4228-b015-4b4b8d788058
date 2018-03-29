@@ -1,0 +1,15 @@
+<p>检查更新及更新提示是WordPress自带的功能，该功能能够自动的检测WordPress程序、你安装的主题、你安装的插件的新的版本并在后台提示管理员更新，有时候很烦这种更新，因为wordpress你多多少少会改点东西，搞不好把你的网站更新挂掉，下面就是停掉更新的检测代码<br />
+<span id="more-1885"></span></p>
+<p>代码放置位置：将下面的代码添加到主题目录下的functions.php中“?>”之前的任意位置（也就是被“”包裹就行）</p>
+<blockquote><p>//修改后台显示更新的代码<br />
+add_filter(&#8216;pre_site_transient_update_core&#8217;,    create_function(&#8216;$a&#8217;, &#8220;return null;&#8221;)); // 关闭核心提示<br />
+add_filter(&#8216;pre_site_transient_update_plugins&#8217;, create_function(&#8216;$a&#8217;, &#8220;return null;&#8221;)); // 关闭插件提示<br />
+add_filter(&#8216;pre_site_transient_update_themes&#8217;,  create_function(&#8216;$a&#8217;, &#8220;return null;&#8221;)); // 关闭主题提示<br />
+remove_action(&#8216;admin_init&#8217;, &#8216;_maybe_update_core&#8217;);    // 禁止 WordPress 检查更新<br />
+remove_action(&#8216;admin_init&#8217;, &#8216;_maybe_update_plugins&#8217;); // 禁止 WordPress 更新插件<br />
+remove_action(&#8216;admin_init&#8217;, &#8216;_maybe_update_themes&#8217;);  // 禁止 WordPress 更新主题</p></blockquote>
+<p>这样你的WordPress就不会在自动提示那烦人的更新了。</p>
+<p>3.7以后开启了小版本的自动更新。很多时候更新不会询问你一觉起来就给你更新了，当然这也需要你的主机支持才可以完成。<br />
+关闭自动更新<br />
+在WordPress 根目录下的 wp-config.php 加入以下代码即可:</p>
+<blockquote><p>define( &#8216;AUTOMATIC_UPDATER_DISABLED&#8217;, true );</p></blockquote>

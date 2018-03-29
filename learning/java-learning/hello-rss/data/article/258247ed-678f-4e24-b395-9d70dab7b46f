@@ -1,0 +1,78 @@
+<p><strong>Audience</strong></p>
+<ul>
+<li>Finance Executives</li>
+<li>Oracle Finance Consultant</li>
+<li>Oracle – End Users</li>
+</ul>
+<p><strong>Summary</strong></p>
+<ul>
+<li>This article will help you to understand what are Auto-Invoices</li>
+<li>Flow of Auto-Invoice in Oracle</li>
+<li>At which level Auto-Invoice comes into picture</li>
+<li>What is Auto-Invoice process</li>
+<li>List of Errors may be faced during Auto-Invoice process</li>
+</ul>
+<p><span id="more-7473"></span><br />
+<strong>What is mean by Auto-Invoices?</strong></p>
+<p>On daily basis, there are multiple sales invoices to be created manually, when we need to create multiple invoices in short time then it becomes difficulty. However Oracle EBS is providing a very strong mechanism to import the receivables transactions (Sales invoice) within oracle (OM) and from external system.</p>
+<p>Oracle has given functionality to convert the sales orders into sales invoices as well as import ready transaction from non oracle system. Using the details in Sales Order Oracle system uses the interface tables and concurrent program to import the Invoices.<br />
+Auto invoice is the interface between Order management and Account Receivables. Auto invoice picks imported data from AR interface tables, validate and create transactions in AR.</p>
+<p style="text-align: center;"><strong>Auto-Invoice Flow in Oracle</strong></p>
+<p style="text-align: center;"><a href="http://www.iwarelogic.com/wp-content/uploads/2014/04/order-to-cash-cycle.jpg"><img class="aligncenter  wp-image-7502" title="Auto-Invoice Flow in Oracle" alt="order to  cash cycle" src="http://www.iwarelogic.com/wp-content/uploads/2014/04/order-to-cash-cycle.jpg" /></a></p>
+<p><strong>Order to Cash Cycle (OM to AR)</strong></p>
+<ul>
+<li>Sales Order can be entered from number of different sources, one can Enter Sales Order manually or import from CRM, EDI or other  systems.</li>
+<li>Credit management also performs a credit check on the customer, According to your credit management set-up.</li>
+</ul>
+<p><strong>After credit check depending upon management decision, you Can Book the Sales Order:</strong></p>
+<ul>
+<li>Once the order is booked , then we will check the ATP, place a demand and reserve on-hand Inventory and we will do the Pick release</li>
+</ul>
+<p><span style="font-size: medium;">Once the order is picked from the stores and released to staging area, then we need to Ship these inventories to Customer’s Ship to Location through Carrier</span></p>
+<p><span style="font-size: large;"><strong>Trigger point where Auto-Invoice process starts:</strong></span></p>
+<p style="text-align: center;"><strong>What is Auto-Invoice Process?</strong></p>
+<p style="text-align: center;"><a href="http://www.iwarelogic.com/wp-content/uploads/2014/04/Fig1-Auto-Invoice-Flow-in-Oracle.jpg"><img class="aligncenter  wp-image-7501" title="What is Auto-Invoice Process?" alt="Image: What is Auto-Invoice Process?" src="http://www.iwarelogic.com/wp-content/uploads/2014/04/Fig1-Auto-Invoice-Flow-in-Oracle.jpg" /></a></p>
+<p>Transaction data originates from Oracle applications and legacy systems. When the data is brought into the Interface Tables, errors are tracked into the Interface Exceptions Table where they can be corrected. Once the lines are corrected, Auto-Invoices created from the corrected lines. Corrected data is sent to Receivables via the Auto-Invoice program; this includes corrected data for debit memos, credit memos and Invoices.</p>
+<p><span style="font-size: medium;"><strong>Interface Table (Auto-Invoice)</strong></span><br />
+The RA_INTERFACE_LINES interface table stores invoice information. You use SQL*Loader to load invoice information into the interface table for each invoice that you create. When you initiate importing invoices, the Auto-Invoice open interface validates global attribute columns in the RA_INTERFACE_LINES table before creating invoice and invoice lines in Oracle Receivables.</p>
+<p><strong>If you want to see the table details the check the link below:</strong><br />
+<a href=" http://docs.oracle.com/cd/A60725_05/html/comnls/us/jlnew/bup00010.htm" target="_blank"> http://docs.oracle.com/cd/A60725_05/html/comnls/us/jlnew/bup00010.htm</a></p>
+<p><span style="font-size: medium;"><strong>Auto-Invoice Import Process:</strong></span></p>
+<p>Once the data is inserted into the Interface table, we are ready to submit the Auto-Invoice Import Process:<br />
+Responsibility: Receivables Manager<br />
+Navigation: Interfaces &#62; Auto-Invoice</p>
+<ol>
+<li>Submit “AutoInvoice Master Program” program.</li>
+<li>Once the request is submitted wait for request to be completed successfully.</li>
+<li>Then go to Transactions&#62; Transactions.</li>
+<li>Click on to find the customer.</li>
+<li>Enter the customer &#38; sales Order number &#38; click on Find Button.</li>
+<li>You can view your transaction online.</li>
+<li>There is a button circle in Red which is BPA (Bill Presentment Architecture), clicking on which you can see your sales invoice online.</li>
+</ol>
+<p style="text-align: center;"><img class="aligncenter" title="Sales Invoice" alt="" src="http://www.iwarelogic.com/wp-content/uploads/2014/04/Fig3-Sales-Invoice.png" width="577" height="409" /></p>
+<p><strong>Submit “AutoInvoice Master Program” program:</strong></p>
+<p><strong>Check concurrent Request Status:</strong></p>
+<p style="text-align: center;"><img class="aligncenter" title="Check concurrent Request Status:" alt="" src="http://www.iwarelogic.com/wp-content/uploads/2014/04/Fig4-Check-Status.png" width="570" height="363" /></p>
+<p><strong>Transactions &#62; Transactions</strong></p>
+<p style="text-align: center;"><img class="aligncenter" title="Transactions" alt="" src="http://www.iwarelogic.com/wp-content/uploads/2014/04/Fig5-Transactions.png" width="576" height="409" /></p>
+<p><strong>Enter the customer and sales Order number and click on Find Button:</strong></p>
+<p><img class="aligncenter" title="Enter the customer and sales Order number and click on Find Button" alt="" src="http://www.iwarelogic.com/wp-content/uploads/2014/04/Fig6-Enter-Details.png" width="575" height="414" /></p>
+<p><strong>You can view your transaction online:</strong></p>
+<p style="text-align: center;"><img class="aligncenter" title="You can view your transaction online" alt="" src="http://www.iwarelogic.com/wp-content/uploads/2014/04/Fig7-view-transaction.png" width="576" height="414" /></p>
+<p><img class="alignnone" alt="" src="http://www.iwarelogic.com/wp-content/uploads/2014/04/Fig8-table.png" width="582" height="307" /></p>
+<p><span style="font-size: medium;"><strong>List of Errors may be faced during Auto-Invoice process:</strong></span></p>
+<p><span style="font-size: medium;"><strong> Responsibility: Receivables Manager Navigation: <span style="text-decoration: underline;">Control &#62; Auto-Invoice &#62; Interface Line</span></strong></span></p>
+<p><span style="font-size: medium;"><strong> Below mentioned are the few examples of errors in Interface lines for AutoInvoice:</strong></span></p>
+<ul>
+<li>Invalid Warehouse ID (WAREHOUSE_ID)</li>
+<li>Unable to derive a gl date for your transaction. Please ensure that your transaction is in a gl period which you have defined</li>
+<li>The CUSTOMER_BANK_ACCOUNT_ID column is obsolete. You are not allowed to pass a value to this column.</li>
+<li>The supplied receipt method must be defined and active for the bill-to customer or site.</li>
+<li>When the receipt method is of type Automatic, you must either supply a valid bank account or ensure that a primary bank account for the currency code of the transaction has been set up for the Bill To customer.</li>
+<li>Please supply both an invoicing rule and an accounting rule for this invoice.</li>
+<li>Please define all periods in which revenue is to be recognized or credited.</li>
+<li>Invalid sales credit type name (SALES_CREDIT_TYPE_NAME)</li>
+</ul>
+<p><span style="font-size: medium;"><strong> Note: </strong>The best practice to correct the error is to correct it in the source system &#38; resubmit the AutoInvoice.</span></p>
+<p><em><strong>&#8211; Nilkanth Gheware</strong></em></p>

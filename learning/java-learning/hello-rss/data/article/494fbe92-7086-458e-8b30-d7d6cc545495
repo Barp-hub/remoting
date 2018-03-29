@@ -1,0 +1,34 @@
+<p>Somebody asked me a questions about the checkbox “Design Console Access” in user creation task in Fusion Application. (In Oracle Identity Manager, OIM). Frankly, I don’t know it either. It sounds too technical. I search it today and found it as a good example of researching.</p>
+<p>Firstly, I searched it in google. But it is too difficult to find a quick and good information to locate the answer.</p>
+<p>Then, I search it in Oracle Help, a new repository of Oracle documentation. It is enhanced in cloud time!&#160; <a title="http://docs.oracle.com/en/" href="http://docs.oracle.com/en/">http://docs.oracle.com/en/</a></p>
+<p><a title="http://docs.oracle.com/cd/E17904_01/doc.1111/e14316/usr_mangmnt.htm#OMUSG499" href="http://docs.oracle.com/cd/E17904_01/doc.1111/e14316/usr_mangmnt.htm#OMUSG499">http://docs.oracle.com/cd/E17904_01/doc.1111/e14316/usr_mangmnt.htm#OMUSG499</a><br />In this page, I searched “Design Console Access” and find the direct answer of “Design Console Access”.</p>
+<p><em><font color="#0000ff">Design Console Access: The user of OIM User type. It can have one of the two possible values, End-User and End-User Administrator. The OIM User type tells whether or not the user can log in to Oracle Identity Manager Design Console. If the &#8220;Design Console Access&#8221; check box is selected, the user type will be &#8220;End-User Administrator&#8221; and the user will have access to design console.</font></em></p>
+<p>But, it is not enough. What is design console? Then, I search the “design console” in the same page. There’s no explanation for “design console”, but there’s some example mentioned it. For example,</p>
+<p><em><font color="#0000ff">Tip:</font></em>  </p>
+<p><em><font color="#0000ff">If the user forgets the password and tries to retrieve it, then the challenge questions are prompted to the user. The user must enter the same answers provided while creating a password. You can configure the challenge questions for the users by using Oracle Identity Manager Design Console. </font></em> </p>
+<p><em><font color="#0000ff">To configure challenge questions for the user:</font></em>
+<ol>
+<li>
+<p><em><font color="#0000ff">Login to Oracle Identity Manager Design Console.</font></em></p>
+</li>
+<li>
+<p><em><font color="#0000ff">Navigate to Administration, Lookup Definition.</font></em></p>
+</li>
+<li>
+<p><em><font color="#0000ff">Search for the Lookup for challenge questions, that is, lookup Code = Lookup.WebClient.Questions.</font></em></p>
+</li>
+<li>
+<p><em><font color="#0000ff">In the Lookup Code Information tab, add questions by entering the appropriate values in the Code Key and Decode fields.</font></em></p>
+</li>
+<li>
+<p><em><font color="#0000ff">Click Add.</font></em></p>
+</li>
+<li>
+<p><em><font color="#0000ff">Add this key to the custom resource bundle.</font></em></p>
+</li>
+</ol>
+<p><em><font color="#0000ff">For more information about the Lookup Definition form, see Section 10.3, &#8220;</font></em><a href="http://docs.oracle.com/cd/E17904_01/doc.1111/e14309/oimadm.htm#OMDEV2574"><em><font color="#0000ff">Lookup Definition Form</font></em></a><em><font color="#0000ff">&#8221; in the </font></em><a href="http://docs.oracle.com/cd/E17904_01/doc.1111/e14309/toc.htm"><em><font color="#0000ff">Oracle Fusion Middleware Developer&#8217;s Guide for Oracle Identity Manager</font></em></a><em><font color="#0000ff">.</font></em>  </p>
+<p>Great! It seems that design console sounds like a development tool.&#160; Then, I go to <a href="http://docs.oracle.com/cd/E17904_01/doc.1111/e14309/toc.htm"><em><font color="#0000ff">Oracle Fusion Middleware Developer&#8217;s Guide for Oracle Identity Manager</font></em></a> and search the design console. In the first chapter of developer guide is “Overview of design console” <a title="http://docs.oracle.com/cd/E17904_01/doc.1111/e14309/dcintro.htm#OMDEV185" href="http://docs.oracle.com/cd/E17904_01/doc.1111/e14309/dcintro.htm#OMDEV185">http://docs.oracle.com/cd/E17904_01/doc.1111/e14309/dcintro.htm#OMDEV185</a></p>
+<p>Design console is a development client tool for OIM.</p>
+<p><em><font color="#0000ff">You can use the Design Console to configure system settings that control the systemwide behavior of Oracle Identity Manager and affect its users. The Design Console allows you to perform user management, resource management, process management, and other administration and development tasks.</font></em></p>
+<p><a href="http://www.yunning.net/blog/wp-content/uploads/2014/12/image.png"><img title="image" style="border-left-width: 0px; border-right-width: 0px; background-image: none; border-bottom-width: 0px; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-top-width: 0px" border="0" alt="image" src="http://www.yunning.net/blog/wp-content/uploads/2014/12/image_thumb.png" width="862" height="569"/></a></p>

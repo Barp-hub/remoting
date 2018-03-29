@@ -1,0 +1,153 @@
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://1.bp.blogspot.com/-1Jd3oRtGFaY/UKxtqgVjrPI/AAAAAAAAADk/TyeYUv_WePQ/s1600/Screen+Shot+2012-11-20+at+10.58.08+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="300" src="http://1.bp.blogspot.com/-1Jd3oRtGFaY/UKxtqgVjrPI/AAAAAAAAADk/TyeYUv_WePQ/s400/Screen+Shot+2012-11-20+at+10.58.08+PM.png" width="400" /></a></div>
+<br />
+<br />
+<blockquote class="tr_bq">
+<span style="font-family: Verdana,sans-serif;">"In 2000, Marian Szefler defined the CEMLI framework. CEMLI stood for Configuration, Extension, Modification, Localization and Integration, and described 17 classes of reason why someone other than Oracle R&amp;D might need to add software to an Oracle application. [...] The classes were ranked by how toxic they were, meaning the likelihood that a mistake in this class would cause data corruption or a down system. In fact, as you got to higher degrees of <i>toxicity</i>, you were coming closer and closer to making fundamental modifications to the software, something you want to avoid at all costs."</span></blockquote>
+<blockquote class="tr_bq">
+<span style="font-family: Verdana,sans-serif;">Chou, T. (2010) Introduction to cloud computing. USA: Active Book Press.&nbsp; </span></blockquote>
+<span style="font-family: Verdana,sans-serif;">Here is some detail onto each category and the toxicity level of modification.</span><br />
+<br />
+<span style="font-family: Verdana,sans-serif;">This framework is mostly used when the eBS is hosted Oracle in an @Oracle On Demand schema and you have to adhere to it when introducing new CEMLIs to the system, the reason being that Oracle maintains the software and thus any change to it can potentially impact their ability to keep it up and running as expected. This might get you denied when trying to introduce changes high on the toxicity level unless you can get an exception by proving that the requirement is critical for the business and there is not another way to achieve it. Also, processes will be evaluated on terms on performance.</span><br />
+<br />
+<span style="font-family: Verdana,sans-serif;">Regarding code, it goes further than the Developer's guide on terms of defining stricter naming conventions and the way the DB objects are created.&nbsp; </span><br />
+<br />
+<h2>
+<span style="font-family: Verdana,sans-serif;">Definitions</span></h2>
+<h3>
+<span style="font-family: Verdana,sans-serif;">Configuration</span></h3>
+<h3>
+<span style="font-family: Verdana,sans-serif;"></span></h3>
+<span style="font-family: Verdana,sans-serif;">Entity objects that allow to be managed with Oracle Applications standard functionality and which are part of the usual setup and maintenance performed in an implementation in order to configure the application behavior to meet the client business needs. These definitions are expected to be modified and fully supported by Oracle. Such entities can be the following. <br />&nbsp;</span><br />
+<ul>
+<li><span style="font-family: Verdana,sans-serif;">Profile Options</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Lookup Types and Lookup Values (Also known as Quick Codes)</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Key Flexfields</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Descriptive Flexfieds</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Concurrent Program Definitions</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Concurrent Processing</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Request Set Definitions</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Menus</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Responsibilities</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Messages</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Value Sets</span></li>
+<li><span style="font-family: Verdana,sans-serif;">AME Rules</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Alerts</span></li>
+</ul>
+<br />
+<span style="font-family: Verdana,sans-serif;">As part of a development effort, some of those entities can and should be leveraged as they promote reuse and standardization among related programs as well as flexibility to drive code behavior based on user modifiable setup.<br /><br />Developers are required to be familiar with their use. Standards relate mostly to naming conventions and, in cases where the configuration might allow embedded SQL or PL/SQL, the code should also adhere to defined standards. </span><br />
+<h3>
+<span style="font-family: Verdana,sans-serif;">Extension</span></h3>
+<h3>
+<span style="font-family: Verdana,sans-serif;"></span></h3>
+<span style="font-family: Verdana,sans-serif;">This encompasses the implementation of new features to cover the functionality gaps of the application in order to achieve business requirements. Development tools as well as some embedded features can be used to create extensions. This refers only to tightly integrated features that are used within the application. On the development tools and technologies supported we have:</span><br />
+<ul>
+<li><span style="font-family: Verdana,sans-serif;">Database </span></li>
+<ul>
+<li><span style="font-family: Verdana,sans-serif;">Custom Database Schemas</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Database Objects</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Database Code. PL/SQL and Java</span></li>
+</ul>
+<li><span style="font-family: Verdana,sans-serif;">File System</span>&nbsp;</li>
+<ul>
+<li><span style="font-family: Verdana,sans-serif;">Custom application directories</span></li>
+</ul>
+<li><span style="font-family: Verdana,sans-serif;">Development Tools</span></li>
+<ul>
+<li><span style="font-family: Verdana,sans-serif;">Oracle Forms</span></li>
+<li><span style="font-family: Verdana,sans-serif;">PL/SQL Libraries </span></li>
+<li><span style="font-family: Verdana,sans-serif;">CUSTOM.pll library</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Oracle Reports</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Printer Drivers</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Oracle BI Publisher</span></li>
+<li><span style="font-family: Verdana,sans-serif;">SQL*Loader Control Files</span></li>
+<li><span style="font-family: Verdana,sans-serif;">SQL and PL/SQL Scripts</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Pro*C</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Oracle Workflow</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Pro*Cobol</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Unix Shells</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Perl Scripts</span></li>
+</ul>
+</ul>
+<br />
+<span style="font-family: Verdana,sans-serif;">On the embedded features</span><br />
+<ul>
+<li><span style="font-family: Verdana,sans-serif;">Oracle Alert</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Oracle Forms Personalizations</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Web ADI</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Folders</span></li>
+<li><span style="font-family: Verdana,sans-serif;">XML Gateway</span><span style="font-family: Verdana,sans-serif;">Attachments</span></li>
+</ul>
+<br />
+<span style="font-family: Verdana,sans-serif;">This topic is one of the most strict relating to standards and they should be followed closely in order to achieve seamless integration as well as reduce any negative impact in the application. Oracle provides support on the tools used.</span><br />
+<h3>
+<span style="font-family: Verdana,sans-serif;">Modification</span></h3>
+<h3>
+<span style="font-family: Verdana,sans-serif;"></span></h3>
+<span style="font-family: Verdana,sans-serif;">Sometimes the functionality gaps proposed solution is to modify a delivered standard product from the two categories mentioned above. Oracle does not support and explicitly discourage this type of modifications. Alternative solutions should always be considered first and if no option is left, raise an Oracle SR to discuss with Oracle if there is any existing update/upgrade that could provide the needed modification.<br /><br />Among the alternatives available we can consider</span><br />
+<ul>
+<li><span style="font-family: Verdana,sans-serif;">New Forms </span></li>
+<li><span style="font-family: Verdana,sans-serif;">Descriptive Flexfields</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Forms Folders</span></li>
+<li><span style="font-family: Verdana,sans-serif;">CUSTOM.pll library</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Forms Personalization</span></li>
+<li><span style="font-family: Verdana,sans-serif;">New Reports </span></li>
+<li><span style="font-family: Verdana,sans-serif;">New concurrent Processes </span></li>
+<li><span style="font-family: Verdana,sans-serif;">Workflow supported modifications</span></li>
+<li><span style="font-family: Verdana,sans-serif;">New printer drivers </span></li>
+<li><span style="font-family: Verdana,sans-serif;">Business System Events</span></li>
+<li><span style="font-family: Verdana,sans-serif;">APIs</span></li>
+<li><span style="font-family: Verdana,sans-serif;">User hooks</span></li>
+<li><span style="font-family: Verdana,sans-serif;">New Alerts</span></li>
+</ul>
+<br />
+<span style="font-family: Verdana,sans-serif;">If after assessing the options no viable alternative is found and the modification is unavoidable, proceed to create a copy of the object to modify, register it under a custom application if possible. Documentation is mandatory as standard products can be modified by Oracle at any time and the modification might need to be evaluated and potentially changed every time that the base object is updated by Oracle. An exception process should be created to evaluate the cost/benefit of such a change.</span><br />
+<h3>
+<span style="font-family: Verdana,sans-serif;">Localization</span></h3>
+<h3>
+<span style="font-family: Verdana,sans-serif;"></span></h3>
+<span style="font-family: Verdana,sans-serif;">There are certain particular requirements that only apply to specific countries/regions/legislation. Sometimes Oracle provides a solution for them such as the HRMS/Payroll localizations. Oracle maintains and support them.</span><br />
+<h3>
+<span style="font-family: Verdana,sans-serif;">Integration&nbsp; </span></h3>
+<h3>
+<span style="font-family: Verdana,sans-serif;"></span></h3>
+<span style="font-family: Verdana,sans-serif;">This considers both inbound and outbound integrations that interact with Oracle&nbsp;&nbsp; Applications. For security reasons, direct manipulation of data is not supported, thus Oracle provides specific methods to achieve integration.<br /><br />Embedded within the applications there is code that allows for the information to be exchanged and effectively validated before being integrated to Oracle underlying tables.<br />&nbsp;</span><br />
+<ul>
+<li><span style="font-family: Verdana,sans-serif;">Open Interfaces. Staging tables and associated validation and load programs.</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Public APIs. Published and supported by Oracle.</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Web ADI. Integrates with Microsoft Excel.</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Punchouts</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Standars based interfaces: XML Gateway</span><span style="font-family: Verdana,sans-serif;">, EDI, BAI, EFT, etc.</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Message based integration </span></li>
+</ul>
+<span style="font-family: Verdana,sans-serif;">The method to move the information is open as Oracle only allows data on the boundaries of the system, and from there it can be brought over and retrieved as needed. Among the methods we have. The big no-no are database links, unless you also host your other systems @Oracle and can get Oracle to approve them, but you better think on an alternative if moving to On Demand.</span><br />
+<ul>
+<li><span style="font-family: Verdana,sans-serif;">File transfers via sftp </span></li>
+<li><span style="font-family: Verdana,sans-serif;">BPEL</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Web Services</span></li>
+<li><span style="font-family: Verdana,sans-serif;">External Tables</span></li>
+<li><span style="font-family: Verdana,sans-serif;">SQL*Loader</span></li>
+</ul>
+<h2>
+<span style="font-family: Verdana,sans-serif;">Toxicity Levels</span></h2>
+<h3>
+<span style="font-family: Verdana,sans-serif;">From low to high</span></h3>
+<ol>
+<li><span style="font-family: Verdana,sans-serif;">Configurations</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Localizations</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Reports</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Incoming Interfaces</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Outgoing Interfaces</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Printer Drivers</span></li>
+<li><span style="font-family: Verdana,sans-serif;">DDLs (Custom Schema)</span></li>
+<li><span style="font-family: Verdana,sans-serif;">PL/SQL and SQL (Read, Custom Schema)</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Unix Scripts</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Forms (Read, Custom Schema)</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Workflows</span></li>
+<li><span style="font-family: Verdana,sans-serif;">DDLs (Oracle Schema)</span></li>
+<li><span style="font-family: Verdana,sans-serif;">PL/SQL and SQL (Read/Write, Custom Schema)</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Forms (Read/Write, Custom Schema)</span><br /><span style="font-family: Verdana,sans-serif;">PL/SQL and SQL (Read, Oracle Schema)</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Forms (Read, Oracle Schema)</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Triggers</span></li>
+<li><span style="font-family: Verdana,sans-serif;">Message Based Integration </span></li>
+</ol>

@@ -1,0 +1,30 @@
+As part of OA Framework extensibility it is possible to substitute a VO definition, which allows to satisfy business requirements such as adding additional conditions to it as well as to retrieve additional columns.<br />
+<br />
+Such extensions, however, are not shown on the personalization catalog available under the System Administration responsibility and thus are not easily disabled in case something is wrong with them.<br />
+<br />
+In order to remove the substitution definition, you have to identify the customization path and then use the jdr API to remove it.<br />
+<br />
+In order to identify the customization, use the following call:<br />
+<br />
+<pre class="textmate-source solarized_dark_"><span class='linenum'>    1</span> <span class="source source_oracle"><span class="keyword keyword_control keyword_control_pl">begin</span>
+<span class='linenum'>    2</span>   <span class="variable variable_other">jdr_utils.</span>listCustomizations<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'<span class="keyword keyword_operator keyword_operator_oracle">/</span>oracle<span class="keyword keyword_operator keyword_operator_oracle">/</span>apps<span class="keyword keyword_operator keyword_operator_oracle">/</span>ap<span class="keyword keyword_operator keyword_operator_oracle">/</span>oie<span class="keyword keyword_operator keyword_operator_oracle">/</span>server<span class="keyword keyword_operator keyword_operator_oracle">/</span>TrackExpenseReportsVO'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class='linenum'>    3</span> <span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class='linenum'>    4</span> <span class="keyword keyword_operator keyword_operator_oracle">/</span>
+<span class='linenum'>    5</span> 
+</span><span class='linenum'>    6</span> </pre>
+<br />
+It will output the path of the customization, which is the one to remove.<br />
+<pre class="textmate-source solarized_dark_"><span class='linenum'>    1</span> <span class="source source_oracle"><span class="keyword keyword_operator keyword_operator_oracle">/</span>oracle<span class="keyword keyword_operator keyword_operator_oracle">/</span><span class="constant constant_character constant_character_oracle">apps</span><span class="keyword keyword_operator keyword_operator_oracle">/</span>ap<span class="keyword keyword_operator keyword_operator_oracle">/</span>oie<span class="keyword keyword_operator keyword_operator_oracle">/</span>server<span class="keyword keyword_operator keyword_operator_oracle">/</span>customizations<span class="keyword keyword_operator keyword_operator_oracle">/</span>site<span class="keyword keyword_operator keyword_operator_oracle">/</span><span class="constant constant_numeric constant_numeric_oracle">0</span><span class="keyword keyword_operator keyword_operator_oracle">/</span>TrackExpenseReportsVO
+</span><span class='linenum'>    2</span> </pre>
+<br />
+In order to delete the customization definition, use the following call, using the output from the previous command as a parameter.<br />
+<pre class="textmate-source solarized_dark_"><span class='linenum'>    1</span> <span class="source source_oracle"><span class="keyword keyword_control keyword_control_pl">begin</span>
+<span class='linenum'>    2</span>   <span class="variable variable_other">jdr_utils.</span>DeleteDocument<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'<span class="keyword keyword_operator keyword_operator_oracle">/</span>oracle<span class="keyword keyword_operator keyword_operator_oracle">/</span>apps<span class="keyword keyword_operator keyword_operator_oracle">/</span>ap<span class="keyword keyword_operator keyword_operator_oracle">/</span>oie<span class="keyword keyword_operator keyword_operator_oracle">/</span>server<span class="keyword keyword_operator keyword_operator_oracle">/</span>customizations<span class="keyword keyword_operator keyword_operator_oracle">/</span>site<span class="keyword keyword_operator keyword_operator_oracle">/</span>0<span class="keyword keyword_operator keyword_operator_oracle">/</span>TrackExpenseReportsVO'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class='linenum'>    3</span> <span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class='linenum'>    4</span> <span class="keyword keyword_operator keyword_operator_oracle">/</span>
+</span><span class='linenum'>    5</span> </pre>
+<br />
+You will get the following message if everything is ok, otherwise you could get an error if document is not found in case you did not properly copy the path or if you execute the command a second time.<br />
+Succesfuly deleted document /oracle/apps/ap/oie/server/customizations/site/0/TrackExpenseReportsVO.
+<br />
+Now, be careful not to pass the base document path to the delete call, otherwise you will remove the actual seeded VO or page definition and you will panic (I did) when the page no longer opens when called on the application. Worry not, you will find the xml either on $JAVA_TOP or under the mds folder of the corresponding application and XMLImporter can be used to restore it.

@@ -1,0 +1,23 @@
+Algo que no me ha parecido en cuanto al comportamiento de Oracle Workflow es el referente a que cuando se recompila algún procedimiento almacenado que es referenciado por el mismo, sea una actividad o atributo tipo documento, el workflow truena con errores de que el estado del package es inconsistente, o no existe, y a diferencia de una sesión de pl/sql, no se soluciona con reintentar el llamado o si se está utilizando la aplicación, cambiarse de responsabilidad.<br />
+<br />
+<br />
+El problema requiere lo siguiente para solucionarlo (Nota 761638.1) , lo cual no me agrada en lo absoluto:
+<br />
+<ul>
+When a package is compiled, all copies in the shared pool are flagged as invalid. The error ORA-04061 in the error stack is caused because the notification mailer is reading an old version of the package stored in memory.  <br />
+
+
+1. Please bring down the concurrent managers, forms server, apache server, etc....on the middle tier. - It is recommended that $COMMON_TOP/admin/scripts/SID/adstpall.sh apps/apps or equivalent be used.<br />
+
+
+2. Enter adadmin - Recompile the APPS schema - take note of invalid objects prior - and then thereafter -to ensure no new invalid objects are created.<br />
+
+
+3. Bring the instance back up - and retest this problem at hand.- Ensure the notification mailer is bounced completely when restarting the instance<br />
+
+
+4. Retest the problem by creating a new requisition - confirm that the approval is flowing properly.<br />
+
+
+For the requisitions which are still in error, please login as the System Administrator - and utilize the RETRY option that will be available in the notifications which were sent identifying
+ the error. </ul>

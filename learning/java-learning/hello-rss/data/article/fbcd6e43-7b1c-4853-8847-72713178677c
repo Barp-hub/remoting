@@ -1,0 +1,8 @@
+<div class="separator" style="clear: both; text-align: center;">
+</div>
+<div>
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://2.bp.blogspot.com/-DV7es_oxnMo/UZAFBS2BftI/AAAAAAAAAFA/t9fES2IwvWI/s1600/screenshot1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="341" src="http://2.bp.blogspot.com/-DV7es_oxnMo/UZAFBS2BftI/AAAAAAAAAFA/t9fES2IwvWI/s400/screenshot1.png" width="400" /></a></div>
+<br />
+<br /></div>
+As more Oracle eBS code uses Java and the source code is not available as used to be with other tools (i.e Oracle Forms, PL/SQL), there is a need to be able to decompile .class files. One tool that I find particularly useful when needed is <a href="http://java.decompiler.free.fr/?q=jdgui" target="_blank">JD-GUI</a>, which is free for non-commercial use.

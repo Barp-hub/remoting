@@ -1,0 +1,17 @@
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://1.bp.blogspot.com/-SyWTtz5mgxs/UaAtnZTKH0I/AAAAAAAAAGA/we3AsMhU1QI/s1600/wf4061.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="244" src="http://1.bp.blogspot.com/-SyWTtz5mgxs/UaAtnZTKH0I/AAAAAAAAAGA/we3AsMhU1QI/s640/wf4061.png" width="640" /></a></div>
+<br />
+This is one of the most annoying problems when working with workflow as on the development process your are likely to do adjustments to the code. It seems that Workflow caches in memory the most recent used version "signature" of the called pl/sql programs, which causes a mismatch with the database one after the stored procedures are recompiled.<br />
+<br />
+Worst case solution is having to bounce middle tier services to force workflow to pick the new signature, which sucks if you are working on a highly used environment or depend on another team to do it.<br />
+<br />
+Workarounds found on the web go as far as to recommend renaming the programs and thus the workflow function name each time a change is made wich in unpractical, but saves the bounce. Another problem with this approach it is also likely to leave a lot of unused code on the database if we are not careful enough to clean up after the frequent renaming.<br />
+<br />
+On R12 at least I seem to have come up with a workaround that is working for me and even if I don't know the reason for this to work, I'm happy it does.<br />
+<br />
+The workaround consists of having two sessions open on different browsers. I usually go with Firefox as the primary one and work on testing the workflow process. After a recompile, the next workflow instance will for sure fail with the ORA-04061, ORA-04065 and ORA-06508 as seen on the image above. Even if hitting retry until wearing out the mouse, the error will just keep popping. This is where using a different browser comes in handy. On my case I open Internet Explorer and hit retry from there, Workflow will then happily continue its path. In the image below you can see how I retried 3 times ("Force" as the activity result) and after the browser switch the activity finalized as expected and the workflow process continued.<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://2.bp.blogspot.com/-VPnPXWlCGCc/UaAxXUMaNWI/AAAAAAAAAGM/wp5uwbigWkk/s1600/wf04061-2.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="164" src="http://2.bp.blogspot.com/-VPnPXWlCGCc/UaAxXUMaNWI/AAAAAAAAAGM/wp5uwbigWkk/s640/wf04061-2.png" width="640" /></a></div>
+<br />
+This might still not be 100% effective but it's worth giving it a try. If the bounce is not feasible immediately, move to other thing and get back after 2 hours, that also works sometimes.

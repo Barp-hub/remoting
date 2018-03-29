@@ -1,0 +1,32 @@
+<p>A recent <a href="https://community.oracle.com/thread/3880690" target="_blank">thread</a> in the <a href="https://community.oracle.com/community/database/general_questions" target="_blank">Database General Questions place</a> was posted today. The original poster set some wrong values for the database memory related parameters and using those exceptionally large values, database got hung. Well, I don’t know whether that was the real issue or not as the original poster didn’t share the contents of the alert.log file of his database neither shared any other details. What he wanted to know that how he can edit the values of those memory parameters for SGA and PGA. There were few suggestions given by the other Oracle community members. What I had suggested is an option of sql*plus which probably can be very handy for such situation i.e. when the database has completely gone hung-PRELIM. Now, a disclaimer, this is not a documented option and not really meant for to be used in general. The major purpose of having this option is to have get into the SQL*PLUS to connect to the SGA, without opening a sqlplus session and further execute commands like ORADEBUG etc. to diagnose what’s the issue probably is that the database has gone hung. So as I normally say-not documented probably means not supported as well-ergo , be careful.</p>
+<p>Now, what could be done in the context of the above thread is that using this PRELIM option, we can get into the database, shutdown the database and once it is down, we can create a PFILE from the SPFILE. Once we have the PFILE,we can edit it and restart the database with the edited options. </p>
+<p>Here is a small demo of the same,</p>
+<blockquote>
+<p><strong>[oracle@test12 ~]$ sqlplus / as sysdba </strong> </p>
+<p><strong>SQL*Plus: Release 12.1.0.2.0 Production on Tue Dec 29 09:32:05 2015 </strong> </p>
+<p><strong>Copyright (c) 1982, 2014, Oracle.&#160; All rights reserved. </strong> </p>
+<p><strong>Connected to an idle instance. </strong> </p>
+<p><strong>SQL&#62; startup </strong> </p>
+<p><strong>ORACLE instance started. </strong> </p>
+<p><strong>Total System Global Area&#160; 578813952 bytes </strong> </p>
+<p><strong>Fixed Size&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 2926952 bytes </strong> </p>
+<p><strong>Variable Size&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 461375128 bytes </strong> </p>
+<p><strong>Database Buffers&#160;&#160;&#160;&#160;&#160; 109051904 bytes </strong> </p>
+<p><strong>Redo Buffers&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 5459968 bytes </strong> </p>
+<p><strong>Database mounted. </strong> </p>
+<p><strong>Database opened. </strong> </p>
+<p><strong>SQL&#62; exit </strong> </p>
+<p><strong>Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 &#8211; 64bit Production </strong> </p>
+<p><strong>With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options </strong> </p>
+<p><strong>[oracle@test12 ~]$ sqlplus -prelim &#8220;/as sysdba&#8221; </strong> </p>
+<p><strong>SQL*Plus: Release 12.1.0.2.0 Production on Tue Dec 29 09:32:22 2015 </strong> </p>
+<p><strong>Copyright (c) 1982, 2014, Oracle.&#160; All rights reserved. </strong> </p>
+<p><strong>SQL&#62; shut abort </strong> </p>
+<p><strong>ORACLE instance shut down. </strong> </p>
+<p><strong>SQL&#62; create pfile=&#8217;/tmp/pfile.ora&#8217; from spfile; </strong> </p>
+<p><strong>File created. </strong> </p>
+<p><strong>SQL&#62; </strong></p>
+</blockquote>
+<p>How good to see the message-File Created , isn’t it :=)&#160; ?</p>
+<p>Happy holidays everyone!</p>
+<p><strong>Reference</strong>: <a title="http://tech.e2sn.com/oracle/troubleshooting/hang/how-to-log-on-even-when-sysdba-can-t-do-so" href="http://tech.e2sn.com/oracle/troubleshooting/hang/how-to-log-on-even-when-sysdba-can-t-do-so">http://tech.e2sn.com/oracle/troubleshooting/hang/how-to-log-on-even-when-sysdba-can-t-do-so</a></p>

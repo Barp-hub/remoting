@@ -1,0 +1,188 @@
+<div class="separator" style="clear: both; text-align: center;">
+</div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-9PvPAhGroVg/U7GxMYjLK9I/AAAAAAAAALQ/x2Ppy418Yc4/s1600/final.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-9PvPAhGroVg/U7GxMYjLK9I/AAAAAAAAALQ/x2Ppy418Yc4/s1600/final.png" height="480" width="640" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Using a Sublime Text Build System to execute a script via SQL*Plus</td></tr>
+</tbody></table>
+<br />
+<a href="http://www.sublimetext.com/">Sublime Text</a> supports the creation of build systems which, as per the <a href="http://sublimetext.info/docs/en/reference/build_systems.html">Unofficial Documentation</a>, allows to "run external programs to process your project’s files and print captured output to the output panel". Furthermore, the captured output can be parsed to capture error information and "When error information is captured, you can navigate to error instances in your project’s files with F4 and Shift+F4. If available, the captured error message will be displayed in the status bar."<br />
+<br />
+As I usually code stored procedures on a text editor and load them to the database via SQL*Plus, this could save me a step and even allow to easily navigate to reported error locations, if any.<br />
+<br />
+To create a New build system we proceed to do the following steps.<br />
+<br />
+Go to the Tools Menu, select the Build System submenu and then the New Build System… option. This will create a untitled file with the .sublime-build extension and the following content:<br />
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<br /></div>
+<div style="margin: 0in;">
+<pre class="textmate-source"><span class="source source_json"><span class="meta meta_structure meta_structure_dictionary meta_structure_dictionary_json"><span class="punctuation punctuation_definition punctuation_definition_dictionary punctuation_definition_dictionary_begin punctuation_definition_dictionary_begin_json">{</span>
+  <span class="string string_quoted string_quoted_double string_quoted_double_json"><span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_begin punctuation_definition_string_begin_json">"</span>cmd<span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_end punctuation_definition_string_end_json">"</span></span><span class="meta meta_structure meta_structure_dictionary meta_structure_dictionary_value meta_structure_dictionary_value_json"><span class="punctuation punctuation_separator punctuation_separator_dictionary punctuation_separator_dictionary_key-value punctuation_separator_dictionary_key-value_json">:</span> <span class="meta meta_structure meta_structure_array meta_structure_array_json"><span class="punctuation punctuation_definition punctuation_definition_array punctuation_definition_array_begin punctuation_definition_array_begin_json">[</span><span class="string string_quoted string_quoted_double string_quoted_double_json"><span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_begin punctuation_definition_string_begin_json">"</span>make<span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_end punctuation_definition_string_end_json">"</span></span><span class="punctuation punctuation_definition punctuation_definition_array punctuation_definition_array_end punctuation_definition_array_end_json">]</span></span>
+</span><span class="punctuation punctuation_definition punctuation_definition_dictionary punctuation_definition_dictionary_end punctuation_definition_dictionary_end_json">}</span></span></span></pre>
+</div>
+<br />
+<!--StartFragment-->
+
+
+
+<!--EndFragment--><br />
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+</div>
+Replace with the following to call sqlplus from the command line:<br />
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<span style="font-size: 11pt;"><br /></span></div>
+<div style="font-family: margin: 0in;">
+<br />
+<pre class="textmate-source"><span class="source source_json"><span class="meta meta_structure meta_structure_dictionary meta_structure_dictionary_json"><span class="punctuation punctuation_definition punctuation_definition_dictionary punctuation_definition_dictionary_begin punctuation_definition_dictionary_begin_json">{</span>
+    <span class="string string_quoted string_quoted_double string_quoted_double_json"><span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_begin punctuation_definition_string_begin_json">"</span>cmd<span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_end punctuation_definition_string_end_json">"</span></span><span class="meta meta_structure meta_structure_dictionary meta_structure_dictionary_value meta_structure_dictionary_value_json"><span class="punctuation punctuation_separator punctuation_separator_dictionary punctuation_separator_dictionary_key-value punctuation_separator_dictionary_key-value_json">:</span> <span class="meta meta_structure meta_structure_array meta_structure_array_json"><span class="punctuation punctuation_definition punctuation_definition_array punctuation_definition_array_begin punctuation_definition_array_begin_json">[</span><span class="string string_quoted string_quoted_double string_quoted_double_json"><span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_begin punctuation_definition_string_begin_json">"</span>sqlplus<span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_end punctuation_definition_string_end_json">"</span></span><span class="punctuation punctuation_separator punctuation_separator_array punctuation_separator_array_json">,</span> <span class="string string_quoted string_quoted_double string_quoted_double_json"><span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_begin punctuation_definition_string_begin_json">"</span>scott/tiger@xe<span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_end punctuation_definition_string_end_json">"</span></span><span class="punctuation punctuation_separator punctuation_separator_array punctuation_separator_array_json">,</span> <span class="string string_quoted string_quoted_double string_quoted_double_json"><span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_begin punctuation_definition_string_begin_json">"</span>@$file<span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_end punctuation_definition_string_end_json">"</span></span><span class="punctuation punctuation_definition punctuation_definition_array punctuation_definition_array_end punctuation_definition_array_end_json">]</span></span>
+  <span class="punctuation punctuation_separator punctuation_separator_dictionary punctuation_separator_dictionary_pair punctuation_separator_dictionary_pair_json">,</span></span> <span class="string string_quoted string_quoted_double string_quoted_double_json"><span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_begin punctuation_definition_string_begin_json">"</span>file_regex<span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_end punctuation_definition_string_end_json">"</span></span><span class="meta meta_structure meta_structure_dictionary meta_structure_dictionary_value meta_structure_dictionary_value_json"><span class="punctuation punctuation_separator punctuation_separator_dictionary punctuation_separator_dictionary_key-value punctuation_separator_dictionary_key-value_json">:</span> <span class="string string_quoted string_quoted_double string_quoted_double_json"><span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_begin punctuation_definition_string_begin_json">"</span>^Errors for file (.*):$<span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_end punctuation_definition_string_end_json">"</span></span>
+  <span class="punctuation punctuation_separator punctuation_separator_dictionary punctuation_separator_dictionary_pair punctuation_separator_dictionary_pair_json">,</span></span> <span class="string string_quoted string_quoted_double string_quoted_double_json"><span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_begin punctuation_definition_string_begin_json">"</span>line_regex<span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_end punctuation_definition_string_end_json">"</span></span><span class="meta meta_structure meta_structure_dictionary meta_structure_dictionary_value meta_structure_dictionary_value_json"><span class="punctuation punctuation_separator punctuation_separator_dictionary punctuation_separator_dictionary_key-value punctuation_separator_dictionary_key-value_json">:</span> <span class="string string_quoted string_quoted_double string_quoted_double_json"><span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_begin punctuation_definition_string_begin_json">"</span>^([0-9]*?)/([0-9]*?)<span class="constant constant_character constant_character_escape constant_character_escape_json">\\</span>s+(.*)$<span class="punctuation punctuation_definition punctuation_definition_string punctuation_definition_string_end punctuation_definition_string_end_json">"</span></span>
+</span><span class="punctuation punctuation_definition punctuation_definition_dictionary punctuation_definition_dictionary_end punctuation_definition_dictionary_end_json">}</span></span>
+</span></pre>
+</div>
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<span style="font-size: 11pt;"><br /></span></div>
+<div style="font-size: 11.0pt; margin: 0in;">
+</div>
+Edit the connection information ("scott/tiger@xe") on line 2 to match with the one corresponding to the database this is to be used for.  Lines 3 and 4 are to be used for capturing error information.<br />
+<br />
+Now, save the file (CTRL+S) and a dialog will appear to specify a name. The appropriate location will be already selected (e.g. %APPDATA%/Roaming/Sublime Text 2/Packages/User if on Windows). Change the untitled name with a meaningful one that relates with the database this is to be used for.<br />
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<br /></div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/--S0FzPzPzt8/U7GxvMutAbI/AAAAAAAAALY/7x8-2LH8wJI/s1600/file_name.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/--S0FzPzPzt8/U7GxvMutAbI/AAAAAAAAALY/7x8-2LH8wJI/s1600/file_name.png" height="66" width="320" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Specify the Build System file name, which will be used also when displaying on the Menu</td></tr>
+</tbody></table>
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<br /></div>
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<!--StartFragment-->
+
+
+
+<!--EndFragment--></div>
+Once the file is saved it will appear on the Build System Menu, after the default ones.<br />
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<br /></div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-nlrtquKRxmA/U7Gx8wRarTI/AAAAAAAAALg/5qn9ZHDUfNs/s1600/bild_system_menu.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-nlrtquKRxmA/U7Gx8wRarTI/AAAAAAAAALg/5qn9ZHDUfNs/s1600/bild_system_menu.png" height="230" width="320" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Build System menu, listing custom ones on the bottom</td></tr>
+</tbody></table>
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+Now, when you are ready to compile a source file to the database, select the appropriate Build System (a checkmark will appear next to it) and it will remain the selected until a different one is chosen.</div>
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<br /></div>
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<!--StartFragment-->
+
+
+
+<!--EndFragment--></div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-tTmitaNiZLA/U7GyLjsobNI/AAAAAAAAALo/2gkO_pXPPSg/s1600/build_system_select.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-tTmitaNiZLA/U7GyLjsobNI/AAAAAAAAALo/2gkO_pXPPSg/s1600/build_system_select.png" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Checkmark denotes which Build System is selected</td></tr>
+</tbody></table>
+To test the build system, I created a file with the following content which has a syntax error to test the error capture feature:<br />
+<br />
+<pre class="textmate-source"><span class="source source_oracle"><span class="comment comment_line comment_line_double-dash">-- Execution related substitution variables</span>
+<span class="keyword keyword_control keyword_control_sqlplus">define</span> <span class="variable variable_parameter">b_usr</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="constant constant_character constant_character_oracle">apps</span><span class="comment comment_line comment_line_double-dash">           -- Schema where the object is to be created in</span>
+<span class="keyword keyword_control keyword_control_sqlplus">define</span> <span class="variable variable_parameter">b_obj</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> xxfnd_test_pkg<span class="comment comment_line comment_line_double-dash"> -- Object Name</span>
+<span class="keyword keyword_control keyword_control_sqlplus">define</span> <span class="variable variable_parameter">b_typ</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="keyword keyword_other keyword_other_ddl keyword_other_ddl_oracle">package</span><span class="comment comment_line comment_line_double-dash">        -- Object Type</span>
+<span class="keyword keyword_control keyword_control_sqlplus">define</span> <span class="variable variable_parameter">b_src</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="variable variable_other">sublime_build_test.</span><span class="constant constant_language constant_language_oracle">sql</span><span class="comment comment_line comment_line_double-dash"> -- Source file name</span>
+<span class="keyword keyword_control keyword_control_sqlplus">define</span> <span class="variable variable_parameter">b_off</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="constant constant_numeric constant_numeric_oracle">9</span><span class="comment comment_line comment_line_double-dash">              -- Line # before the CREATE statement</span>
+<span class="comment comment_line comment_line_double-dash">-- Environment Setup</span>
+<span class="support support_function support_function_oracle">set</span> <span class="keyword keyword_control keyword_control_sqlplus">verify</span> <span class="keyword keyword_control keyword_control_sqlplus">off</span>
+<span class="comment comment_line comment_line_double-dash">-- Identification</span>
+<span class="keyword keyword_control keyword_control_sqlplus">prompt</span><span class="comment comment_line comment_line_double-dash"> -- Executing script &amp;b_src to create object &amp;b_usr..&amp;b_obj</span>
+<span class="support support_function support_function_oracle">create</span> <span class="keyword keyword_operator keyword_operator_oracle">or</span> <span class="support support_function support_function_oracle">replace</span> <span class="keyword keyword_other keyword_other_ddl keyword_other_ddl_oracle">package</span> <span class="keyword keyword_operator keyword_operator_oracle">&amp;</span><span class="variable variable_other">b_usr.</span><span class="keyword keyword_operator keyword_operator_oracle">.&amp;</span><span class="variable variable_parameter">b_obj</span> <span class="keyword keyword_other keyword_other_ddl keyword_other_ddl_oracle">authid</span> <span class="keyword keyword_other keyword_other_ddl keyword_other_ddl_oracle">current_user</span> <span class="keyword keyword_control keyword_control_pl">as</span>
+
+  <span class="keyword keyword_other keyword_other_ddl keyword_other_ddl_oracle">function</span> test_fn <span class="keyword keyword_operator keyword_operator_oracle">;</span><span class="comment comment_line comment_line_double-dash">  -- Forced error, no return defined</span>
+
+<span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_operator keyword_operator_oracle">&amp;</span><span class="variable variable_parameter">b_obj</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="keyword keyword_operator keyword_operator_oracle">/</span>
+</span></pre>
+<br />
+To execute the build, use CTRL + B. This will execute the command and capture the output on a panel on the bottom of the window, here is an example of using an invalid TNS alias definition.<br />
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-ujD_7uhlQ_s/U7GyfAoTNSI/AAAAAAAAALw/NjbIYzQISkg/s1600/build_capture1.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-ujD_7uhlQ_s/U7GyfAoTNSI/AAAAAAAAALw/NjbIYzQISkg/s1600/build_capture1.png" height="128" width="400" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">SQL*Plus output capture on Sublime Text</td></tr>
+</tbody></table>
+<div>
+<br />
+After using the proper information, I can see the actual output from the script execution</div>
+<div>
+<br /></div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/--fnD_V3yveI/U7G3uwm1cMI/AAAAAAAAAMQ/--vI16LWJXI/s1600/bild_capture1b.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/--fnD_V3yveI/U7G3uwm1cMI/AAAAAAAAAMQ/--vI16LWJXI/s1600/bild_capture1b.png" height="241" width="640" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">SQL*Plus script execution output capture on Sublime Text</td></tr>
+</tbody></table>
+<div>
+<br /></div>
+<div>
+As it can be seen, compilation errors are found, but not displayed. We would usually use the show errors command, but it sometimes is not reliable and can also fail to show information when creating objects under an schema different to the one we are connecting with. The alternative is to query the dba_errors table (or user_errors if not having access to it). The script now becomes the following:</div>
+<div>
+<div>
+<br /></div>
+</div>
+<div>
+<pre class="textmate-source"><span class="source source_oracle"><span class="comment comment_line comment_line_double-dash">-- Execution related substitution variables</span>
+<span class="keyword keyword_control keyword_control_sqlplus">define</span> <span class="variable variable_parameter">b_usr</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="constant constant_character constant_character_oracle">apps</span><span class="comment comment_line comment_line_double-dash">           -- Schema where the object is to be created in</span>
+<span class="keyword keyword_control keyword_control_sqlplus">define</span> <span class="variable variable_parameter">b_obj</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> xxfnd_test_pkg<span class="comment comment_line comment_line_double-dash"> -- Object Name</span>
+<span class="keyword keyword_control keyword_control_sqlplus">define</span> <span class="variable variable_parameter">b_typ</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="keyword keyword_other keyword_other_ddl keyword_other_ddl_oracle">package</span><span class="comment comment_line comment_line_double-dash">        -- Object Type</span>
+<span class="keyword keyword_control keyword_control_sqlplus">define</span> <span class="variable variable_parameter">b_src</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="variable variable_other">sublime_build_test.</span><span class="constant constant_language constant_language_oracle">sql</span><span class="comment comment_line comment_line_double-dash"> -- Source file name</span>
+<span class="keyword keyword_control keyword_control_sqlplus">define</span> <span class="variable variable_parameter">b_off</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="constant constant_numeric constant_numeric_oracle">13</span><span class="comment comment_line comment_line_double-dash">              -- Line # before the CREATE statement</span>
+<span class="comment comment_line comment_line_double-dash">-- Environment Setup</span>
+<span class="support support_function support_function_oracle">set</span> <span class="keyword keyword_control keyword_control_sqlplus">verify</span> <span class="keyword keyword_control keyword_control_sqlplus">off</span>
+<span class="support support_function support_function_oracle">set</span> <span class="keyword keyword_control keyword_control_sqlplus">lines</span> <span class="constant constant_numeric constant_numeric_oracle">132</span>
+<span class="keyword keyword_control keyword_control_sqlplus">col</span> <span class="string string_quoted string_quoted_double string_quoted_double_oracle">"LINE/COL"</span> <span class="support support_function support_function_oracle">format</span> A10
+<span class="keyword keyword_control keyword_control_sqlplus">col</span> ERROR <span class="support support_function support_function_oracle">format</span> A120
+<span class="comment comment_line comment_line_double-dash">-- Identification</span>
+<span class="keyword keyword_control keyword_control_sqlplus">prompt</span><span class="comment comment_line comment_line_double-dash"> -- Executing script &amp;b_src to create object &amp;b_usr..&amp;b_obj</span>
+<span class="support support_function support_function_oracle">create</span> <span class="keyword keyword_operator keyword_operator_oracle">or</span> <span class="support support_function support_function_oracle">replace</span> <span class="keyword keyword_other keyword_other_ddl keyword_other_ddl_oracle">package</span> <span class="keyword keyword_operator keyword_operator_oracle">&amp;</span><span class="variable variable_other">b_usr.</span><span class="keyword keyword_operator keyword_operator_oracle">.&amp;</span><span class="variable variable_parameter">b_obj</span> <span class="keyword keyword_other keyword_other_ddl keyword_other_ddl_oracle">authid</span> <span class="keyword keyword_other keyword_other_ddl keyword_other_ddl_oracle">current_user</span> <span class="keyword keyword_control keyword_control_pl">as</span>
+
+  <span class="keyword keyword_other keyword_other_ddl keyword_other_ddl_oracle">function</span> test_fn <span class="keyword keyword_operator keyword_operator_oracle">;</span><span class="comment comment_line comment_line_double-dash">  -- Forced error, no return defined</span>
+
+<span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_operator keyword_operator_oracle">&amp;</span><span class="variable variable_parameter">b_obj</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="keyword keyword_operator keyword_operator_oracle">/</span>
+
+<span class="keyword keyword_control keyword_control_sqlplus">prompt</span> <span class="keyword keyword_control keyword_control_sqlplus">Errors</span> <span class="keyword keyword_control keyword_control_pl">for</span> file <span class="keyword keyword_operator keyword_operator_oracle">&amp;</span><span class="variable variable_other">b_src.</span>:
+<span class="keyword keyword_other keyword_other_dml keyword_other_dml_oracle">select</span> line <span class="keyword keyword_operator keyword_operator_oracle">+</span> <span class="keyword keyword_operator keyword_operator_oracle">&amp;</span><span class="variable variable_parameter">b_off</span> <span class="keyword keyword_operator keyword_operator_oracle">||</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'<span class="keyword keyword_operator keyword_operator_oracle">/</span>'</span> <span class="keyword keyword_operator keyword_operator_oracle">||</span> position <span class="string string_quoted string_quoted_double string_quoted_double_oracle">"LINE/COL"</span>
+     <span class="keyword keyword_operator keyword_operator_oracle">,</span> text error
+  <span class="keyword keyword_other keyword_other_dml keyword_other_dml_oracle">from</span> all_errors
+ <span class="keyword keyword_other keyword_other_dml keyword_other_dml_oracle">where</span> <span class="constant constant_language constant_language_oracle constant_language_oracle_apps">owner</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="support support_function support_function_oracle">upper</span><span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'<span class="keyword keyword_operator keyword_operator_oracle">&amp;</span>b_usr'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span>
+   <span class="keyword keyword_operator keyword_operator_oracle">and</span> <span class="keyword keyword_control keyword_control_pl">name</span>  <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="support support_function support_function_oracle">upper</span><span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'<span class="keyword keyword_operator keyword_operator_oracle">&amp;</span>b_obj'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span>
+   <span class="keyword keyword_operator keyword_operator_oracle">and</span> <span class="storage storage_type storage_type_oracle">type</span>  <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="support support_function support_function_oracle">upper</span><span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'<span class="keyword keyword_operator keyword_operator_oracle">&amp;</span>b_typ'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span>
+
+<span class="keyword keyword_operator keyword_operator_oracle">/</span></span></pre>
+</div>
+<div>
+<br /></div>
+<div>
+<div>
+And the output now shows as follows; notice how the first line displaying the error is highlighted as I pressed F4 to navigate through errors.</div>
+</div>
+<div>
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<br /></div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-k_G1LV89PD0/U7GzBU9gGAI/AAAAAAAAAL8/HeV24-wqc18/s1600/build_capture2.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-k_G1LV89PD0/U7GzBU9gGAI/AAAAAAAAAL8/HeV24-wqc18/s1600/build_capture2.png" height="356" width="640" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Sql*Plus output and error capture on Sublime Text</td></tr>
+</tbody></table>
+<br />
+The screen capture below shows that the error message is displayed on the status bar and the corresponding line (16) is highlighted on the source file. As the column is also captured, the cursor will be also positioned on it.<br />
+<br />
+The only caveat, if you haven't noticed, is the use of an offset to properly identify the line number for the error within the script. As Oracle reports the line number of the actual source (starting at wherever the CREATE statement is located), we need to account for as many lines as we have on the script before it. Line 6 (define b_off = 13) is used to store the offset value which is 13 in this example as the create or replace package line is located on row 14.<br />
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<br /></div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-TvPU-x9Uaes/U7GzUbF4N8I/AAAAAAAAAME/K1e-LhO_0dQ/s1600/offset.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-TvPU-x9Uaes/U7GzUbF4N8I/AAAAAAAAAME/K1e-LhO_0dQ/s1600/offset.png" height="201" width="400" /></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Partial SQL*Plus script depicting offset position and definition</td></tr>
+</tbody></table>
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<br /></div>
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<br /></div>
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<br /></div>
+<div style="font-family: Calibri; font-size: 11.0pt; margin: 0in;">
+<br /></div>
+</div>

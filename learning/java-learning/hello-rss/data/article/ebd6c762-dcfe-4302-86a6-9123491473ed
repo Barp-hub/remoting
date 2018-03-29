@@ -1,0 +1,145 @@
+<p>(Oracle General Ledger R12.1 Feature)</p>
+<p>Currency which is one of the four ‘C’ of a Ledger and ledger being a shared entity in Oracle Applications, leverages its multi-currency benefits in multi ferrous way viz., entering a transaction in foreign currency and reporting in your functional and reporting currency.<br />
+Basically, multi-currency refers to the ability of transactions being entered and reported in multiple currencies. It comprises of three main concepts:<br />
+<span id="more-7639"></span></p>
+<ul>
+<li>Conversion</li>
+<li>Revaluation</li>
+<li>Translation</li>
+</ul>
+<p>The above concepts are explained briefly as below:</p>
+<ol>
+<li><span style="text-decoration: underline;">Conversion:</span> Refers to a foreign currency transaction immediately converted in functional currency (i.e. the ledger currency).</li>
+<li><span style="text-decoration: underline;"> Revaluation:</span> Adjusting the assets and liabilities that may be materially understated or overstated at the end of the period due to significant fluctuations in the exchange rates between the time the transaction was entered and at the end of period.</li>
+<li><span style="text-decoration: underline;"> Translation:</span> Refers to the restatement of an entire ledger or balances for a company from functional currency to foreign currency.</li>
+</ol>
+<p>Having understood of the above concept let us understand how does the multi-currency feature works in the above scenarios:</p>
+<p><strong> I. CONVERSION</strong></p>
+<p>Consider the example as below:</p>
+<p>A`Ltd.’ company registered and operating in India, sells goods on credit worth USD 1,000 to its customer located in US. A`Ltd`s functional currency is INR. The transaction happens on 01-APR-2014.</p>
+<p>So, in the above example the company would be billing to its customer in USD however the US dollar denominated transactions (i.e. the foreign currency transaction) needs to be <strong>CONVERTED</strong> in INR while booking/recording an accounting entry in A`ltd’s ledger or the books.</p>
+<p style="text-align: right;"><em>&#8230;So there is a <strong><span style="text-decoration: underline;">conversion</span></strong> happening</em></p>
+<p>So in the above example following would be the components of a foreign currency journal:</p>
+<p><center><img class="wp-image-7641 aligncenter" src="http://www.iwarelogic.com/wp-content/uploads/2014/05/foreign-currency-journal.png" alt="foreign currency journal" width="439" height="215" /></center></p>
+<p>From the above entry it would be clear that currency needs to be enabled and the daily rates for any given date of transaction needs to be uploaded in the Rate Type that you define. Following would be the three key setups need to be configured in a sequential manner depicted below:</p>
+<p><center><img class="wp-image-7642 aligncenter" src="http://www.iwarelogic.com/wp-content/uploads/2014/05/arrow-currency-1024x157.png" alt="arrow-currency" width="567" height="87" /></center></p>
+<p>So, in the above ex., rates can come as shown below:</p>
+<p><center>User</center><center><img class="aligncenter size-full wp-image-7643" src="http://www.iwarelogic.com/wp-content/uploads/2014/05/Rate.jpg" alt="Rate" width="135" height="106" /></center><center>Rate Type</center><br />
+*If we want the user to enter the rates as per the user discretion then at the transaction level<br />
+we must select User</p>
+<p style="text-align: center;">V/s.</p>
+<p>Rate Type: Here we can setup different rate types depending upon the requirement and rates need to be uploaded or entered in the defined rate types. So at the transaction level the rates will default from the daily rates entered in the rate types.</p>
+<p><strong><span style="text-decoration: underline;">Following are the rate types that can be defined</span></strong></p>
+<ul>
+<li>Spot</li>
+<li>Corporate</li>
+<li>User (Note it is one of the rate type)</li>
+<li>EMU Fixed</li>
+<li>User Defined</li>
+</ul>
+<p><strong>II. REVALUATION</strong><br />
+Consider the above example of A`ltd. supposingly, the balance of USD 1,000 remains unpaid as on 30-APR-2014 and books need to be closed as on that date for the month reporting purposes. But when the transaction was entered it was at Rs. 50 a dollar and now the rate has increased say for example to Rs. 52 a dollar. So, it would not be appropriate to report the receivables still at INR 50,000. It needs to be reported at INR 52,000 (52 x USD1000). Thus there is a difference of INR 2,000/- which is referred to as ‘Unrealized Gain’ arising due significant changes in the exchange rate between 01-APR-14 and 30-APR-14.</p>
+<p>This is only one transaction but in actual business scenarios there might be hundreds of transactions entered not only in USD but in different currencies, dates and rates. All these foreign currency denominated transactions remained unsettled at the period end must be <strong>REVALUED</strong>.</p>
+<p style="text-align: right;"><em>&#8230;So there is a <strong>Revaluation</strong> happening</em></p>
+<p>In order to perform revaluation, the following steps need to be followed:</p>
+<p><center><img class="wp-image-7644 aligncenter" src="http://www.iwarelogic.com/wp-content/uploads/2014/05/revaluation1.jpg" alt="revaluation1" width="483" height="308" /></center></p>
+<p><center><img class="wp-image-7645 aligncenter" src="http://www.iwarelogic.com/wp-content/uploads/2014/05/revaluation2.jpg" alt="revaluation2" width="484" height="309" /></center></p>
+<p>After submitting the program named Program – Revalue balances, wait until the program is completed normally. Once it is completed you can enquire the Revaluation batch. You will find an unposted journal entry if you have unchecked the ‘AutoPost Revaluation’ while performing revaluation.</p>
+<p>Even after generating an unpost revaluation journal, if at all the user thinks that the journal entry is not correct, one has an option to query the revaluation earlier submitted, change the parameters and resubmit the revaluation program.<br />
+Once the revaluation entry is generated the user can either set the journal for reversal or reverse it upfront.<br />
+Note : You must update the ‘Cumulative Translation Adjustment Account’ in your accounting setup manager, <span style="text-decoration: underline;">if you have reporting currency enabled.</span> If you don`t update it, it will generate the revaluation journal in your functional currency, but while posting it will through an error as <strong>‘CTA account failed validation.’</strong> <span style="font-size: 12pt;">And only functional currency revaluation journal will be generated, its reporting currency representation journal will not be generated.</span></p>
+<p><span style="text-decoration: underline; font-size: 12pt;">Following is a demonstrated example of revaluation:</span></p>
+<p>In order to perform revaluation the user needs to follow the below steps:</p>
+<p><strong>Step-1: Navigate to Revaluation window</strong></p>
+<p><center><img class="wp-image-7646 aligncenter" src="http://www.iwarelogic.com/wp-content/uploads/2014/05/step-1-Navigate-to-Revaluation.jpg" alt="step 1 Navigate to Revaluation" width="560" height="420" /></center></p>
+<p><strong>Step-2: A Revaluation window opens wherein you need to enter the revaluation parameters as below:</strong></p>
+<p><center><img class="wp-image-7654 aligncenter" src="http://www.iwarelogic.com/wp-content/uploads/2014/05/step-2-revaluation-parameters.png" alt="step 2 revaluation parameters" width="549" height="366" /></center></p>
+<p><strong>Step-3: Click on the Revalue button above – a Program – Revalue Balances will open then in the parameters enter information as below:</strong></p>
+<p><center><img class="wp-image-7655 aligncenter" src="http://www.iwarelogic.com/wp-content/uploads/2014/05/step-3-Revalue-Balances.png" alt="step 3 Revalue Balances" width="573" height="378" /></center></p>
+<p><strong>Note:</strong> After submitting the program ensure that it completes with the status as normal.</p>
+<p><strong>Step-4: Query your journal batch in Journal window. The following journal would appear:</strong></p>
+<p><center><img class="wp-image-7649 aligncenter" src="http://www.iwarelogic.com/wp-content/uploads/2014/05/step-4-journal.png" alt="step 4 journal" width="572" height="429" /></center></p>
+<p>Note the date and rate at which revaluation journal was created. The journal entry is created in your functional currency.<br />
+You can now select the journal for posting.</p>
+<p>So, these are the steps that you need to follow while performing the revaluation.</p>
+<p><strong>Note:</strong> Sample examples are taken for performing the revaluation.</p>
+<p><strong>III. TRANSLATION</strong><br />
+Translation refers to restatement of your Balance Sheet and Income &#38; Expenditure statement accounts from functional to foreign currency.</p>
+<p><center><img class="wp-image-7651 aligncenter" src="http://www.iwarelogic.com/wp-content/uploads/2014/05/translation.jpg" alt="translation" width="430" height="311" /></center></p>
+<p>General Ledger selects the translation rates based on the GL Account type and Translation rate type. The following table will summarize the rates and account balance type used for translation:</p>
+<table border="1" width="100%" align="center">
+<tbody>
+<tr>
+<td><b>SR NO</b></td>
+<td><b>ACCOUNT TYPE</b></td>
+<td><b>ACCOUNT BALANCE TYPE</b></td>
+<td><b>RATE USED IN TRANSLATION</b></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Assets</td>
+<td>Cumulative Balance</td>
+<td>Period-end rate</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Liabilities</td>
+<td>Cumulative Balance</td>
+<td>Period-end rate</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Revenue</td>
+<td>Periodic Balance</td>
+<td>Period average rate</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Expense</td>
+<td>Periodic Balance</td>
+<td>Period average rate</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Owner&#8217;s Equity</td>
+<td>Cumulative Balance</td>
+<td>Period-end rate unless historical rates are defined for these accounts.</td>
+</tr>
+</tbody>
+</table>
+<p><span><br />
+</span><br />
+As it can be evident from the above table that all of the Balance Sheet and Income Statement Accounts are translated at different rates there is a difference which is bound to occur. So the difference is accounted for in the ‘Cumulative Translation Adjustment’ Account (CTA). So this account must be specified in the Accounting Setup Manager.</p>
+<p><strong> Translation with Historical Rates and Amounts:</strong></p>
+<ul>
+<li>Historical Rates are the weighted average rates for transactions that occur at different times.</li>
+<li>Historical rates are used to report journal entry line amounts in the units of money that were current when the transaction took place.</li>
+<li>Historical balances are opposite of inflation adjusted balances</li>
+</ul>
+<p>It is not usual that you use the same translation rate for all accounts. As you can see from the above table that different rates are used for different account types. For many assets typically the non-monetary items are to be carried at historical rates. Thus you need to set up historical rates before you run translation.</p>
+<p>If you have defined historical rates or amounts, oracle GL selects one of the two amounts those are used to arrive at a translated balance for your account:</p>
+<ul>
+<li>Account balance</li>
+<li>Net Activity</li>
+</ul>
+<p>However, the amount would differ depending on the type of account to which the historical rate or amount applies:</p>
+<ul>
+<li>Revenue/Expense</li>
+<li>Asset/Liability</li>
+<li>Owner&#8217;s Equity</li>
+</ul>
+<p>The translation has to be done using period to date (PTD) and year to date (YTD) rules:</p>
+<ul>
+<li>Typically the Revenue/Expense accounts are translated using the PTD rules</li>
+<li>Asset/Liability accounts are translated using YTD rules</li>
+<li>Owner&#8217;s Equity is translated using the historical rate</li>
+</ul>
+<p><strong>REPORTS:</strong><br />
+Some useful reports are provided by Oracle GL are shown below:</p>
+<p><center><img class="wp-image-7652 aligncenter" src="http://www.iwarelogic.com/wp-content/uploads/2014/05/Report-foriegn-currency-listing.jpg" alt="Report - foriegn currency listing" width="384" height="277" /></center></p>
+<p>Purpose of Reports:<br />
+<span style="text-decoration: underline;">Daily Conversion Rates Listing:</span> Lists the conversion rates defined for a specific foreign currency and accounting period.<br />
+<span style="text-decoration: underline;"> Historical Rates Listing:</span> Lists defined historical translation rates and amounts.<br />
+<span style="text-decoration: underline;"> Period Rates Listing:</span> Lists defined exchange rates for any accounting period, including the period average and period end translation rates and revaluation rates.</p>
+<p><em><strong>&#8211; Harshad N Godbole</strong></em><br />
+Oracle Apps &#8211; Functional Finance Consultant</p>

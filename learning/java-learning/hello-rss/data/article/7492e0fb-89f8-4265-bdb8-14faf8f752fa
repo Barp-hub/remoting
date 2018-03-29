@@ -1,0 +1,280 @@
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://1.bp.blogspot.com/-YXXCFe57WY4/UJhorhzjd3I/AAAAAAAAAA0/9xyRtC0c2mk/s1600/153594c4goidl-v6qsc3-picture-86.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="93" src="http://1.bp.blogspot.com/-YXXCFe57WY4/UJhorhzjd3I/AAAAAAAAAA0/9xyRtC0c2mk/s320/153594c4goidl-v6qsc3-picture-86.png" width="320" /></a></div>
+<span style="font-family: inherit;"><br /></span>
+<span style="font-family: inherit;">Value sets are used to restrain information entered on flexfields in 
+Oracle Applications. To validate format masks Oracle provides some basic
+ functionality, and for limiting the information to chose from, a list 
+of values can be provided. Unfortunately, when this is not enough for 
+specific format masks, cross validation or control numbers verification,
+ information checking has to be done afterwards through custom code. Here
+ is a sample of a workaround to define a special value set for such 
+cases and perform validation as the user tries to leave the flexfield 
+segment/attribute.</span><br />
+<span style="font-family: inherit;"><br /></span>
+<span style="font-family: inherit;"><br />
+The key to achieve such a validation to use a Special type value set. We
+ will take advantage of the fact that they allow to call a user exit, 
+usually utilized to provide flexfields within flexfields. The user exit 
+is also their main disadvantage as they can only be used on forms based 
+data entry, as stated on the flexfields user guide:</span><br />
+<span style="font-family: inherit;"><br /></span>
+<br />
+<div style="margin-left: 40px;">
+<i><span style="font-family: inherit;">Warning:
+ Special/Pair value sets are user-exit value sets (that is, they can be 
+validated by the C engine only). They cannot be validated by PL/SQL 
+Values and Value Sets APIs. Concurrent programs using Special/Pair value
+ sets may only be run from Forms-based applications.</span></i></div>
+<span style="font-family: inherit;"><br />Another
+ restriction is that as we will be calling a PLSQL user exit, code is to
+ be executed as in a database session, thus there is no access to forms 
+built ins or program units.<br /><br />However, it's interesting to hack 
+around using this feature, but be aware that as a undocumented feature 
+it's not supported by Oracle (this was supposed to be available for 
+release 12 as a new PL/SQL type value set but I have not seen it being 
+available). The validation as such will be implemented using 
+an&nbsp;anonymous&nbsp;PL/SQL block. Other uses may be to check for uniqueness, 
+dependency on other values, you name it.</span><br />
+<h2>
+<span style="font-family: inherit;">How to achieve it </span></h2>
+<span style="font-family: inherit;">A 
+basic description of the way to implement this type of custom validation
+ is provided and then an example. This was done on a 11.5.10.2 
+environment so some things may not apply to your particular case. I 
+initially played with this in a 11.5.7 release so I guess that for 
+releases in between this should be also possible. For release 12 I 
+tested it and it works.</span><br />
+<h3>
+<span style="font-family: inherit;">Define the value set </span></h3>
+<span style="font-family: inherit;">A 
+special type validation value set has to be defined with the basic 
+formatting restrictions to apply on the data to be entered, such as the 
+length, case, padding and ranges if they are relevant.</span><br />
+<h4>
+<span style="font-family: inherit;">Create and test Your validation logic code </span></h4>
+<span style="font-family: inherit;">Beforehand, &nbsp;and given than this type of value set can't be validated until it's 
+used and in the first attempts it may fail or require adjusting, create 
+an anonymous pl/sql block with the validation logic. Consider that you 
+will have read/write access to the value entered on the 
+attribute/segment as well as items on the current form and we can also 
+leverage other current session values trough profiles and the fnd_global
+ package as you also can execute database stored procedures. <br /><br />Something you must avoid in your validation code are comments preceded with double dash (--)
+ as the block will be stripped of new line characters and parsed as a 
+single line, causing to effectively comment the rest of the code, use 
+slash and asterisk pairs comments instead (/* */).
+ Code length may have a limit, so try to keep your code tiny. As a 
+starting basis you may use the following block, l_forms_value will be 
+the value entered by the user.</span><br />
+<span style="font-family: inherit;"><br /></span>
+<br />
+<pre class="textmate-source solarized_dark_"><span class="linenum">    1</span> <span class="source source_oracle"><span class="keyword keyword_control keyword_control_pl">declare</span>
+<span class="linenum">    2</span>   <span class="variable variable_other">l_new_value</span>   <span class="storage storage_type storage_type_oracle">varchar2</span><span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="constant constant_numeric constant_numeric_oracle">150</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">    3</span>   <span class="variable variable_other">l_forms_value</span> <span class="storage storage_type storage_type_oracle">varchar2</span><span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="constant constant_numeric constant_numeric_oracle">150</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">:=</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'Invalid Value'</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">    4</span>   <span class="variable variable_other">l_err</span> <span class="storage storage_type storage_type_oracle">boolean</span> <span class="keyword keyword_operator keyword_operator_oracle">:=</span> <span class="constant constant_language constant_language_oracle">false</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">    5</span>   <span class="comment comment_block">/* Set error message routine */</span>
+<span class="linenum">    6</span> <span class="meta meta_function meta_function_oracle">  <span class="keyword keyword_other keyword_other_oracle keyword_other_oracle_ddl">procedure</span><span class="entity entity_name entity_name_function"> set_msg</span><span class="keyword keyword_operator keyword_operator_oracle">(</span></span>
+<span class="linenum">    7</span>       <span class="variable variable_parameter">p_msg</span> <span class="keyword keyword_operator keyword_operator_oracle">in</span> <span class="storage storage_type storage_type_oracle">varchar2</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">is</span>
+<span class="linenum">    8</span>   <span class="keyword keyword_control keyword_control_pl">begin</span>
+<span class="linenum">    9</span>     <span class="variable variable_other">fnd_message.</span>set_name<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'FND'</span><span class="keyword keyword_operator keyword_operator_oracle">,</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'FND_GENERIC_MESSAGE'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   10</span>     <span class="variable variable_other">fnd_message.</span>set_token<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'MESSAGE'</span><span class="keyword keyword_operator keyword_operator_oracle">,</span> <span class="variable variable_parameter">p_msg</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   11</span>   <span class="keyword keyword_control keyword_control_pl">end</span> set_msg <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   12</span> <span class="keyword keyword_control keyword_control_pl">begin</span>
+<span class="linenum">   13</span>   <span class="comment comment_block">/*
+<span class="linenum">   14</span>   -- Validation logic here, if it's too complex, use and error flag and
+<span class="linenum">   15</span>   -- test validation result as the last action in your code
+<span class="linenum">   16</span>   */</span>
+<span class="linenum">   17</span>   <span class="keyword keyword_control keyword_control_pl">if</span> <span class="variable variable_other">l_forms_value</span> <span class="keyword keyword_operator keyword_operator_oracle">!=</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'Valid Value'</span> <span class="keyword keyword_control keyword_control_pl">then</span>
+<span class="linenum">   18</span>     <span class="variable variable_other">l_err</span> <span class="keyword keyword_operator keyword_operator_oracle">:=</span> <span class="constant constant_language constant_language_oracle">true</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   19</span>     set_msg<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'The entered value is not valid<span class="keyword keyword_operator keyword_operator_oracle">.</span>'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   20</span>   <span class="keyword keyword_control keyword_control_pl">else</span>
+<span class="linenum">   21</span>     <span class="variable variable_other">l_new_value</span> <span class="keyword keyword_operator keyword_operator_oracle">:=</span> <span class="variable variable_other">l_forms_value</span> <span class="keyword keyword_operator keyword_operator_oracle">||</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">' entered as of '</span> <span class="keyword keyword_operator keyword_operator_oracle">||</span> <span class="support support_function support_function_oracle">fnd_date</span><span class="keyword keyword_operator keyword_operator_oracle">.</span>date_to_canonical<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="constant constant_language constant_language_oracle">sysdate</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>    
+<span class="linenum">   22</span>   <span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_control keyword_control_pl">if</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   23</span>   <span class="comment comment_block">/* Show error and don't allow the user to move to another field */</span>
+<span class="linenum">   24</span>   <span class="keyword keyword_control keyword_control_pl">if</span> <span class="variable variable_other">l_err</span> <span class="keyword keyword_control keyword_control_pl">then</span>
+<span class="linenum">   25</span>     <span class="variable variable_other">fnd_message.</span>raise_error <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   26</span>   <span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_control keyword_control_pl">if</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   27</span> <span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+</span><span class="linenum">   28</span> </pre>
+<br />
+<div>
+<h4>
+<span style="font-family: inherit;">Substitute test values to the ones to user at runtime</span></h4>
+<span style="font-family: inherit;">The values You can access as bind variables are:</span><br />
+<ul>
+<li><span style="font-family: arial,sans-serif;"><span style="font-family: courier new,monospace;">:!value</span> </span><span style="font-family: inherit;">The user input on the flexfield, it can be read and written to.</span></li>
+<li><span style="font-family: arial,sans-serif;"><span style="font-family: courier new,monospace;">:block.item</span> </span><span style="font-family: inherit;">The value of any item on forms shown at runtime (including</span><span style="font-family: arial,sans-serif;"> <span style="font-family: courier new,monospace;">$FLEX$</span> </span><span style="font-family: inherit;">and</span><span style="font-family: arial,sans-serif;"> <span style="font-family: courier new,monospace;">$PROFILES$</span> </span><span style="font-family: inherit;">block).</span></li>
+</ul>
+</div>
+<br />
+<h4>
+<span style="font-family: inherit;">Wrap your final code as FND PLSQL "your code here" </span></h4>
+<span style="font-family: inherit;">The user exit to use is</span> <span style="font-family: courier new,monospace;">PLSQL</span>
+ <span style="font-family: inherit;">which allows the execution of an anonymous PL/SQL block with the 
+following syntax, so once validated and with all the above 
+considerations you just have to enclose your final code in double quotes and 
+prefix it with</span> <span style="font-family: courier new,monospace;">FND PLSQL</span>. <br />
+<div>
+<span style="font-size: x-small;"><br /></span>
+<br />
+<pre class="textmate-source solarized_dark_"><span class="linenum">    1</span> <span class="source source_oracle">FND PLSQL <span class="string string_quoted string_quoted_double string_quoted_double_oracle">"declare
+<span class="linenum">    2</span>   ...
+<span class="linenum">    3</span> begin
+<span class="linenum">    4</span>   ...
+<span class="linenum">    5</span> end ;"</span>
+</span><span class="linenum">    6</span> </pre>
+<span style="font-family: inherit;">and add it to the Validate event of the previously defined value set. Example follows.</span></div>
+<div>
+<br /></div>
+<div>
+<div>
+<h2>
+<span style="font-family: inherit;">Example</span></h2>
+<span style="font-family: inherit;">A flexfield is required to enter the taxpayer id 
+for Mexico, which can be 10 o 13 characters long if a Homoclave (a 
+control key derived from first 10 characters) is provided. Format is 
+AAAA999999[XXX] (A=Letter, 9=Digit, X=Alphanumeric). As such, focusing 
+only on the format, validation needed is as follows:</span><br />
+<ul>
+<li><span style="font-family: inherit;">Length can only be 10 or 13 characters long.</span></li>
+<li><span style="font-family: inherit;">Format Mask is AAAA999999 if 10 characters are entered.</span></li>
+<ul>
+<li><span style="font-family: inherit;">We then calculate the Homoclave and append it to the entered value</span></li>
+</ul>
+<li><span style="font-family: inherit;">Format Mask is AAAA999999XXX if 13 characters are entered.</span></li>
+<ul>
+<li><span style="font-family: inherit;">We should validate the entered Homoclave vs. the derived one.</span></li>
+</ul>
+<li><span style="font-family: inherit;">Inform the user on failure to comply and don't allow to continue if such is the case.</span></li>
+</ul>
+<span style="font-family: inherit;"><br />For learning purposes, 'XXX' will be appended if 10 characters provided and the Homoclave must always be 'XXX'.</span><br />
+<h3>
+<span style="font-family: inherit;">Create Value Set </span></h3>
+<span style="font-family: inherit;">Specify a Name, format type, maximum length and select Special as the validation type.</span><br />
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://4.bp.blogspot.com/-rH_3Hst9tU0/UJhn9utRK_I/AAAAAAAAAAc/Eed0Rlf54Sw/s1600/153594c4goidl-v6qsc3-picture-81.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="172" src="http://4.bp.blogspot.com/-rH_3Hst9tU0/UJhn9utRK_I/AAAAAAAAAAc/Eed0Rlf54Sw/s320/153594c4goidl-v6qsc3-picture-81.png" width="320" /></a></div>
+<div style="margin-left: auto; margin-right: auto; text-align: center;">
+<br />
+<span style="font-family: inherit;">Picture 1</span></div>
+<br />
+<br />
+<br />
+<h3>
+<span style="font-family: inherit;">Create validation logic</span></h3>
+<span style="font-family: inherit;">According
+ to requirement, and with the help of an existing package, we define our
+ validation logic, use runtime bind variables and set up error messages.</span>
+<br />
+<span style="font-family: inherit;"><br /></span>
+<br />
+<pre class="textmate-source solarized_dark_"><span class="linenum">    1</span> <span class="source source_oracle">FND PLSQL "<span class="keyword keyword_control keyword_control_pl">declare</span>
+<span class="linenum">    2</span>   <span class="variable variable_other">l_value</span> <span class="storage storage_type storage_type_oracle">varchar2</span><span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="constant constant_numeric constant_numeric_oracle">13</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">:=</span> :!value <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">    3</span>   <span class="variable variable_other">l_valid</span> <span class="storage storage_type storage_type_oracle">varchar2</span><span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="constant constant_numeric constant_numeric_oracle">13</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">:=</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'1'</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">    4</span> <span class="meta meta_function meta_function_oracle">  <span class="keyword keyword_other keyword_other_oracle keyword_other_oracle_ddl">procedure</span><span class="entity entity_name entity_name_function"> set_msg</span><span class="keyword keyword_operator keyword_operator_oracle">(</span></span>
+<span class="linenum">    5</span>       <span class="variable variable_parameter">p_msg</span> <span class="keyword keyword_operator keyword_operator_oracle">in</span> <span class="storage storage_type storage_type_oracle">varchar2</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">is</span>
+<span class="linenum">    6</span>   <span class="keyword keyword_control keyword_control_pl">begin</span>
+<span class="linenum">    7</span>     <span class="variable variable_other">fnd_message.</span>set_name<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'FND'</span><span class="keyword keyword_operator keyword_operator_oracle">,</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'FND_GENERIC_MESSAGE'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">    8</span>     <span class="variable variable_other">fnd_message.</span>set_token<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'MESSAGE'</span><span class="keyword keyword_operator keyword_operator_oracle">,</span> <span class="variable variable_parameter">p_msg</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">    9</span>   <span class="keyword keyword_control keyword_control_pl">end</span> set_msg <span class="keyword keyword_operator keyword_operator_oracle">;</span>  
+<span class="linenum">   10</span> <span class="keyword keyword_control keyword_control_pl">begin</span>
+<span class="linenum">   11</span>    <span class="comment comment_block">/* If required or not is specified at segment definition */</span>
+<span class="linenum">   12</span>   <span class="keyword keyword_control keyword_control_pl">if</span> <span class="variable variable_other">l_value</span> <span class="keyword keyword_operator keyword_operator_oracle">is</span> <span class="keyword keyword_operator keyword_operator_oracle">not</span> <span class="constant constant_language constant_language_oracle">null</span> <span class="keyword keyword_control keyword_control_pl">then</span>
+<span class="linenum">   13</span>     <span class="comment comment_block">/* 10 characters are ok, only if format is correct, l_valid will be '0' if validation fails */</span>
+<span class="linenum">   14</span>     <span class="keyword keyword_control keyword_control_pl">if</span> <span class="support support_function support_function_oracle">length</span><span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="variable variable_other">l_value</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="constant constant_numeric constant_numeric_oracle">10</span> <span class="keyword keyword_control keyword_control_pl">then</span>
+<span class="linenum">   15</span>       <span class="variable variable_other">l_valid</span> <span class="keyword keyword_operator keyword_operator_oracle">:=</span> <span class="variable variable_other">hr_ni_chk_pkg.</span>chk_nat_id_format<span class="keyword keyword_operator keyword_operator_oracle">(</span>
+<span class="linenum">   16</span>           <span class="variable variable_parameter">p_national_identifier</span> <span class="keyword keyword_operator keyword_operator_oracle">=&amp;</span>gt<span class="keyword keyword_operator keyword_operator_oracle">;</span> <span class="variable variable_other">l_value</span>
+<span class="linenum">   17</span>         <span class="keyword keyword_operator keyword_operator_oracle">,</span> <span class="variable variable_parameter">p_format_string</span>       <span class="keyword keyword_operator keyword_operator_oracle">=&amp;</span>gt<span class="keyword keyword_operator keyword_operator_oracle">;</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'AAAADDDDDD'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   18</span>       <span class="keyword keyword_control keyword_control_pl">if</span> <span class="variable variable_other">l_valid</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'0'</span> <span class="keyword keyword_control keyword_control_pl">then</span>
+<span class="linenum">   19</span>         set_msg<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'The information provided is not in the required format, AAAADDDDDD, where A must be a letter and D a digit<span class="keyword keyword_operator keyword_operator_oracle">.</span>'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   20</span>       <span class="keyword keyword_control keyword_control_pl">else</span>      
+<span class="linenum">   21</span>         :!value <span class="keyword keyword_operator keyword_operator_oracle">:=</span> <span class="variable variable_other">l_value</span> <span class="keyword keyword_operator keyword_operator_oracle">||</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'XXX'</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   22</span>       <span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_control keyword_control_pl">if</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   23</span>     <span class="comment comment_block">/* 13 characters are ok, only if format is correct, l_valid will be '0' if validation fails */</span>
+<span class="linenum">   24</span>     <span class="keyword keyword_control keyword_control_pl">elsif</span>  <span class="support support_function support_function_oracle">length</span><span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="variable variable_other">l_value</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="constant constant_numeric constant_numeric_oracle">13</span> <span class="keyword keyword_control keyword_control_pl">then</span>
+<span class="linenum">   25</span>       <span class="variable variable_other">l_valid</span> <span class="keyword keyword_operator keyword_operator_oracle">:=</span> <span class="variable variable_other">hr_ni_chk_pkg.</span>chk_nat_id_format<span class="keyword keyword_operator keyword_operator_oracle">(</span>
+<span class="linenum">   26</span>           <span class="variable variable_parameter">p_national_identifier</span> <span class="keyword keyword_operator keyword_operator_oracle">=&amp;</span>gt<span class="keyword keyword_operator keyword_operator_oracle">;</span> <span class="variable variable_other">l_value</span>
+<span class="linenum">   27</span>         <span class="keyword keyword_operator keyword_operator_oracle">,</span> <span class="variable variable_parameter">p_format_string</span>       <span class="keyword keyword_operator keyword_operator_oracle">=&amp;</span>gt<span class="keyword keyword_operator keyword_operator_oracle">;</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'AAAADDDDDDXXX'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   28</span>       <span class="keyword keyword_control keyword_control_pl">if</span> <span class="variable variable_other">l_valid</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'0'</span> <span class="keyword keyword_control keyword_control_pl">then</span>
+<span class="linenum">   29</span>         set_msg<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'The information provided is not in the required format, AAAADDDDDDXXXX, where A must be a letter, D a digit and X either a letter or a digit'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   30</span>       <span class="keyword keyword_control keyword_control_pl">elsif</span> <span class="support support_function support_function_oracle">substr</span><span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="variable variable_other">l_value</span><span class="keyword keyword_operator keyword_operator_oracle">,</span> <span class="keyword keyword_operator keyword_operator_oracle">-</span><span class="constant constant_numeric constant_numeric_oracle">3</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">!=</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'XXX'</span> <span class="keyword keyword_control keyword_control_pl">then</span>
+<span class="linenum">   31</span>         set_msg<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'The calculated Homoclave does not correspond to the one entered, please review the information provided'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   32</span>         <span class="variable variable_other">l_valid</span> <span class="keyword keyword_operator keyword_operator_oracle">:=</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'0'</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   33</span>       <span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_control keyword_control_pl">if</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   34</span>     <span class="comment comment_block">/* Only 10 or 13 characters permitted */</span>
+<span class="linenum">   35</span>     <span class="keyword keyword_control keyword_control_pl">else</span>     
+<span class="linenum">   36</span>       <span class="variable variable_other">l_valid</span> <span class="keyword keyword_operator keyword_operator_oracle">:=</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'0'</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   37</span>       set_msg<span class="keyword keyword_operator keyword_operator_oracle">(</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'Length of RFC must be either 10 or 13 characters, please review the information provided'</span> <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   38</span>     <span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_control keyword_control_pl">if</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   39</span>       <span class="comment comment_block">/* If any of the validations failed, raise error */</span>
+<span class="linenum">   40</span>     <span class="keyword keyword_control keyword_control_pl">if</span> <span class="variable variable_other">l_valid</span> <span class="keyword keyword_operator keyword_operator_oracle">=</span> <span class="string string_quoted string_quoted_single string_quoted_single_oracle">'0'</span> <span class="keyword keyword_control keyword_control_pl">then</span>
+<span class="linenum">   41</span>       <span class="variable variable_other">fnd_message.</span>raise_error <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   42</span>     <span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_control keyword_control_pl">if</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   43</span>   <span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_control keyword_control_pl">if</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+<span class="linenum">   44</span> <span class="keyword keyword_control keyword_control_pl">END</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span> <span class="string string_quoted string_quoted_double string_quoted_double_oracle">"    &lt;/pre&gt;
+</span><span class="linenum">   45</span> </span></pre>
+<h3>
+<span style="font-family: inherit;">Define value set event </span></h3>
+<span style="font-family: inherit;">As
+ it fires after the value entered and leaving the field (it can be thought of a WHEN-VALIDATE-ITEM trigger), on the details for 
+the value set, click on Edit Information and then select the "Validate" value from the list as the event name and copy the call to the user exit in the multi line text field.</span><br />
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://4.bp.blogspot.com/-D-jLBeWzGog/UJhoUONyOFI/AAAAAAAAAAk/FRU1UGa8rGA/s1600/153594c4goidl-v6qsc3-picture-82.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="112" src="http://4.bp.blogspot.com/-D-jLBeWzGog/UJhoUONyOFI/AAAAAAAAAAk/FRU1UGa8rGA/s320/153594c4goidl-v6qsc3-picture-82.png" width="320" /></a></div>
+<div style="margin-left: auto; margin-right: auto; text-align: center;">
+<br />
+<span style="font-family: inherit;">Picture 2</span></div>
+<span style="font-family: inherit;"><br /></span></div>
+<div>
+<span style="font-family: inherit;"><br /></span>
+<br />
+<h3>
+<span style="font-family: inherit;">Validate </span></h3>
+<span style="font-family: inherit;">Assign
+ value set to desired flexfield attribute and test it. If everything is 
+OK, messages will appear whenever validation fails.</span><br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://2.bp.blogspot.com/-jWDabtKDT-E/UJhojIroyMI/AAAAAAAAAAs/lQBb5EMABf8/s1600/153594c4goidl-v6qsc3-picture-85.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="93" src="http://2.bp.blogspot.com/-jWDabtKDT-E/UJhojIroyMI/AAAAAAAAAAs/lQBb5EMABf8/s320/153594c4goidl-v6qsc3-picture-85.png" width="320" /></a></div>
+<div style="margin-left: auto; margin-right: auto; text-align: center;">
+<br />
+<span style="font-family: inherit;">Picture 3</span><br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://1.bp.blogspot.com/-YXXCFe57WY4/UJhorhzjd3I/AAAAAAAAAA0/9xyRtC0c2mk/s1600/153594c4goidl-v6qsc3-picture-86.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="93" src="http://1.bp.blogspot.com/-YXXCFe57WY4/UJhorhzjd3I/AAAAAAAAAA0/9xyRtC0c2mk/s320/153594c4goidl-v6qsc3-picture-86.png" width="320" /></a></div>
+<div style="margin-left: auto; margin-right: auto;">
+<br />
+<span style="font-family: inherit;">Picture 5</span><br />
+<br />
+<h3 style="text-align: left;">
+<span style="font-family: inherit;">Errors</span></h3>
+<div style="text-align: left;">
+<span style="font-family: inherit;">Possible
+ errors will be related to the pl/sql code entered on the value set 
+details. As mentioned before, a case is when using double dash comments:</span><br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://1.bp.blogspot.com/-dwS6-LVpbUY/UJhpCkf_luI/AAAAAAAAAA8/YkieH1W5KtE/s1600/153594c4goidl-v6qsc3-picture-83.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://1.bp.blogspot.com/-dwS6-LVpbUY/UJhpCkf_luI/AAAAAAAAAA8/YkieH1W5KtE/s320/153594c4goidl-v6qsc3-picture-83.png" width="300" /></a></div>
+<div style="margin-left: auto; margin-right: auto; text-align: center;">
+<span style="font-family: inherit;"><a href="http://knol.google.com/k/-/-/153594c4goidl/v6qsc3/picture-83.png" imageanchor="1"><img border="0" src="file:///Users/amox/Downloads/am0xmx@gmail.com-takeout/knol/153594c4goidl-v6qsc3-picture-83.png" /></a><br />Picture 6</span></div>
+<span style="font-family: inherit;"><br /></span></div>
+</div>
+</div>
+<span style="font-family: inherit;">Other
+ errors will be reported with ORA and PLS, with line and column 
+indicating the error, that's the reason to validate the code beforehand 
+as is more tedious to go forth and back changing value set code, as it 
+will require You to change responsibilities to take effect.<br /><br />Also, as happened on test, no space was added between FND PLSQL and the open quote to define the string to contain the code.</span><br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://4.bp.blogspot.com/-d9JghUlLjy4/UJhpMjicD0I/AAAAAAAAABE/bzySyym1fQQ/s1600/153594c4goidl-v6qsc3-picture-84.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="116" src="http://4.bp.blogspot.com/-d9JghUlLjy4/UJhpMjicD0I/AAAAAAAAABE/bzySyym1fQQ/s320/153594c4goidl-v6qsc3-picture-84.png" width="320" /></a></div>
+<div style="margin-left: auto; margin-right: auto; text-align: center;">
+<span style="font-family: inherit;"><a href="http://knol.google.com/k/-/-/153594c4goidl/v6qsc3/picture-84.png" imageanchor="1"><img border="0" src="file:///Users/amox/Downloads/am0xmx@gmail.com-takeout/knol/153594c4goidl-v6qsc3-picture-84.png" /></a><br />Picture 7</span></div>
+<span style="font-family: inherit;"><br /></span>
+<br />
+<h2>
+<span style="font-family: inherit;">Other information </span></h2>
+<span style="font-family: inherit;">A test to use </span><span style="font-family: Courier New, Courier, monospace;">raise form_trigger_failure</span><span style="font-family: inherit;"> didnt' work, so the code from 
+form built-ins, program units or associated libraries may not be 
+available to use.<br /><br />However, session information is available, a call to </span><span style="font-family: Courier New, Courier, monospace;">fnd_global.user_name</span><span style="font-family: inherit;"> added to one of the messages successfully showed the user login.<br /><br />Code length limit, if any, is not known. If reached, use stored procedures to keep code short, but it may add to execution time.</span></div>
+</div>
+<br />
+<span style="font-family: inherit;"><br /></span>
+<br />
+<br />
+<script type="text/javascript">SyntaxHighlighter.highlight();</script>

@@ -1,0 +1,1 @@
+<div dir="ltr" style="text-align: left;" trbidi="on">frmcmp_batch module=formname.fmb userid=apps/apps output_file=/yourfmxpath/formname.fmx compile_all=special batch=yes/</div>

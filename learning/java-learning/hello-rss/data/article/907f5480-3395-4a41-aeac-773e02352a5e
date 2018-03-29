@@ -1,0 +1,27 @@
+<p>One of the biggest things that we couldn’t do in the previous versions of the oracle database was to use the back arrow button-to reexecute the old commands, without typing them. Of course, a workarouns is possible in the form of <a href="https://github.com/hanslub42/rlwrap" target="_blank"><font style="background-color: #0000ff">rlwrap</font></a> but it’s not comparable to a natively available feature in the SQL*PLUS. Well, until now because now, we have <a href="https://docs.oracle.com/database/122/SQPUG/HISTORY.htm#SQPUG-GUID-CCF9B047-3122-4644-BA06-5FA4B5812E9F" target="_blank"><font style="background-color: #0000ff">HISTORY</font></a> option available in 12.2 SQL*PLUS. Let’s take a look.</p>
+<p><font face="Lucida Console">SQL&#62; /</font></p>
+<p><font face="Lucida Console">BANNER&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; CON_ID<br />&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- &#8212;&#8212;&#8212;-<br />Oracle Database 12c Enterprise Edition R&#160;&#160;&#160;&#160;&#160; 0<br />elease 12.2.0.1.0 &#8211; 64bit Production</font></p>
+<p><font face="Lucida Console">PL/SQL Release 12.2.0.1.0 &#8211; Production&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0<br />CORE&#160;&#160;&#160; 12.2.0.1.0&#160;&#160;&#160; Production&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0<br />TNS for Linux: Version 12.2.0.1.0 &#8211; Prod&#160;&#160;&#160;&#160;&#160; 0<br />uction</font></p>
+<p><font face="Lucida Console">NLSRTL Version 12.2.0.1.0 &#8211; Production&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0</font></p>
+<p><font face="Lucida Console">SQL&#62; show history<br />history is OFF<br />SQL&#62; select * from dual;</font></p>
+<p><font face="Lucida Console">D<br />&#8211;<br />X</font></p>
+<p><font face="Lucida Console">SQL&#62; ^[[A&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#8221; &#8211; rest of line ignored.<br />SQL&#62; 042: unknown command &#8220;<br /></font></p>
+<p>So we can see that there is new option of HISTORY in the SQL*PLUS and it is OFF by default. And with this, we obviously can’t use get back to the previously executed commands. So let’s turn the feature on.</p>
+<p><font face="Lucida Console">SQL&#62; set history on<br />SQL&#62; select * from dual;</font></p>
+<p><font face="Lucida Console">D<br />&#8211;<br />X</font></p>
+<p><font face="Lucida Console">SQL&#62; select sysdate from dual;</font></p>
+<p><font face="Lucida Console">SYSDATE<br />&#8212;&#8212;&#8212;<br />09-MAR-17</font></p>
+<p><font face="Lucida Console">SQL&#62; show history<br />history is ON and set to &#8220;100&#8221;<br />SQL&#62; <br /></font></p>
+<p>So we have enabled the History and it’s set to 100 statements by deault. We have executed two commands now. Let’s see them.</p>
+<p><font face="Lucida Console">SQL&#62; history<br />&#160; 1&#160; select * from dual;<br />&#160; 2&#160; select sysdate from dual;<br />&#160; 3&#160; show history<br /></font></p>
+<p>Cool! So now how we execute the 2nd statement?</p>
+<p><font face="Lucida Console">SQL&#62; history 2 run</font></p>
+<p><font face="Lucida Console">SYSDATE<br />&#8212;&#8212;&#8212;<br />09-MAR-17</font></p>
+<p>Nice! And how do we edit this statement and change from Sysdate to user name? </p>
+<p><font face="Lucida Console">SQL&#62; history 2 edit<br /></font>And now, if we check the History, we see that the edited statement is available for us to use.</p>
+<p><font face="Lucida Console">SQL&#62; history<br />&#160; 1&#160; select * from dual;<br />&#160; 2&#160; select sysdate from dual;<br />&#160; 3&#160; show history<br />&#160; 4&#160; select username&#160; from dual;</font></p>
+<p>And for some reason, you want to clear the history information, you can use CLEAR option.</p>
+<p><font face="Lucida Console">SQL&#62; history clear<br />SQL&#62; history<br />SP2-1651: History list is empty.</font></p>
+<p>&#160;</p>
+<p>Cool isn’t it? Well now if you are going to say that it’s still not equivalent of using the back arrow button, yes it’s not but then, it’s better than the hassle of installing an external wrapper downloaed from the internet and of course, miles better than not having any of such facility at all IMO. </p>
+<p>Happy weekend and happy testing 12.2 features! </p>

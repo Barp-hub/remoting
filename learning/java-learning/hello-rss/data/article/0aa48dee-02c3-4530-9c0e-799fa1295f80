@@ -1,0 +1,17 @@
+While running some scripts to compile a bunch of IDS 10G forms on an 11g database, the time it was taking was becoming quite&nbsp;annoying. Even if taking around 30 seconds per form, compiling more than hundred at at time did really add up. As I had done this before on 10g, even if I didn't time forms individually, the total time it was taking on 11g did not seem to be reasonable.<br />
+<br />
+Turns out, there is an issue with Oracle regarding performance querying ALL_OBJECTS and a fix for it already exists and is even already delivered on newer DB versions (10.1.0.5, 11.2.0.2 and beyond); problem is that it is not enabled by default.<br />
+<br />
+To enable the fix on memory, execute the following (OFF to disable it if necessary):<br />
+<br />
+<pre class="textmate-source solarized_dark_"><span class="linenum">    1</span> <span class="source source_oracle"><span class="constant constant_language constant_language_oracle">SQL</span><span class="keyword keyword_operator keyword_operator_oracle">&gt;</span> <span class="keyword keyword_other keyword_other_ddl keyword_other_ddl_oracle">ALTER</span> SYSTEM <span class="keyword keyword_other keyword_other_dml keyword_other_dml_oracle">SET</span> <span class="string string_quoted string_quoted_double string_quoted_double_oracle">"_FIX_CONTROL"</span><span class="keyword keyword_operator keyword_operator_oracle">=</span><span class="string string_quoted string_quoted_double string_quoted_double_oracle">"8560951:ON"</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
+</span><span class="linenum">    2</span> </pre>
+<br />
+In our case, this reduced compilation time to about 2 seconds per form, a 15X improvement.<br />
+<br />
+Once the change is validated, set the parameter permanently on the DB.<br />
+<br />
+The solution is documented on Metalink note:<br />
+<blockquote class="tr_bq">
+Compilation against a 11g database hangs or takes a very long time [ID 880660.1]</blockquote>
+<script type="text/javascript">SyntaxHighlighter.highlight();</script>

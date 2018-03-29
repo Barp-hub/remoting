@@ -1,0 +1,246 @@
+
+    <h2 id="etcd-介绍">etcd 介绍</h2>
+
+<p>很久之前写过<a href="http://cizixs.com/2016/08/02/intro-to-etcd">一篇 etcd 的介绍文章</a>，主要是讲 etcd 的概念和使用方式，这篇文章介绍如何使用 go 语言进行 etcd 的开发工作。</p>
+
+<p>etcd 目前最新版 API 是 v3 版本，之前被广泛使用的 API 为 v2 版本。这篇文章会介绍 v2 版本 go 语言客户端的使用，涉及了最常见的增删查改和监听操作。</p>
+
+<h2 id="v2-版本使用">v2 版本使用</h2>
+
+<p><a href="http://cizixs.com/2016/08/02/intro-to-etcd">之前的文章</a> 已经对 etcd v2 版本的概念和 API 介绍得很详细了，这里再总结一下。</p>
+
+<ul>
+  <li>作为分布式的键值存储，etcd v2 存储的 key 和 value 都是字符串类型。其中 key 以类 unix 文件系统的结构存储，分为目录和文件，目录下面可以嵌套目录和文件，文件只能对应某个值（value）。可以对 key 进行创建、删除和修改的工作</li>
+  <li>可以为 key（包括目录和文件）设置一个 TTL 值，也就是过期时间，等到时间过了，值自动被删除</li>
+  <li>提供了 CAS(compare And Set）和 CAD（Compare And Delete）两种原子操作，可以实现比较然后执行某个动作的逻辑</li>
+  <li>可以监听某个文件和目录，当里面的值发生变化时，监听者会立即收到通知</li>
+</ul>
+
+<p>概念讲完了，下面看看如何用 go 语言进行 etcd 的开发工作。etcd 官方就维护了一个 etcd go 语言客户端，在 <code class="highlighter-rouge">github.com/coreos/etcd/client</code>，我们可以用下面的语句把它导入到 go 程序中：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import	(
+    ...
+    etcd "github.com/coreos/etcd/client"
+    "github.com/coreos/etcd/pkg/transport"
+)
+</code></pre></div></div>
+
+<p>我们给它取了个别名 <code class="highlighter-rouge">etcd</code>，之后后面的程序中我们可以用 <code class="highlighter-rouge">etcd</code> 而不是 <code class="highlighter-rouge">client</code> 来使用它提供的功能（这样程序的可读性更好）。</p>
+
+<h3 id="创建-client-客户端">创建 client 客户端</h3>
+
+<p>首先，我们要创建一个 etcd 的 Client，可以使用 <code class="highlighter-rouge">etcd.New()</code> 函数，它接受 <code class="highlighter-rouge">etcd.Config</code> 作为参数，后者主要的参数包括：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Endpoints</code>：etcd server 集群的地址列表，是一个 string 列表，每个值为一个 etcd 的监听地址</li>
+  <li><code class="highlighter-rouge">Transport</code>：底层用于进行 HTTP 请求传输的结构体</li>
+  <li><code class="highlighter-rouge">Username</code> 和 <code class="highlighter-rouge">Password</code>：进行简单认证的用户名和密码</li>
+</ul>
+
+<p>其他还有一些参数这里就不说了，使用默认值就行。为了完整性，我们会处理 etcd server 开启了简单认证和 TLS 的情况，首先创建一个自定义的结构体保存所有需要的参数：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>type EtcdConfig struct {
+	Endpoints []string
+	KeyFile   string
+	CertFile  string
+	CAFile    string
+	Username  string
+	Password  string
+}
+</code></pre></div></div>
+
+<p>注意这是我们自己定义的结构体，不是客户端程序提供的。</p>
+
+<p>然后构建能进行 TLS 处理的 transport，<code class="highlighter-rouge">transport</code> 是 etcd 提供的库，它内部会处理证书的读取和验证工作：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tlsInfo := transport.TLSInfo{
+	CertFile: c.CertFile,
+	KeyFile:  c.KeyFile,
+	CAFile:   c.CAFile,
+}
+
+t, err := transport.NewTransport(tlsInfo, time.Second)
+</code></pre></div></div>
+
+<p>然后就能构建 client：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>client, err := etcd.New(etcd.Config{
+	Endpoints: c.Endpoints,
+	Transport: t,
+	Username:  c.Username,
+	Password:  c.Password,
+})
+</code></pre></div></div>
+
+<p>这个 client 主要负责 HTTP API 交互的逻辑，同时也负责从多个 endpoints 中选择一个可用的来调用。但是和 keys 交互的逻辑并没有直接在这个 client 中，而是需要另外一个对象 <code class="highlighter-rouge">KeysAPI</code>：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kapi := etcd.NewKeysAPI(client)
+</code></pre></div></div>
+
+<p>所有键值对有关的操作都是这个 <code class="highlighter-rouge">kapi</code> 对象的方法提供的，它会实现接口的如下方法：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>type KeysAPI interface {
+	// Get 从 etcd 中获取 Node 的信息
+	Get(ctx context.Context, key string, opts *GetOptions) (*Response, error)
+
+	// Set 设置对应 key 的值为 value，这个方法也可以用来创建目录
+	Set(ctx context.Context, key, value string, opts *SetOptions) (*Response, error)
+
+	// Delete 删除节点，包括目录和文件节点
+	Delete(ctx context.Context, key string, opts *DeleteOptions) (*Response, error)
+
+	// Create 是 set 的一种特殊形式，只有之前节点不存在时才会创建成功
+	Create(ctx context.Context, key, value string) (*Response, error)
+
+	// CreateInOrder 在目录下面创建递增的键值对
+	CreateInOrder(ctx context.Context, dir, value string, opts *CreateInOrderOptions) (*Response, error)
+
+	// Update 也是 Set 的一种特殊形式，只有对应的节点存在时才会更新成功
+	Update(ctx context.Context, key, value string) (*Response, error)
+
+	// Watcher 返回一个 Watcher 对象，监听某个节点下面的变化
+	Watcher(key string, opts *WatcherOptions) Watcher
+}
+</code></pre></div></div>
+
+<h3 id="创建值">创建值</h3>
+
+<p>先来看看设置一个 key value 的操作，第一个是 context 对象，后面两个分别是 key 和 value 值，最后是额外的参数，目前并不需要设置为 nil：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resp, err := client.Set(context.Background(), "/user/name", "cizixs", nil)
+</code></pre></div></div>
+
+<p>如果要为某个值设置超时时间，可以添加选项 <code class="highlighter-rouge">TTL</code>：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resp, err := client.Set(context.Background(), "/user/name", "",
+	&amp;etcd.SetOptions{
+		TTL: time.Duration(ttl) * time.Second,
+		Refresh: true,
+	},
+)
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">SetOptions</code> 可选的字段有：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Dir</code>：布尔值，表示要创建的是一个目录</li>
+  <li><code class="highlighter-rouge">Refresh</code>：如果设置为 true，则表明只是更新某个 key 的 TTL 时间，不会重置它的值</li>
+  <li><code class="highlighter-rouge">PrevValue</code>：原子操作，只有节点的值和这个字段指定的值相同时才会执行更新操作</li>
+  <li><code class="highlighter-rouge">PrevIndex</code>：原子操作，只有节点的 ModifiedIndex 和这个字段指定的值相同时才会执行更新操作</li>
+  <li><code class="highlighter-rouge">PrevExist</code>：原子操作，只有节点存在或者不存在时才会执行更新操作，支持的值有 <code class="highlighter-rouge">PrevIgnore</code>、<code class="highlighter-rouge">PrevExist</code> 和 <code class="highlighter-rouge">PrevNoExist</code></li>
+</ul>
+
+<p>这里要先讲一下返回值 <code class="highlighter-rouge">Response</code> 的构成，它包含了返回中节点的信息以及 index 信息：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>type Response struct {
+	// Action 操作的动作名称，可以是 set、delete
+	Action string `json:"action"`
+
+	// Node 代表操作的节点
+	Node *Node `json:"node"`
+
+	// PrevNode 节点之前的值
+	PrevNode *Node `json:"prevNode"`
+
+	// Index：response 生成是 cluster index 的值
+	Index uint64 `json:"-"`
+}
+</code></pre></div></div>
+
+<p>其中节点的定义如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>type Node struct {
+	//  节点的位置，目录名称，比如 `/foo/bar`
+	Key string `json:"key"`
+
+	//  节点是否为一个目录
+	Dir bool `json:"dir,omitempty"`
+
+	//  节点存储的对象值，如果是目录，则忽略这个字段
+	Value string `json:"value"`
+
+	// Nodes 子节点，如果是目录，则这个字段保存了目录下面的所有节点内容
+	Nodes Nodes `json:"nodes"`
+
+	//  节点创建时候的 etcd  index
+	CreatedIndex uint64 `json:"createdIndex"`
+
+	//  节点更新时候的 etcd index
+	ModifiedIndex uint64 `json:"modifiedIndex"`
+
+	// 节点的过期时间
+	Expiration *time.Time `json:"expiration,omitempty"`
+
+	// TTL 节点设置的 time to live，单位是秒
+	TTL int64 `json:"ttl,omitempty"`
+}
+</code></pre></div></div>
+
+<h3 id="获取值">获取值</h3>
+
+<p>获取值是通过 <code class="highlighter-rouge">Get</code> 方法，和 <code class="highlighter-rouge">Set</code> 一样，它也支持选项。如果只是简单获取某个键的值，直接设置选项为空就行：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resp, err := client.Get(context.Background(), key, nil)
+</code></pre></div></div>
+
+<p>如果要递归地获取某个目录下面所有的内容，可以使用 <code class="highlighter-rouge">Recursive</code> 参数：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resp, err := client.Get(context.Background(), key, &amp;etcd.GetOptions{
+    Recursive: true,   
+})
+</code></pre></div></div>
+
+<p>然后通过 resp 就能遍历所有的子节点的值。</p>
+
+<h3 id="删除值">删除值</h3>
+
+<p>删除操作通过 <code class="highlighter-rouge">Delete</code> 方法完成，简单删除一个文件节点，可以忽略参数：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>_, err := client.Delete(context.Background(), key, nil)
+</code></pre></div></div>
+
+<p>如果要删除某个非空的目录，需要 <code class="highlighter-rouge">Recursive</code> 参数：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>_, err := client.Delete(context.Background(), key, &amp;etcd.DeleteOptions{
+    Dir: true,
+    Recursive: true,
+})
+</code></pre></div></div>
+
+<p>其他字段包括：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">PrevValue</code>：只有节点值和给定的值相同时才执行删除操作</li>
+  <li><code class="highlighter-rouge">PrevIndex</code>：只有节点的 index 和给定的 index 相同时，才执行删除操作</li>
+</ul>
+
+<h3 id="监听值">监听值</h3>
+
+<p>etcd 另外一个重要的功能是监听目录或者文件的变化，<code class="highlighter-rouge">Watcher</code> 方法会返回一个对象，调用它的 <code class="highlighter-rouge">Next()</code> 方法会阻塞，一直到监听的对象有变化，它才会返回变化节点的情况：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>watcher := client.Watcher(key, &amp;etcd.WatcherOptions{
+	Recursive: true,
+})
+
+for {
+	resp, err := watcher.Next(context.Background())
+	if err != nil {
+		return err
+	}
+}
+</code></pre></div></div>
+
+<p>其中 <code class="highlighter-rouge">WatcherOptions</code> 接受 <code class="highlighter-rouge">AfterIndex</code> 和 <code class="highlighter-rouge">Recursive</code> 两个参数，分别表示才某个 Index 之后开始监听，以及递归监听某个目录下面所有的节点。</p>
+
+<p>完整的 demo 代码在<a href="https://github.com/cizixs/etcd-demo/tree/master/v2"> github 上</a>，请前往阅读。</p>
+
+<h2 id="参考资料">参考资料</h2>
+
+<ul>
+  <li><a href="https://godoc.org/github.com/coreos/etcd/client">etcd client v2 godoc 文档</a></li>
+  <li><a href="https://github.com/coreos/etcd/tree/master/client">etcd client 源码</a></li>
+  <li><a href="http://dockone.io/article/801">谈谈CoreOS的etcd</a></li>
+</ul>
+
+    <p><a href="http://cizixs.com/2017/12/03/etcd-v2-go-client">etcd go 语言 v2 客户端开发介绍</a> was originally published by cizixs at <a href="http://cizixs.com">Cizixs Writes Here</a> on December 03, 2017.</p>
+  

@@ -15,7 +15,7 @@ public class ApplicationConfig {
     public DataSource dataSource() {
         return DataSourceBuilder.create()
                 .driverClassName("org.sqlite.JDBC")
-                .url("jdbc:sqlite:rss.db")
+                .url("jdbc:sqlite:data/db/rss.db")
                 .build();
     }
 

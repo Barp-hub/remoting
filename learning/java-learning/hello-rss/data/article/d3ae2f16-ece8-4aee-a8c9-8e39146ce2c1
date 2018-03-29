@@ -1,0 +1,45 @@
+<p>Oracle fusion application security mechanism is designed on the base of role-based access control (RBAC). Oracle recommend to implement roles with functional security and data security and then assign roles to user, which bring benefits from maintenance and reusability. We should not directly assign functional security and data security to user, even though it looks ok from technical perspective.</p>
+<p>First, let’s have a look at the Oracle recommended security setup process with a real business scenario, and then have a review of Oracle fusion security architecture and concept for further understanding.</p>
+<p><strong>Oracle recommended Security Setup Process</strong>, which is the most safe for your implementation.</p>
+<p>Considering you have a financial manager called Ning&#160; Yun, who is responsible for all financial modules as a manager role in business unit A, B, C, Ledger X, Y, and asset book Z.</p>
+<p>1. Create a user ning with person information (generally employee information). A person will auto created in HCM. Or you can create person in HCM and user will be auto created.</p>
+<p>2. You should have had job roles, like general ledger manager, payables manager, receivables manager, etc. in your system, generally they are predefined by oracle. </p>
+<p>3. Create data roles for above job roles through data role template. Or the data role can be generated automatically when you create BU, asset book, GL data access set.</p>
+<p>4. Assign the necessary data role to user. </p>
+<p>I recommend that you always generate data role by data role template or generate automatically and NOT try to generate your own data security, because it is not completed. If you try to research the Oracle-predefined data role template, it is very complex. You can duplicate it by data security easily. So, always use data template or auto generation.</p>
+<p><strong></strong>&#160;</p>
+<p><strong>Oracle fusion security architecture and concepts</strong></p>
+<p><strong>Functional Security:</strong> </p>
+<p><strong>1. Resource</strong>: Very technical concept that the technical components used by privilege.</p>
+<p><strong>2. Entitlement (Privilege)</strong>: A task/action of duty role. An entitlement is one or more allowable actions applied to a set of database resources.</p>
+<p><strong>3. Application Role (Duty/Duty role):</strong>&#160; Duty roles cannot be provisioned directly to users, but are inherited by enterprise roles to control access to applications. Duty roles may carry both function and data security grants.</p>
+<p><strong>4. External Role (Job/Job role):</strong> Specific to a job, and controls access to functions through inherited duty roles that carry the entitlement necessary for performing specific tasks associated with the duties of the job, such as access for a procurement manager.</p>
+<p><strong>5. User:</strong> application user registered in system.</p>
+<p><strong>Data Security</strong></p>
+<p><strong>6. Database resource:</strong>&#160; A database resource specifies access to a table, view, or flexfield that is secured by a data security policy.</p>
+<p><strong>7. HCM Security Profile:</strong> HCM data roles are generated using the Manage Data Roles and Security Profiles task, which uses HCM security profiles, not data role templates, to define the data security condition.</p>
+<p><strong>8. Data role template:</strong> You use data role templates to generate data roles. You generate such data roles, and create and maintain data role templates in the Authorization Policy Manager (APM).</p>
+<p><strong>Data Role (Also external role in APM):</strong> Specific to a job within a dimension of data, and augments the inherited abstract, duty, or job roles with entitlement to access specific data, such as access for a procurement manager in a particular business unit. Job role with data security.</p>
+<p><a href="http://www.yunning.net/blog/wp-content/uploads/2014/11/image9.png"><img title="image" style="border-top: 0px; border-right: 0px; background-image: none; border-bottom: 0px; padding-top: 0px; padding-left: 0px; border-left: 0px; display: inline; padding-right: 0px" border="0" alt="image" src="http://www.yunning.net/blog/wp-content/uploads/2014/11/image_thumb9.png" width="690" height="633"/></a></p>
+<p><strong></strong>&#160;</p>
+<p><strong>E</strong><strong>xample:</strong></p>
+<h3><a name="_Toc327372858_1_1"><b>External Role/Job Role: Accounts Payable M<font size="2">an</font>ager </b></a>(which is mapping to real AP manager in business)</h3>
+<p>Duties assigned directly and indirectly to the job role <b>Accounts Payable Manager</b>  </p>
+<p><b>Application Role/Duty Role</b>  </p>
+<p><b>Description</b>  </p>
+<p>Accounts Payable Managerial Analysis Duty: Analyzes Invoices and related documents along with Payments, Holds&#160; Discounts, and Payables Balances  </p>
+<p>Accounts Payable Period Status Management Duty: Manages Oracle Fusion Payables period status.  </p>
+<p>Accounts Payable Period Status Review Duty: Reviews Oracle Fusion Payables period status.  </p>
+<p>Actual Procurement Cost Collection Duty: Subscribes to costing service for interfacing invoice transactions to receipt accounting.  </p>
+<p>……  </p>
+<p><strong>The relationship between external role (data role) and job role: (first page for functional hierarchy, second page for data security)</strong> </p>
+<p><a href="http://www.yunning.net/blog/wp-content/uploads/2014/11/image4.png"><img title="image" style="border-top: 0px; border-right: 0px; background-image: none; border-bottom: 0px; padding-top: 0px; padding-left: 0px; border-left: 0px; display: inline; padding-right: 0px" border="0" alt="image" src="http://www.yunning.net/blog/wp-content/uploads/2014/11/image_thumb4.png" width="868" height="314"/></a> </p>
+<p><a href="http://www.yunning.net/blog/wp-content/uploads/2014/11/image5.png"><img title="image" style="border-top: 0px; border-right: 0px; background-image: none; border-bottom: 0px; padding-top: 0px; padding-left: 0px; border-left: 0px; display: inline; padding-right: 0px" border="0" alt="image" src="http://www.yunning.net/blog/wp-content/uploads/2014/11/image_thumb5.png" width="884" height="426"/></a> </p>
+<p>&#160; </p>
+<p><strong>The relationship between job role and application rule:</strong> </p>
+<p><a href="http://www.yunning.net/blog/wp-content/uploads/2014/11/image6.png"><img title="image" style="border-top: 0px; border-right: 0px; background-image: none; border-bottom: 0px; padding-top: 0px; padding-left: 0px; border-left: 0px; display: inline; padding-right: 0px" border="0" alt="image" src="http://www.yunning.net/blog/wp-content/uploads/2014/11/image_thumb6.png" width="870" height="401"/></a></p>
+<p><strong>The relationship between application role and entitlement:</strong></p>
+<p><a href="http://www.yunning.net/blog/wp-content/uploads/2014/11/image7.png"><img title="image" style="border-top: 0px; border-right: 0px; background-image: none; border-bottom: 0px; padding-top: 0px; padding-left: 0px; border-left: 0px; display: inline; padding-right: 0px" border="0" alt="image" src="http://www.yunning.net/blog/wp-content/uploads/2014/11/image_thumb7.png" width="878" height="365"/></a></p>
+<p><strong>The relationship between entitlement and resource:</strong></p>
+<p><a href="http://www.yunning.net/blog/wp-content/uploads/2014/11/image8.png"><img title="image" style="border-top: 0px; border-right: 0px; background-image: none; border-bottom: 0px; padding-top: 0px; padding-left: 0px; border-left: 0px; display: inline; padding-right: 0px" border="0" alt="image" src="http://www.yunning.net/blog/wp-content/uploads/2014/11/image_thumb8.png" width="877" height="378"/></a></p>
+<p>(From my own opinion, the security mechanism, especially data security is very complex in current version of Fusion Application, so please always use data role template or auto-generation. That’s enough)</p>

@@ -65,21 +65,7 @@ public class RssTest {
     @Test
     public void update() {
 
-        AtomicInteger from = new AtomicInteger(Integer.MIN_VALUE);
-        Integer count = 10;
-        while (true) {
-            List<Feed> list = this.feedService.listFeed(from.get(), count);
-            if (list == null || list.isEmpty()) {
-                break;
-            }
-            list.forEach(feed -> {
-                if (feed.getId() > from.get()) {
-                    from.set(feed.getId());
-                }
-
-                this.feedService.syncFeed(feed);
-            });
-        }
+        this.feedService.syncAllFeed();
 
     }
 

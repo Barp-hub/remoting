@@ -1,0 +1,42 @@
+<p><strong>What’s the job and position?</strong>  </p>
+<p>Oracle HRMS provides flexible work structures to represent the ongoing responsibilities and functions that an organization must carry out in order to meet its goals. Jobs and positions are placeholders in your enterprise model representing <i>roles</i>, which enable you to distinguish between tasks and the individuals who perform those tasks. Oracle HRMS uses <i>jobs</i> to represent the duties people perform and the required skills, for example:
+<ul>
+<li>
+<p>Professor</p>
+</li>
+<li>
+<p>Developer</p>
+</li>
+<li>
+<p>Accountant</p>
+</li>
+</ul>
+<p><i>Positions</i> represent a specific instance of a job, such as:
+<ul>
+<li>
+<p>Assistant Professor of Sociology</p>
+</li>
+<li>
+<p>Senior Software Developer</p>
+</li>
+<li>
+<p>Payroll Accountant</p>
+</li>
+</ul>
+<p>A clear conceptual model of your enterprise helps you to optimize your workforce. Jobs and positions are key components of that model. The flexibility of jobs and positions enables you to model your enterprise accurately. Use jobs or positions (in combination with organizations, assignments, grades, salaries, and other HR structures) to manage your workforce in a manner consistent with the way you do business.  </p>
+<p><strong>How to select job or position control for your enterprise?</strong>  </p>
+<p>As you implement your enterprise model, one of the earliest decisions you face is whether to use jobs, positions, or a combination of both. You can use Oracle HRMS to define required skills and valid grades for either one. Enterprises fall into one of three general categories:
+<ul>
+<li>
+<p>Rule-based</p>
+</li>
+<li>
+<p>Project-based</p>
+</li>
+<li>
+<p>Hybrid</p>
+</li>
+</ul>
+<p>If your organization is a rule-based enterprise, you regulate employment, roles, and compensation according to strict policies and procedures. Fixed roles tend to endure over time, surviving multiple incumbents. You manage roles rather than individuals. Examples include government, higher education, and health care. Rule-based industries, where roles continue to exist after individuals leave, typically model the enterprise using positions.  </p>
+<p>If your organization is a project-based enterprise, such as a construction or software company, you require the flexibility to assign people to new projects or organizations on a regular basis. You manage people and their skill sets, rather than fixed roles. This requires the flexibility to match competencies to tasks quickly and easily. Project-based organizations, where roles end when individuals complete a project, typically model the enterprise using jobs.  </p>
+<p>If your organization is a hybrid enterprise, you assign some individuals to fixed roles, and others to multiple projects. This is typical of large manufacturing or corporate enterprises. Hybrid enterprises such as these model the enterprise using both jobs and positions.</p>
