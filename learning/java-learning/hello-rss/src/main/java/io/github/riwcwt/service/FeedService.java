@@ -65,7 +65,13 @@ public class FeedService {
             article.setLink(entry.getLink());
             article.setStatus(0);
             article.setTitle(entry.getTitle());
-            Optional.ofNullable(entry.getUpdatedDate()).ifPresent(date -> article.setUpdatedDate(date.getTime()));
+            //            Optional.ofNullable(entry.getUpdatedDate()).ifPresent(date -> article.setUpdatedDate(date.getTime()));
+
+            if (entry.getUpdatedDate() == null) {
+                article.setUpdatedDate(syndFeed.getPublishedDate().getTime());
+            } else {
+                article.setUpdatedDate(entry.getUpdatedDate().getTime());
+            }
 
             String file = UUID.randomUUID().toString();
             article.setFile(file);

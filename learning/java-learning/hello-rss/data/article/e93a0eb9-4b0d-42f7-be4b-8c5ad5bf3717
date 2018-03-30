@@ -1,4 +1,0 @@
-As easy as it may seem, the fact that purchase orders can be of different types and can have cancellations and price overrides makes getting the PO total amount a little tricky. A quick way to get the information as per Oracle's logic is to cal the following function (the third parameter is the release_id, if available):<br />
-<pre class="brush: PLSql; toolbar: false;">  po_inq_sv.get_po_total( poh.type_lookup_code, poh.po_header_id, NULL) po_amount
-</pre>
-<script type="text/javascript">SyntaxHighlighter.highlight();</script>

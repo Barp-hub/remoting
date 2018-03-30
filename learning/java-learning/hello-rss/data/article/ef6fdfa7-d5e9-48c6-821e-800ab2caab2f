@@ -1,9 +1,0 @@
-Kofax Markview is a third party which provides various products that integrate with Oracle Applications. One of them is used to provide the ability for employees to send their Expense Reports receipts via fax when required, for which a wait activity is added to the AP Expense Report workflow. When Kofax MV is not enabled/working, however, the workflow will just sit there waiting for a response; use the following pl/sql call to advance it:
-<br />
-<br />
-<pre class="textmate-source solarized_dark_"><span class="linenum">    1</span> <span class="source source_oracle"><span class="keyword keyword_control keyword_control_pl">begin</span>
-<span class="linenum">    2</span>   <span class="variable variable_other">sfschema.MVERP_Expense_Report.</span>ReleaseExpenseReport<span class="keyword keyword_operator keyword_operator_oracle">(</span>
-<span class="linenum">    3</span>       ReportHeaderId <span class="keyword keyword_operator keyword_operator_oracle">=&gt;</span> <span class="keyword keyword_operator keyword_operator_oracle">&amp;</span>expense_report_id <span class="keyword keyword_operator keyword_operator_oracle">)</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
-<span class="linenum">    4</span> <span class="keyword keyword_control keyword_control_pl">end</span> <span class="keyword keyword_operator keyword_operator_oracle">;</span>
-<span class="linenum">    5</span> <span class="keyword keyword_operator keyword_operator_oracle">/</span>
-</span><span class="linenum">    6</span> </pre>
