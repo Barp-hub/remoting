@@ -1,51 +1,38 @@
 package com.machine;
 
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.UUID;
-
 import org.junit.Test;
+
+import java.util.UUID;
 
 public class ThreadException {
 
-	@Test
-	public void exception() {
-		Thread thread = new Thread(new Runnable() {
+    @Test
+    public void exception() throws InterruptedException {
+        Thread thread = new Thread(() -> {
+            throw new RuntimeException("runtime error!");
 
-			@Override
-			public void run() {
-				throw new RuntimeException("runtime error!");
+        });
+        thread.setUncaughtExceptionHandler((t, e) -> {
+            System.out.println(t.getName());
+            System.out.println(e.getMessage());
+        });
+        thread.start();
 
-			}
-		});
-		thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				System.out.println(t.getName());
-				System.out.println(e.getMessage());
-			}
-		});
-		thread.start();
+        Thread boy = new Thread(() -> {
+            throw new RuntimeException("bad boy!");
+        });
+        boy.setUncaughtExceptionHandler((t, e) -> {
+            System.out.println(t.getName());
+            System.out.println(e.getMessage());
+        });
+        boy.start();
 
-		Thread boy = new Thread(new Runnable() {
+        thread.join();
+        boy.join();
+    }
 
-			@Override
-			public void run() {
-				throw new RuntimeException("bad boy!");
-			}
-		});
-		boy.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				System.out.println(t.getName());
-				System.out.println(e.getMessage());
-			}
-		});
-		boy.start();
-
-	}
-
-	@Test
-	public void random() {
-		System.out.println(UUID.randomUUID().toString());
-	}
+    @Test
+    public void random() {
+        System.out.println(UUID.randomUUID().toString());
+    }
 }
